@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="inside" value="false"/>
+  <property name="x" value="0"/>
+  <property name="y" value="0"/>
+ </properties>
+ <tileset firstgid="1" name="land" tilewidth="32" tileheight="32">
+  <image source="../imgs/land/land.png" width="512" height="128"/>
+  <terraintypes>
+   <terrain name="water" tile="33"/>
+   <terrain name="shadow" tile="37"/>
+   <terrain name="dirt0" tile="41"/>
+   <terrain name="dirt1" tile="45"/>
+   <terrain name="grass" tile="1"/>
+  </terraintypes>
+  <tile id="1" terrain="4,4,4,4"/>
+  <tile id="3" terrain="0,4,0,0"/>
+  <tile id="7" terrain="1,4,1,1"/>
+  <tile id="11" terrain="2,4,2,2"/>
+  <tile id="15" terrain="3,4,3,3"/>
+  <tile id="16" terrain="4,4,4,0"/>
+  <tile id="17" terrain="4,4,0,0"/>
+  <tile id="18" terrain="4,4,0,4"/>
+  <tile id="19" terrain="4,0,0,0"/>
+  <tile id="20" terrain="4,4,4,1"/>
+  <tile id="21" terrain="4,4,1,1"/>
+  <tile id="22" terrain="4,4,1,4"/>
+  <tile id="23" terrain="4,1,1,1"/>
+  <tile id="24" terrain="4,4,4,2"/>
+  <tile id="25" terrain="4,4,2,2"/>
+  <tile id="26" terrain="4,4,2,4"/>
+  <tile id="27" terrain="4,2,2,2"/>
+  <tile id="28" terrain="4,4,4,3"/>
+  <tile id="29" terrain="4,4,3,3"/>
+  <tile id="30" terrain="4,4,3,4"/>
+  <tile id="31" terrain="4,3,3,3"/>
+  <tile id="32" terrain="4,0,4,0"/>
+  <tile id="33" terrain="0,0,0,0"/>
+  <tile id="34" terrain="0,4,0,4"/>
+  <tile id="35" terrain="0,0,0,4"/>
+  <tile id="36" terrain="4,1,4,1"/>
+  <tile id="37" terrain="1,1,1,1"/>
+  <tile id="38" terrain="1,4,1,4"/>
+  <tile id="39" terrain="1,1,1,4"/>
+  <tile id="40" terrain="4,2,4,2"/>
+  <tile id="41" terrain="2,2,2,2"/>
+  <tile id="42" terrain="2,4,2,4"/>
+  <tile id="43" terrain="2,2,2,4"/>
+  <tile id="44" terrain="4,3,4,3"/>
+  <tile id="45" terrain="3,3,3,3"/>
+  <tile id="46" terrain="3,4,3,4"/>
+  <tile id="47" terrain="3,3,3,4"/>
+  <tile id="48" terrain="4,0,4,4"/>
+  <tile id="49" terrain="0,0,4,4"/>
+  <tile id="50" terrain="0,4,4,4"/>
+  <tile id="51" terrain="0,0,4,0"/>
+  <tile id="52" terrain="4,1,4,4"/>
+  <tile id="53" terrain="1,1,4,4"/>
+  <tile id="54" terrain="1,4,4,4"/>
+  <tile id="55" terrain="1,1,4,1"/>
+  <tile id="56" terrain="4,2,4,4"/>
+  <tile id="57" terrain="2,2,4,4"/>
+  <tile id="58" terrain="2,4,4,4"/>
+  <tile id="59" terrain="2,2,4,2"/>
+  <tile id="60" terrain="4,3,4,4"/>
+  <tile id="61" terrain="3,3,4,4"/>
+  <tile id="62" terrain="3,4,4,4"/>
+  <tile id="63" terrain="3,3,4,3"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="100" height="100">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2dSW/bMBBGiSCHHnzovrlA0aS7nQZN0rSNu/3/X1USNdExPaSGi8Rx9B3eTUkkPn8ckRwjR8aYIwFnlk+Wc+H1KV5ZTgCLdAzhQ6ePu5aX8KHGR4uMwEe9j5+WP6ZNRuCj3oeDZqTUyT3LQwXPrZWcsaQZKZ23kI12PkInJRnp6eO15YLhSoGHUh+O0nmr51zlXFxaHlkeE55YPityUuKjdN7qmY3TrYunlreEO8qclPgInUgz0suHz8abwEXoRENtK/XhyF2T9HreWDYo75T4uL/lQYGPnIz0rB3ORywb2nx4jgvdSGt779pxKD64GubdSLyEtZ1z0nsNeEg+3HtF7D1c6mXofav3cw75eG/5quA+T4Jxi7mReEnVkt7P6Xx8sXyL+HDZ6J1hzkfoJpaXWJ2hTs4HfteUHG/vNXTicnFt9GQj5UMyjv456c/Ezkk0ObkmHlwu3GdLQzZiPvw9Dt2nX2dxPjTWkTDfmjxwPnI/K6eMy1Qd6Z2RQ6Dms8L5cGjOyG0m9t7lMvJry2/46OJFuqaHD11O4GM6YvXEo2XNNRdS63i46O9F83s+AAAAMCWxHi6NvVy3Ge/B7Z8+szxnWBrs0U3lgnp4YfnIsICTSV3EPHBOsA/R3gOdnyQuPCv4GM1Dan6Cj3Ed1HqAjzYe6Jlz7twEH+1chGf/jg+VLuAj30OYCfjo5yLmAT7ajG/Ouktyhgkf5bjxbdUT4/lu+VHhYm3ZzNRHCl8nwvwM+fBObgq9rAz6BDj8GWWYn5zvUuRmxWcDPvKR5MQhrSfUBXoF8pH2J/m5KzV/wUUbpBmhbjgnK3IN5qlycvoqqZObgI2Bj55OUsBHPbnzFnyMh2QPRYK271lpgZ5lDO2ltHQBD7wHOr6xuWNojxcu6l1wY+u/v31Frmvlgf4N9JLsMlSPvZeWHuCEp1UNqAXvVXpcOJCRtuuGFsw9IxIfXK/tEj66+Ij17ixGcgMf+S44N62cwEd8bHL6ElZmd14r9TN3H9zebEmv5yK4vjQzc/fhCDPSol+H1pilkWcHPvZ91Pbr1GQHPvga0iojQz098CHz0Toj8FHnwzFmRuAj38eYGYGPfB9jOuF84FzqH0P9ITW9uDk+kI3/SHukWzkJfSAbu+T0ftY6ob2hHmRjH+lZCDd/rYWeOBfIBk9unyHt+9yYdHbWZr8v1INsxKk9L+TWLFwmPMhGmtpeXOojlQm4kFOTkXAOi10HF3Ja96tzoGbocIKe6Tonpf83Dh7G91IDPAAAAAAAAAAAAAAAAAAAAJTzF7nD6nhAnAAA
+  </data>
+ </layer>
+</map>
