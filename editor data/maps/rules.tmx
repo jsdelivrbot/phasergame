@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32" backgroundcolor="#4b4b4b">
+ <tileset firstgid="1" source="../tilesets/land.tsx"/>
+ <tileset firstgid="369" name="col" tilewidth="32" tileheight="32">
+  <image source="../../imgs/col.png" width="224" height="192"/>
+ </tileset>
+ <layer name="regions" width="20" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NigAAmNHqwAHR3jbpvFIyCUTAKBgcAAG4dW3lABgAA
+  </data>
+ </layer>
+ <layer name="input_ground" width="20" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC4tlgIA4KB3PMLjATii9C0rvHiiH4ACijBBaDEqLMw6cW0bBKBgFo4CeAAC2nZxeQAYAAA==
+  </data>
+ </layer>
+ <layer name="output_col" width="20" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2tmZACDiVC6BUoPFjADzT2TBpn7uqDumQmluweZ+0bBKBgFo4BWAADdZOSjQAYAAA==
+  </data>
+ </layer>
+</map>
