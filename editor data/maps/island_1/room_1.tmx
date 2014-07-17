@@ -394,24 +394,26 @@
  </layer>
  <layer name="layer2" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2TsQqAMAxE60f7AbaTuqqTOqnfaQIpHCGtqB0cPHhQ0+aQ9lJXztWFaQgvDMRITFBDgvSk6kxLdMJMLMQKNaQ3erDOoDb63olD1VG6B+upvZx+v/d+2Kvz98Svkcyx4trKtvUPFq1kjhXXej4C+OHMWHOQu4eY9R7O6fzrOcj5Pbm/kn6+sF9X2C+lr/hdvUeOO2eZE41CQG5ABgAA
+   H4sIAAAAAAAAC+2TQQoAIQhF69AdoFyVl56CBAmdnBBmFiN8cOF/hH1TDCE5K3cVo0DxAOPVrmYUKh5kvKeleX7eezzuXfN3wsszc6Ool7ItvUFSnZkbRf16H8B42s1A3O+Pso5sTrsZNPBO9ufJK8685szT6iu83X/cyTpHugBjTm6/QAYAAA==
   </data>
  </layer>
  <layer name="layer3" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoA3YyMjAsIkRU3w6FjEQaISKnwTSV9DU8DExMOwEiu3Conc+UIwTKM8FxNxAvB6q5jyQvoDDLjGguoNAuUM45AWB8kJALAzE26FqrgPpG0B8FYhPAfFZHHonAsUnAfFkNPnlaPxTaPyrWMwD6ZkJxLOAeDYjphn4wDUcahcCxRcB8WISzBoFo2AUjAJsAABCO+VkQAYAAA==
+   H4sIAAAAAAAAC92TXUsCQRSGZ7YrE4IS/N9aKZtfaGXUjeiNGBQoKCiIH7jV3/BKuqpncBeW2Q+n1S70hYfDvHPmzJ6dGSH+R20pRAdu4BYKcusXZXj+An8JY1hpOReWED28VyhDBapuTo2YYv4c0tBy/RlxHrFXlrw+cwN4gEdo+nIvmb+CDHRd/5P4BQ5MYBpRO4efh2tt/kkbT7SxE1JPrbHhDkoyWCNOHxG5dfwG3P+hlq5cSH/7yE7QX5zqO/rzn5G35zPx5YA9efdV6Y34bljb4s6dWUHfu69KQ+Iowbeqd7QxWLc2rK3e0Y9B7vcB/+sx1JMh53eq+gW7Njv3QAYAAA==
   </data>
  </layer>
  <layer name="col" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC3NiYmBwGmGYGGAKVYesz5QI82yZEBgXwKYPl3nEuBubHKn+JWQespmDwTxkveTELynmYTOblLRGDfMIuZua5pETfiPJPHz2DAbzSEkvlKZvAAmtYmxABgAA
+   H4sIAAAAAAAAC3NiYmBwGsEYF4DJIas1JdEMfGaj68NlHiluJVUfKeYhm0lt80g1F10PqXFLrnnIZpKSvgajecSEA6nhRql5yPoGs3n47KGFeeTow2ceJekLHQMAbCM+1UAGAAA=
   </data>
  </layer>
  <objectgroup name="doors" width="20" height="20">
-  <object name="island_1" type="door" x="256" y="608" width="64" height="32">
+  <object name="island_1" type="door" x="256" y="608" width="32" height="32">
    <properties>
-    <property name="island" value="1"/>
-    <property name="room" value="0"/>
+    <property name="island" value="0"/>
+    <property name="map" value="0"/>
+    <property name="x" value="220"/>
+    <property name="y" value="280"/>
    </properties>
   </object>
  </objectgroup>

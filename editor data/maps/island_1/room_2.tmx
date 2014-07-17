@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="32" tileheight="32">
+ <properties>
+  <property name="spawnX" value="15"/>
+  <property name="spawnY" value="26"/>
+ </properties>
+ <tileset firstgid="1" source="../../tilesets/land.tsx"/>
+ <tileset firstgid="369" source="../../tilesets/col.tsx"/>
+ <tileset firstgid="411" name="Cave" tilewidth="32" tileheight="32">
+  <image source="../../../imgs/Cave.png" width="256" height="1056"/>
+ </tileset>
+ <layer name="ground" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3DAQ0AAAwCIN8/gmUNctjoJVVVVfXdAVtiU64QDgAA
+  </data>
+ </layer>
+ <layer name="layer2" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3VSQ7CMAwF0HL/IzF00TKIQQLW7ChwDbyJZAUn8U9rIyQs/V2U58RR28+apldkSzmC2Sj3zpknygDmMKKHYD4oaN2jHrT2GFPqQWNPaWrs8H6mNrndJbzByAzVRXdq7cXu2smTXM9C3BetuYB5JvZF3D2tuYHZKdxS79eKWeTc8JZLvde8u5xr+ZZLrlWdEzOzdvn/iMfaTdU33ZayYFk6fp95PM7/dz/nHUea/1y5LueWIt0Hem81biucxcOV9kTntTJ0LfLL7hviipGHEA4AAA==
+  </data>
+ </layer>
+ <layer name="layer3" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+WWyw7CIBBFgS9TV+pGXakr9b+60XRhFz4Tn1/nkIY4HRkDLdAYbzIppZRTMsOlQvyGMllej/Ldh9uZFFF1h/lPEGdZtqkK1LcO/C0PmO8ZeX1ae2AcEGebgKl1Bc5NVpmp2EaaZyKUco+5DHfHvENzY1PBPN8w/XjNF2YMzk0otZXjkRJiDDFRcTkmD9qTtEdNgTeDmKuqZ4X2CSztUQvgLSFW6tOzfGoTj3Xx2ab7iKtjF6WuKcxsw7NsbSqfOrN5hc17cI45z8Kqcz7bzgUszrOaKidMfI2dYxsrJRfff6tr7kyxifMaur429i79lpQ8X6bLPnNl+yjEPvu3/HbgzO1C9CL/a1D1gTeAGNbkvgCuUrHiEA4AAA==
+  </data>
+ </layer>
+ <layer name="col" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC9WW3QqAIAyF8/2hq7rxeXqwEApK9j+P1IFd6Ihvbmu6LN9WLXmLMqU4rHFmmBafFIeXGc2Xhy3lNiNLXVCichjleXrgXmtMay9EuDPl5e7lbZKv90e5qzIDqBmxKXWrRKy9cTXi1k0WLmK+Slzkv6pxUeLqN4PrrZs0QyWOJx6rRnOzfetVYxyXPfdmcJuQXK5PLHuj5XmPjXzDRc6WyVvm3pXucSSX+i5SLxQXoT9zT6CEuR0QDgAA
+  </data>
+ </layer>
+ <objectgroup name="doors" width="30" height="30">
+  <object name="island_1" type="door" x="448" y="928" width="96" height="32">
+   <properties>
+    <property name="island" value="0"/>
+    <property name="map" value="0"/>
+    <property name="x" value="213"/>
+    <property name="y" value="289"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

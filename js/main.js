@@ -8,14 +8,90 @@ var doors = null;
 var col = null;
 
 function preload(){
-	game.load.spritesheet('player','imgs/player/player1.png',32,48)
-	game.load.json('islands','php/get-islands.php')
+	//data
+	game.load.json('islands','data/islands.json')
+
+	//image
+	game.load.image('door','imgs/other/door.png')
+
+	//player
+	//fighter
+	game.load.spritesheet('player/1','imgs/player/fighter/01.png',32,48)
+	game.load.spritesheet('player/2','imgs/player/fighter/02.png',32,48)
+	game.load.spritesheet('player/3','imgs/player/fighter/03.png',32,48)
+	game.load.spritesheet('player/4','imgs/player/fighter/04.png',32,48)
+	game.load.spritesheet('player/5','imgs/player/fighter/05.png',32,48)
+	game.load.spritesheet('player/6','imgs/player/fighter/06.png',32,48)
+	game.load.spritesheet('player/7','imgs/player/fighter/07.png',32,48)
+	game.load.spritesheet('player/8','imgs/player/fighter/08.png',32,48)
+	//lancer
+	game.load.spritesheet('player/9','imgs/player/lancer/01.png',32,48)
+	game.load.spritesheet('player/10','imgs/player/lancer/02.png',32,48)
+	game.load.spritesheet('player/11','imgs/player/lancer/03.png',32,48)
+	game.load.spritesheet('player/12','imgs/player/lancer/04.png',32,48)
+	//warrior
+	game.load.spritesheet('player/13','imgs/player/warrior/01.png',32,48)
+	game.load.spritesheet('player/14','imgs/player/warrior/02.png',32,48)
+
+
 	//tile sets
 	game.load.image('tileset/land','imgs/land.png')
 	game.load.image('tileset/misc','imgs/misc.png')
 	game.load.image('tileset/col','imgs/col.png')
+
+	//land
+	game.load.image('tileset/CastleTown','imgs/CastleTown.png')
+	game.load.image('tileset/CastleTown2','imgs/CastleTown2.png')
+
+	game.load.image('tileset/Cave','imgs/Cave.png')
+
+	game.load.image('tileset/DesertTown','imgs/DesertTown.png')
+	game.load.image('tileset/DesertTown2','imgs/DesertTown2.png')
+
+	game.load.image('tileset/FarmVillage','imgs/FarmVillage.png')
+	game.load.image('tileset/FarmVillage2','imgs/FarmVillage2.png')
+
+	game.load.image('tileset/Forest','imgs/Forest.png')
+	game.load.image('tileset/ForestTown','imgs/ForestTown.png')
+	game.load.image('tileset/ForestTown2','imgs/ForestTown2.png')
+
+	game.load.image('tileset/grassland','imgs/grassland.png')
+
+	game.load.image('tileset/MineTown','imgs/MineTown.png')
+	game.load.image('tileset/MineTown2','imgs/MineTown2.png')
+
+	game.load.image('tileset/Mountain','imgs/Mountain.png')	
+
 	game.load.image('tileset/PortTown','imgs/PortTown.png')
 	game.load.image('tileset/PortTown2','imgs/PortTown2.png')
+
+	game.load.image('tileset/PostTown','imgs/PostTown.png')
+	game.load.image('tileset/PostTown2','imgs/PostTown2.png')
+
+	game.load.image('tileset/Snowfield','imgs/Snowfield.png')
+	game.load.image('tileset/SnowTown','imgs/SnowTown.png')
+	game.load.image('tileset/SnowTown2','imgs/SnowTown2.png')
+
+	game.load.image('tileset/Swamp','imgs/Swamp.png')	
+
+	game.load.image('tileset/Woods','imgs/Woods.png')	
+
+	$('#progressbar').progressbar({
+		max: 100
+	})
+
+	game.load.onLoadStart.add(function(){
+		$('#loading-overlay').show()
+	})
+
+	game.load.onFileComplete.add(function(){
+		// console.log('load:'+game.load.progressFloat)
+		$('#progressbar').progressbar('value',game.load.progressFloat)
+	})
+
+	game.load.onLoadComplete.add(function(){
+		$('#loading-overlay').hide()
+	})
 }
 
 function create(){
@@ -23,24 +99,37 @@ function create(){
 	game.time.advancedTiming = true
 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
-	loadMap(0,0,createPlayer)
+	//player
+	player = game.add.sprite(0, 0,'player/1')
+
+	//set up the animations
+	player.animations.add('down',[0,1,2,3],10,true,true)
+	player.animations.add('left',[4,5,6,7],10,true,true)
+	player.animations.add('right',[8,9,10,11],10,true,true)
+	player.animations.add('up',[12,13,14,15],10,true,true)
+
+    game.physics.enable(player, Phaser.Physics.ARCADE);
+    player.body.setSize(20,18,6,30);
+
+	game.camera.follow(player)
+	
+	//set the player invisible so when the world if loading we dont see him
+	player.visible = false
+
+	//load the first map
+	loadMap(0,0,function(){
+		player.visible = true
+		player.bringToTop()
+
+		//move the player to spawn
+		player.x = map.properties.spawnX * map.tileWidth;
+		player.y = map.properties.spawnY * map.tileHeight;
+	})
 }
 
 function update(){
 	if(player){
-		if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
-	    {
-	        player.body.velocity.y = -200;
-	    	player.body.velocity.x = 0
-	        player.animations.play('up')
-	    }
-	    else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
-	    {
-	        player.body.velocity.y = 200;
-	    	player.body.velocity.x = 0
-	        player.animations.play('down')
-	    }
-	    else if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
+		if (game.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
 	    {
 	        player.body.velocity.x = 200;
 	    	player.body.velocity.y = 0
@@ -52,6 +141,18 @@ function update(){
 	    	player.body.velocity.y = 0
 	        player.animations.play('left')
 	    }
+	    else if (game.input.keyboard.isDown(Phaser.Keyboard.UP))
+	    {
+	        player.body.velocity.y = -200;
+	    	player.body.velocity.x = 0
+	        player.animations.play('up')
+	    }
+	    else if (game.input.keyboard.isDown(Phaser.Keyboard.DOWN))
+	    {
+	        player.body.velocity.y = 200;
+	    	player.body.velocity.x = 0
+	        player.animations.play('down')
+	    }
 	    else{
 	    	player.body.velocity.y = 0
 	    	player.body.velocity.x = 0
@@ -62,17 +163,31 @@ function update(){
 	    if(col){
 	    	game.physics.arcade.collide(player, col);
 	    }
+
+	    if(doors){
+	    	game.physics.arcade.collide(player, doors, function(_player,_door){
+				//set the player invisible so when the world if loading we dont see him
+				player.visible = false
+
+	    		loadMap(_door.properties.island,_door.properties.map,function(){
+					player.visible = true
+	    			player.bringToTop()
+
+					//move the player to spawn
+					player.x = (_door.properties.x || parseInt(map.properties.spawnX)) * map.tileWidth;
+					player.y = (_door.properties.y || parseInt(map.properties.spawnY)) * map.tileHeight;
+	    		})
+	    	},null,this)
+	    }
 	}
 }
 
 function render(){
 	game.debug.text('fps: '+game.time.fps,32,32)
 	//player
-	/*
-	if(player){
-		game.debug.body(player)
-	}
-	*/
+	// if(player){
+	// 	game.debug.body(player)
+	// }
 }
 
 function loadMap(_island,_map,callback){
@@ -83,8 +198,6 @@ function loadMap(_island,_map,callback){
 
 			//when the map is loaded call this
 			function _createMap(){
-				console.log('creating map')
-
 				//see if the old map is there
 				if(map){
 					ground.destroy()
@@ -106,7 +219,6 @@ function loadMap(_island,_map,callback){
 				layer2 = map.createLayer('layer2');
 				layer3 = map.createLayer('layer3');
 				col = map.createLayer('col');
-				doors = map.objects.doors
 
 				col.visible = false
 
@@ -117,12 +229,35 @@ function loadMap(_island,_map,callback){
 					}
 				}; 
 
+				//fix the col
+				// map.forEach(function(_tile){
+				// 	if(_tile.index != -1){
+				// 		console.log(_tile.index)
+				// 	}
+				// 	return;
+				// },this,0,0,map.width,map.height,col)
+
 				ground.resizeWorld();
 
 				//loop through the doors and create the col
-				// for (var i = 0; i < doors.length; i++) {
-				// 	doors[i] = game.add.sprite(doors[i].x,doors[i].y,'player')
-				// };
+				doors = game.add.group()
+			    doors.enableBody = true;
+			    doors.physicsBodyType = Phaser.Physics.ARCADE;
+				for (var i = 0; i < map.objects.doors.length; i++) {
+					_door = doors.create(map.objects.doors[i].x,map.objects.doors[i].y,'door')
+
+        			_door.body.immovable = true;
+        			_door.body.offset.x = -2
+        			_door.body.offset.y = -2
+        			_door.body.width = map.objects.doors[i].width + 4
+        			_door.body.height = map.objects.doors[i].height + 4
+
+        			_door.properties = {}
+					_door.properties.island = parseInt(map.objects.doors[i].properties.island)
+					_door.properties.map = parseInt(map.objects.doors[i].properties.map)
+					_door.properties.x = parseInt(map.objects.doors[i].properties.x)
+					_door.properties.y = parseInt(map.objects.doors[i].properties.y)
+				};
 
 				if(callback){
 					callback()
@@ -131,10 +266,9 @@ function loadMap(_island,_map,callback){
 
 			//load the tile map
 			if(!game.cache.checkTilemapKey('map-'+_islands[_island].maps[_map].id)){
+				// game.load.onLoadComplete.removeAll()
 				game.load.tilemap('map-'+_islands[_island].maps[_map].id,'maps/'+_islands[_island].maps[_map].url, null, Phaser.Tilemap.TILED_JSON)
-				game.load.onLoadComplete.add(function(){
-					_createMap()
-				},this)
+				game.load.onLoadComplete.add(_createMap)
 				game.load.start()
 			}
 			else{
@@ -142,29 +276,4 @@ function loadMap(_island,_map,callback){
 			}
 		}
 	}
-}
-
-function createPlayer(){
-	if(player){
-		player.destroy()
-	}
-
-	//create a new
-	player = game.add.sprite(0, 0,'player')
-
-	//set up the animations
-	player.animations.add('down',[0,1,2,3],10,true,true)
-	player.animations.add('left',[4,5,6,7],10,true,true)
-	player.animations.add('right',[8,9,10,11],10,true,true)
-	player.animations.add('up',[12,13,14,15],10,true,true)
-
-    game.physics.enable(player, Phaser.Physics.ARCADE);
-    player.body.setSize(24,24,4,20);
-    player.body.collideWorldBounds = true
-
-	game.camera.follow(player)
-
-	//move the player to spawn
-	player.x = map.properties.spawnX * map.tileWidth;
-	player.y = map.properties.spawnY * map.tileHeight;
 }
