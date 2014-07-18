@@ -399,12 +399,12 @@
  </layer>
  <layer name="layer3" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC92TXUsCQRSGZ7YrE4IS/N9aKZtfaGXUjeiNGBQoKCiIH7jV3/BKuqpncBeW2Q+n1S70hYfDvHPmzJ6dGSH+R20pRAdu4BYKcusXZXj+An8JY1hpOReWED28VyhDBapuTo2YYv4c0tBy/RlxHrFXlrw+cwN4gEdo+nIvmb+CDHRd/5P4BQ5MYBpRO4efh2tt/kkbT7SxE1JPrbHhDkoyWCNOHxG5dfwG3P+hlq5cSH/7yE7QX5zqO/rzn5G35zPx5YA9efdV6Y34bljb4s6dWUHfu69KQ+Iowbeqd7QxWLc2rK3e0Y9B7vcB/+sx1JMh53eq+gW7Njv3QAYAAA==
+   H4sIAAAAAAAAC82TwUvDMBSHk3rSgeAE/+86nWzqRtVNtsvYLrKBgoKCBZkTqx7U0/S0CZ7GTvoFWyhpO2PtYD/4eOTl5Ze+NBFiPmpLITqwBdtQlD/5HRlfPyB/B9dwr9WsWkJ0yfVgD/ah4tdUicvMr0AOWn6+T7xN2GuDunPmLuAIalAP1a4xn4d1OPHzj8Qn8MCFmwRvm/wmFLT5Y23samMvxk+tKUEZdmXUY5YeEmod8gdw+AcvXXZMf/9RKUV/s+T80l/4HwV7NojNDHsK7qvSKfHM0Nvizi1Z0XxwX5UuiVcpvlW9o4nBuk9Db/WOvgxqpxme66L5PbP2BV5DHjLm/5lqiM8bvGfU4wifMXxkfGaBvgEYCHpYQAYAAA==
   </data>
  </layer>
  <layer name="col" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC3NiYmBwGsEYF4DJIas1JdEMfGaj68NlHiluJVUfKeYhm0lt80g1F10PqXFLrnnIZpKSvgajecSEA6nhRql5yPoGs3n47KGFeeTow2ceJekLHQMAbCM+1UAGAAA=
+   H4sIAAAAAAAAC3NiYmBwGsEYF4DJIas1JdEMfGaj68NlHiluJVUfKeYhm0lt80g1F10PqXFLrnnIZpKSvgajecSEA6nhRql5yPoGs3n47KHUPGxxTK4Z6OZQI32hYwD6NaQMQAYAAA==
   </data>
  </layer>
  <objectgroup name="doors" width="20" height="20">
@@ -414,6 +414,12 @@
     <property name="map" value="0"/>
     <property name="x" value="220"/>
     <property name="y" value="280"/>
+   </properties>
+  </object>
+  <object name="room_3" type="door" x="544" y="544" width="32" height="32">
+   <properties>
+    <property name="island" value="0"/>
+    <property name="map" value="3"/>
    </properties>
   </object>
  </objectgroup>

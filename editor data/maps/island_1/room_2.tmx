@@ -30,7 +30,7 @@
   </data>
  </layer>
  <objectgroup name="doors" width="30" height="30">
-  <object name="island_1" type="door" x="448" y="928" width="96" height="32">
+  <object name="island_1" type="door" x="448" y="960" width="96" height="32">
    <properties>
     <property name="island" value="0"/>
     <property name="map" value="0"/>

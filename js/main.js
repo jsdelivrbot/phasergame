@@ -1,4 +1,3 @@
-var game = new Phaser.Game(800,600,Phaser.AUTO,'game', { preload: preload, create: create, update: update, render: render} )
 var player = null;
 var map = null;
 var ground = null;
@@ -7,94 +6,11 @@ var layer3 = null;
 var doors = null;
 var col = null;
 
-function preload(){
-	//data
-	game.load.json('islands','data/islands.json')
-
-	//image
-	game.load.image('door','imgs/other/door.png')
-
-	//player
-	//fighter
-	game.load.spritesheet('player/1','imgs/player/fighter/01.png',32,48)
-	game.load.spritesheet('player/2','imgs/player/fighter/02.png',32,48)
-	game.load.spritesheet('player/3','imgs/player/fighter/03.png',32,48)
-	game.load.spritesheet('player/4','imgs/player/fighter/04.png',32,48)
-	game.load.spritesheet('player/5','imgs/player/fighter/05.png',32,48)
-	game.load.spritesheet('player/6','imgs/player/fighter/06.png',32,48)
-	game.load.spritesheet('player/7','imgs/player/fighter/07.png',32,48)
-	game.load.spritesheet('player/8','imgs/player/fighter/08.png',32,48)
-	//lancer
-	game.load.spritesheet('player/9','imgs/player/lancer/01.png',32,48)
-	game.load.spritesheet('player/10','imgs/player/lancer/02.png',32,48)
-	game.load.spritesheet('player/11','imgs/player/lancer/03.png',32,48)
-	game.load.spritesheet('player/12','imgs/player/lancer/04.png',32,48)
-	//warrior
-	game.load.spritesheet('player/13','imgs/player/warrior/01.png',32,48)
-	game.load.spritesheet('player/14','imgs/player/warrior/02.png',32,48)
-
-
-	//tile sets
-	game.load.image('tileset/land','imgs/land.png')
-	game.load.image('tileset/misc','imgs/misc.png')
-	game.load.image('tileset/col','imgs/col.png')
-
-	//land
-	game.load.image('tileset/CastleTown','imgs/CastleTown.png')
-	game.load.image('tileset/CastleTown2','imgs/CastleTown2.png')
-
-	game.load.image('tileset/Cave','imgs/Cave.png')
-
-	game.load.image('tileset/DesertTown','imgs/DesertTown.png')
-	game.load.image('tileset/DesertTown2','imgs/DesertTown2.png')
-
-	game.load.image('tileset/FarmVillage','imgs/FarmVillage.png')
-	game.load.image('tileset/FarmVillage2','imgs/FarmVillage2.png')
-
-	game.load.image('tileset/Forest','imgs/Forest.png')
-	game.load.image('tileset/ForestTown','imgs/ForestTown.png')
-	game.load.image('tileset/ForestTown2','imgs/ForestTown2.png')
-
-	game.load.image('tileset/grassland','imgs/grassland.png')
-
-	game.load.image('tileset/MineTown','imgs/MineTown.png')
-	game.load.image('tileset/MineTown2','imgs/MineTown2.png')
-
-	game.load.image('tileset/Mountain','imgs/Mountain.png')	
-
-	game.load.image('tileset/PortTown','imgs/PortTown.png')
-	game.load.image('tileset/PortTown2','imgs/PortTown2.png')
-
-	game.load.image('tileset/PostTown','imgs/PostTown.png')
-	game.load.image('tileset/PostTown2','imgs/PostTown2.png')
-
-	game.load.image('tileset/Snowfield','imgs/Snowfield.png')
-	game.load.image('tileset/SnowTown','imgs/SnowTown.png')
-	game.load.image('tileset/SnowTown2','imgs/SnowTown2.png')
-
-	game.load.image('tileset/Swamp','imgs/Swamp.png')	
-
-	game.load.image('tileset/Woods','imgs/Woods.png')	
-
-	$('#progressbar').progressbar({
-		max: 100
-	})
-
-	game.load.onLoadStart.add(function(){
-		$('#loading-overlay').show()
-	})
-
-	game.load.onFileComplete.add(function(){
-		// console.log('load:'+game.load.progressFloat)
-		$('#progressbar').progressbar('value',game.load.progressFloat)
-	})
-
-	game.load.onLoadComplete.add(function(){
-		$('#loading-overlay').hide()
-	})
-}
+//the preload function is in preload.js
+var game = new Phaser.Game(800,600,Phaser.AUTO,'game', { preload: preload, create: create, update: update, render: render},false,false)
 
 function create(){
+
 	//set up
 	game.time.advancedTiming = true
 	game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -125,6 +41,9 @@ function create(){
 		player.x = map.properties.spawnX * map.tileWidth;
 		player.y = map.properties.spawnY * map.tileHeight;
 	})
+
+	//resize the game to fit the screen
+	$(window).trigger('resize')
 }
 
 function update(){
@@ -276,4 +195,61 @@ function loadMap(_island,_map,callback){
 			}
 		}
 	}
+}
+
+$(document).ready(function() {
+	$('#progress-bar').progressbar({
+		max: 100,
+      	value: false,
+		change: function() {
+			$('#progress-bar .progress-label').text( Math.ceil($('#progress-bar').progressbar( "value" )) + "%" );
+		},
+		complete: function() {
+			$('#progress-bar .progress-label').text("Complete!");
+		}
+	})
+	$('#settings-window').dialog({
+		title: "Settings",
+		draggable: false,
+		resizable: false,
+		autoOpen: false,
+		width: window.innerWidth - 100,
+		height: window.innerHeight - 100
+	})
+
+	//buttons
+	$('#menu-button').button({
+		text: false,
+		icons: {primary: "ui-icon-gear"}
+	}).click(function(event) {
+		$('#settings-window').dialog('open')
+	});
+
+	//resize
+	$(window).resize(function(event) {
+		$(".menu").dialog({
+			width: window.innerWidth - 100,
+			height: window.innerHeight - 100
+		})
+
+		game.scale.scaleMode = 2;
+		game.scale.setMaximum()
+		game.scale.refresh()
+	});
+});
+
+function resizeGame() {
+	// var height = $(window).height();
+	// var width = $(window).width();
+		
+	// game.width = width;
+	// game.height = height;
+	// game.stage.bounds.width = width;
+	// game.stage.bounds.height = height;
+	// game.camera.setSize(width,height)
+		
+	// if (game.renderType === Phaser.WEBGL)
+	// {
+	// 	game.renderer.resize(width, height);
+	// }
 }

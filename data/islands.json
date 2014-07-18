@@ -20,6 +20,12 @@
 				"island":"0",
 				"name":"",
 				"url":"island_1/room_2.json"
+			},
+			{
+				"id":"3",
+				"island":"0",
+				"name":"",
+				"url":"island_1/room_3.json"
 			}
 		]
 	},
