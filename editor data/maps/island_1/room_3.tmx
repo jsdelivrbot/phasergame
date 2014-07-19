@@ -9,6 +9,9 @@
  <tileset firstgid="411" name="PortTown2" tilewidth="32" tileheight="32">
   <image source="../../../imgs/PortTown2.png" width="256" height="672"/>
  </tileset>
+ <tileset firstgid="579" name="PortTown" tilewidth="32" tileheight="32">
+  <image source="../../../imgs/PortTown.png" width="256" height="1024"/>
+ </tileset>
  <layer name="ground" width="15" height="15">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC5vNyMAwe4TiZWj8eVjUYBOjBOMzD9091PATKe4hpJca7iMnPGnhLlzuoHZ8E4MBVg43R4QDAAA=
@@ -21,12 +24,17 @@
  </layer>
  <layer name="layer3" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoA9gZmJgYAFiVibS9XID9fAAMS8ZeoWBekSAWJQMvaNgFNADAAB81uqxhAMAAA==
+   H4sIAAAAAAAAC2NgoAx8ZkTl9zNBMAj8Q5JjBoqxADErE0JsN1B+DxDvBWILoPh0KIaBn0DxX0DMDRTjAWJeJLnDQPEjQHwUiB2QxBmA7O9AMUYgzQTEwkAsAsSiSGpOA+XPAPFZNLfD9H/BJj4AwBNLWBAL/iOphYUFOQAUlt9JCQ8ke0Bu8CLWXiZU/4LiIIiJOP1eaHo9ofwgIvQG4dDrSUAvseqIAQAci0SzhAMAAA==
+  </data>
+ </layer>
+ <layer name="layer4" width="15" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYBQMJAAA7Ly31YQDAAA=
   </data>
  </layer>
  <layer name="col" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgIB7MYkRgUgFMDzJNCqbUfmT9o3pH9dJCL7kYAFe140WEAwAA
+   H4sIAAAAAAAAC5vFyMAwi04YBGihtxcqj64GJN4HlZuCJt6Lpg9dP7HixABy9eIKB1rrxaaf1vYSivvBppea+QIAcL125oQDAAA=
   </data>
  </layer>
  <objectgroup name="doors" width="15" height="15">

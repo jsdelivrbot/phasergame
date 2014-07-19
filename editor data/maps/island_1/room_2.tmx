@@ -2,7 +2,7 @@
 <map version="1.0" orientation="orthogonal" width="30" height="30" tilewidth="32" tileheight="32">
  <properties>
   <property name="spawnX" value="15"/>
-  <property name="spawnY" value="26"/>
+  <property name="spawnY" value="27"/>
  </properties>
  <tileset firstgid="1" source="../../tilesets/land.tsx"/>
  <tileset firstgid="369" source="../../tilesets/col.tsx"/>
@@ -22,6 +22,11 @@
  <layer name="layer3" width="30" height="30">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+WWyw7CIBBFgS9TV+pGXakr9b+60XRhFz4Tn1/nkIY4HRkDLdAYbzIppZRTMsOlQvyGMllej/Ldh9uZFFF1h/lPEGdZtqkK1LcO/C0PmO8ZeX1ae2AcEGebgKl1Bc5NVpmp2EaaZyKUco+5DHfHvENzY1PBPN8w/XjNF2YMzk0otZXjkRJiDDFRcTkmD9qTtEdNgTeDmKuqZ4X2CSztUQvgLSFW6tOzfGoTj3Xx2ab7iKtjF6WuKcxsw7NsbSqfOrN5hc17cI45z8Kqcz7bzgUszrOaKidMfI2dYxsrJRfff6tr7kyxifMaur429i79lpQ8X6bLPnNl+yjEPvu3/HbgzO1C9CL/a1D1gTeAGNbkvgCuUrHiEA4AAA==
+  </data>
+ </layer>
+ <layer name="layer4" width="30" height="30">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3BAQEAAACCIP+vbkhAAQAA8Gh7blyXEA4AAA==
   </data>
  </layer>
  <layer name="col" width="30" height="30">

@@ -394,17 +394,22 @@
  </layer>
  <layer name="layer2" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2TQQoAIQhF69AdoFyVl56CBAmdnBBmFiN8cOF/hH1TDCE5K3cVo0DxAOPVrmYUKh5kvKeleX7eezzuXfN3wsszc6Ool7ItvUFSnZkbRf16H8B42s1A3O+Pso5sTrsZNPBO9ufJK8685szT6iu83X/cyTpHugBjTm6/QAYAAA==
+   H4sIAAAAAAAAC2NgoD5oZGRgaCISNzNi1wMTB4FOILuLSNzNiF1PNyOmO0fBKICBRrS02ExheulES4vI6a8RSxrHlWeIcUcnljSOK88MhXzQRGU3dg0BPw9VAABufXM4QAYAAA==
   </data>
  </layer>
  <layer name="layer3" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC82TwUvDMBSHk3rSgeAE/+86nWzqRtVNtsvYLrKBgoKCBZkTqx7U0/S0CZ7GTvoFWyhpO2PtYD/4eOTl5Ze+NBFiPmpLITqwBdtQlD/5HRlfPyB/B9dwr9WsWkJ0yfVgD/ah4tdUicvMr0AOWn6+T7xN2GuDunPmLuAIalAP1a4xn4d1OPHzj8Qn8MCFmwRvm/wmFLT5Y23samMvxk+tKUEZdmXUY5YeEmod8gdw+AcvXXZMf/9RKUV/s+T80l/4HwV7NojNDHsK7qvSKfHM0Nvizi1Z0XxwX5UuiVcpvlW9o4nBuk9Db/WOvgxqpxme66L5PbP2BV5DHjLm/5lqiM8bvGfU4wifMXxkfGaBvgEYCHpYQAYAAA==
+   H4sIAAAAAAAAC82T30vCUBTH751PFQQa9JdnoqayyiRfxF4iQcHAwIGo0aqH7El7Sl+lJ/1c3GDsF9vYoC98OOzcc793ZztXiGzUlUI8wAUU4VIe8iXpXz8n/wpjeHPVnGpCPJHrwRXUoG7VNIhHrB/DCXSs/JQ4CzjrnLoha89wC024c9TmWS/AGTxa+Q/iJ5hgwCTAO0gtV73hejZ9/NSeMlSgKr0eYXoPqNXJX8NNzPfPUuUE/YVJj9GffeY9sZ3iN7HnValPHET01pi5nObN2/OqNCK+JHhXdY+2Kfao7tEugt9fyrP2n/y+2LuAb4eH9Pl/UbXEZwU/KfX4i88aNhnd9z1w+OvrQAYAAA==
+  </data>
+ </layer>
+ <layer name="layer4" width="20" height="20">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACytlZGAopTImFeDSMxTNmwjkTwLiyXjsGer+nUjAf/RwH7JeUtMfehwRch82s8nJA0Mlfj+SaCa13YfPnuFoHr3jl1C6JaWsBwA2AtePQAYAAA==
   </data>
  </layer>
  <layer name="col" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC3NiYmBwGsEYF4DJIas1JdEMfGaj68NlHiluJVUfKeYhm0lt80g1F10PqXFLrnnIZpKSvgajecSEA6nhRql5yPoGs3n47KHUPGxxTK4Z6OZQI32hYwD6NaQMQAYAAA==
+   H4sIAAAAAAAAC3NiYmBwGsEYF4DJIas1JdEMfGaj68NlHiluJUafKRMCk2IeLncTAwiZR6q5tDAPWQ+p5uDTj808bGaTkl6pYR4+f5AbbqTK4zN3MJuHzx5KzTOD6rWhsHxBNg/Et8GRDkhNX+gYABwkZwZABgAA
   </data>
  </layer>
  <objectgroup name="doors" width="20" height="20">

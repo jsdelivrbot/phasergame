@@ -1,3 +1,4 @@
+var game = null;
 var player = null;
 var map = null;
 var ground = null;
@@ -5,9 +6,6 @@ var layer2 = null;
 var layer3 = null;
 var doors = null;
 var col = null;
-
-//the preload function is in preload.js
-var game = new Phaser.Game(800,600,Phaser.AUTO,'game', { preload: preload, create: create, update: update, render: render},false,false)
 
 function create(){
 
@@ -90,7 +88,6 @@ function update(){
 
 	    		loadMap(_door.properties.island,_door.properties.map,function(){
 					player.visible = true
-	    			player.bringToTop()
 
 					//move the player to spawn
 					player.x = (_door.properties.x || parseInt(map.properties.spawnX)) * map.tileWidth;
@@ -137,9 +134,14 @@ function loadMap(_island,_map,callback){
 				ground = map.createLayer('ground');
 				layer2 = map.createLayer('layer2');
 				layer3 = map.createLayer('layer3');
+				layer4 = map.createLayer('layer4');
 				col = map.createLayer('col');
 
 				col.visible = false
+
+				//get the layers fixed
+	    		player.bringToTop()
+				layer4.bringToTop()
 
 				//set up the collition
 				for (var i = 0; i < map.tilesets.length; i++) {
@@ -198,6 +200,55 @@ function loadMap(_island,_map,callback){
 }
 
 $(document).ready(function() {
+
+	//----------------------first--------------------
+
+	//aply the bindings onto the settings ko
+	ko.applyBindings(settings,$('#settings-window').get(0));
+
+	//start the game
+	game = new Phaser.Game(800,600,settings.graphics.renderMode(),'game', { preload: preload, create: create, update: update, render: render},false,false)
+
+
+	//---------------------background----------------------
+
+	//dialog
+	$(".dialog").dialog({
+		draggable: false,
+		resizable: false,
+		autoOpen: false,
+		modal: true,
+		width: window.innerWidth - 100,
+		height: window.innerHeight - 100
+	})
+
+	//popups
+	$('.popup').each(function(index){
+		$(this).dialog({
+			title: $(this).data('title'),
+			resizable: false,
+			autoOpen: false,
+			modal: true
+		})
+	})
+
+	//tooltips
+	$(".tool-tip").tooltip({
+		content: $(this).data('tool-tip')
+	})
+
+	//select
+	$('select').selectmenu({
+		width:200,
+		change: function(event,ui){
+			$(event.target).trigger('change')
+		}
+	});
+
+
+	//---------------------app--------------------
+	
+	//progressbar
 	$('#progress-bar').progressbar({
 		max: 100,
       	value: false,
@@ -208,21 +259,46 @@ $(document).ready(function() {
 			$('#progress-bar .progress-label').text("Complete!");
 		}
 	})
-	$('#settings-window').dialog({
-		title: "Settings",
-		draggable: false,
-		resizable: false,
-		autoOpen: false,
-		width: window.innerWidth - 100,
-		height: window.innerHeight - 100
+
+	$('#menu').dialog("option",{
+		title: "Menu",
+		buttons: [ 
+			{ 
+				text: "Save", 
+				click: function() 
+				{
+				 	$(this).dialog("close"); 
+				 	localStorage.setItem('settings',ko.mapping.toJSON(settings))
+				 	$("#reload-popup").dialog('open')
+				} 
+			} 
+		]
 	})
+
+	//popups
+	$('#reload-popup').dialog('option','buttons',[
+		{
+			text: 'Not now',
+			click: function() 
+			{
+			 	$(this).dialog("close"); 
+			}
+		},
+		{
+			text: 'reload',
+			click: function() 
+			{
+			 	location.reload()
+			} 
+		}
+	])
 
 	//buttons
 	$('#menu-button').button({
 		text: false,
 		icons: {primary: "ui-icon-gear"}
 	}).click(function(event) {
-		$('#settings-window').dialog('open')
+		$('#menu').dialog('open')
 	});
 
 	//resize
@@ -238,18 +314,19 @@ $(document).ready(function() {
 	});
 });
 
+//temp
 function resizeGame() {
-	// var height = $(window).height();
-	// var width = $(window).width();
+	var height = $(window).height();
+	var width = $(window).width();
 		
-	// game.width = width;
-	// game.height = height;
-	// game.stage.bounds.width = width;
-	// game.stage.bounds.height = height;
-	// game.camera.setSize(width,height)
+	game.width = width;
+	game.height = height;
+	game.stage.bounds.width = width;
+	game.stage.bounds.height = height;
+	game.camera.setSize(width,height)
 		
-	// if (game.renderType === Phaser.WEBGL)
-	// {
-	// 	game.renderer.resize(width, height);
-	// }
+	if (game.renderType === Phaser.WEBGL)
+	{
+		game.renderer.resize(width, height);
+	}
 }

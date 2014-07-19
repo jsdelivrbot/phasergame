@@ -2,17 +2,22 @@
 <html>
 	<head>
 		<title>phaser game</title>
-		<script src="jquery/jquery.js" type="text/javascript"></script>
-		<script src="jquery/jquery-ui.min.js" type="text/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="jquery/jquery-ui.min.css">
-		<link rel="stylesheet" type="text/css" href="jquery/jquery-ui.theme.min.css">
+		<script src="js/lib/jquery/jquery.js" type="text/javascript"></script>
+		<script src="js/lib/jquery/jquery-ui.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" type="text/css" href="js/lib/jquery/jquery-ui.min.css">
+		<link rel="stylesheet" type="text/css" href="js/lib/jquery/jquery-ui.theme.min.css">
 
-		<script src="js/knockout.js" type="text/javascript"></script>
+		<!-- game lib -->
+		<script src="js/lib/knockout.js" type="text/javascript"></script>
+		<script src="js/lib/knockout-mapping.js" type="text/javascript"></script>
+		<script src="js/lib/phaser.min.js" type="text/javascript"></script>
 
-		<script src="js/preload.js" type="text/javascript"></script>
+		<!-- data -->
+		<script src="js/objs/settings.js" type="text/javascript"></script>
 
-		<script src="js/phaser.min.js" type="text/javascript"></script>
-		<script src="js/main.js" type="text/javascript"></script>
+		<!-- game -->
+		<script src="js/objs/preload.js" type="text/javascript"></script>
+		<script src="js/game.js" type="text/javascript"></script>
 
 		<link rel="stylesheet" type="text/css" href="js/style.css">
 	</head>
@@ -25,8 +30,13 @@
 					<div id="progress-bar"><div class="progress-label">Loading...</div></div>
 				</div>
 
-				<div id="settings-window" class="menu">
-					<p>testing</p>
+				<div id="menu" class="dialog">
+					<label>Render Mode</label>
+					<select data-bind="value: graphics.renderMode, foreach: graphics.renderModes">
+						<option data-bind="value: data, text: name"></option>
+					</select>
+
+					<div id="reload-popup" class="popup" data-title="Warning">You are going to have to reload the game for the settings to take effect</div>
 				</div>
 			</div>
 		</div>

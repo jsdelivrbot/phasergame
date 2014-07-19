@@ -5,33 +5,24 @@
 		"maps":[
 			{
 				"id":"0",
-				"island":"0",
 				"name":"",
 				"url":"island_1/island_1.json"
 			},
 			{
 				"id":"1",
-				"island":"0",
 				"name":"",
 				"url":"island_1/room_1.json"
 			},
 			{
 				"id":"2",
-				"island":"0",
 				"name":"",
 				"url":"island_1/room_2.json"
 			},
 			{
 				"id":"3",
-				"island":"0",
 				"name":"",
 				"url":"island_1/room_3.json"
 			}
 		]
-	},
-	{
-		"id":"1",
-		"name":"island2",
-		"maps":[]
 	}
 ]
