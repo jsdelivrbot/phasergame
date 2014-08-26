@@ -16,13 +16,30 @@ settings = {
 			}
 		]),
 		renderMode: ko.observable(Phaser.AUTO)
-	}
+	},
+	keyboard: [
+		{
+			name: 'move up',
+			key: ko.observable(Phaser.Keyboard.UP)
+		},
+		{
+			name: 'move down',
+			key: ko.observable(Phaser.Keyboard.DOWN)
+		},
+		{
+			name: 'move right',
+			key: ko.observable(Phaser.Keyboard.RIGHT)
+		},
+		{
+			name: 'move left',
+			key: ko.observable(Phaser.Keyboard.LEFT)
+		}
+	]
 }
+	
+settings = ko.mapping.fromJSON(ko.toJSON(settings))
 
 //load the settings from localStorage
 if(localStorage.settings){
-	settings = ko.mapping.fromJSON(localStorage.settings)
-}
-else{
-	settings = ko.mapping.fromJSON(ko.toJSON(settings))
+	settings = ko.mapping.fromJSON(localStorage.settings,settings)
 }

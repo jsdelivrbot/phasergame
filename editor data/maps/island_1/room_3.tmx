@@ -19,22 +19,22 @@
  </layer>
  <layer name="layer2" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC1vAyMCwgAK8GojXkIDXIundDMRbSMBbkfSSA0b1juqlpV5yMQADv93khAMAAA==
+   H4sIAAAAAAAAC2NgoAysZmRgWEMCXsuI0LsZyN5CAt7KiNsdo2AUDFUAABVFba2EAwAA
   </data>
  </layer>
  <layer name="layer3" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoAx8ZkTl9zNBMAj8Q5JjBoqxADErE0JsN1B+DxDvBWILoPh0KIaBn0DxX0DMDRTjAWJeJLnDQPEjQHwUiB2QxBmA7O9AMUYgzQTEwkAsAsSiSGpOA+XPAPFZNLfD9H/BJj4AwBNLWBAL/iOphYUFOQAUlt9JCQ8ke0Bu8CLWXiZU/4LiIIiJOP1eaHo9ofwgIvQG4dDrSUAvseqIAQAci0SzhAMAAA==
+   H4sIAAAAAAAAC2NgoAx8ZkTl9zNBMAj8Q5JjBoqxADErE0JsN1B+DxDvBWILoPh0KIaBn0DxX0DMDRTjAWJeJLnDQPEjQHwUiB2QxBmA7O9AMUYgzQTEwkAsAsSiSGpOA+XPAPFZNLfD9H/BJj4AwJOJsBpc4D+SH2BhQQ4AheV3UsIDyR6QG7yItZcJ1b+gOAhiIk6/F5peTyg/iAi9QTj0Egp7YtURAwCgZ0DUhAMAAA==
   </data>
  </layer>
  <layer name="layer4" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgGAWjYBQMJAAA7Ly31YQDAAA=
+   H4sIAAAAAAAAC1vAyMCwgAJMDhjVS7ren0D8i0QzBtrNI00vuRgARqoD+4QDAAA=
   </data>
  </layer>
  <layer name="col" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC5vFyMAwi04YBGihtxcqj64GJN4HlZuCJt6Lpg9dP7HixABy9eIKB1rrxaaf1vYSivvBppea+QIAcL125oQDAAA=
+   H4sIAAAAAAAAC5vFyMAwi04YBGihtxcqj64GJN4HlZuCJt6Lpg9dP7HixABy9aL7n1y95JhBrl5y7SUU94NNLzXzBQAM5xoqhAMAAA==
   </data>
  </layer>
  <objectgroup name="doors" width="15" height="15">

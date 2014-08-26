@@ -11,32 +11,92 @@
 		<script src="js/lib/knockout.js" type="text/javascript"></script>
 		<script src="js/lib/knockout-mapping.js" type="text/javascript"></script>
 		<script src="js/lib/phaser.min.js" type="text/javascript"></script>
+		<script src="js/lib/socket.io.js" type="text/javascript"></script>
+		<script src="js/lib/classy.js" type="text/javascript"></script>
 
-		<!-- data -->
+		<!-- functions -->
 		<script src="js/objs/settings.js" type="text/javascript"></script>
-
-		<!-- game -->
 		<script src="js/objs/preload.js" type="text/javascript"></script>
-		<script src="js/game.js" type="text/javascript"></script>
+
+		<!-- objs -->
+		<script src="js/objs/game.js" type="text/javascript"></script>
+		<script src="js/objs/server.js" type="text/javascript"></script>
+		<script src="js/objs/entity.js" type="text/javascript"></script>
+		<script src="js/objs/players.js" type="text/javascript"></script>
+
+		<!-- main -->
+		<script src="js/main.js" type="text/javascript"></script>
 
 		<link rel="stylesheet" type="text/css" href="js/style.css">
 	</head>
 	<body>
 		<div id="game">
 			<div id="ui">
-				<button id="menu-button">Menu button</button>
+				<button id="menu-button" class="button">Menu button</button>
 
 				<div id="loading-overlay">
 					<div id="progress-bar"><div class="progress-label">Loading...</div></div>
 				</div>
 
-				<div id="menu" class="dialog">
-					<label>Render Mode</label>
-					<select data-bind="value: graphics.renderMode, foreach: graphics.renderModes">
-						<option data-bind="value: data, text: name"></option>
-					</select>
+				<div id="connect">
+					<label>Server Ip</label>
+					<input type="text" id="server-ip" value="127.0.0.1:25565">
+				</div>
 
-					<div id="reload-popup" class="popup" data-title="Warning">You are going to have to reload the game for the settings to take effect</div>
+				<div id="login">
+					<input type="text" id="login-email" value="rdfriedl@gmail.com">
+					<input type="text" id="login-password" value="bio">
+				</div>
+
+				<div id="menu" class="dialog">
+					<div id="menu-tabs" class="tabs">
+					  	<ul>
+					  	  	<li><a href="#menu-tab-1">tab1</a></li>
+					  	  	<li><a href="#menu-tab-2">Settings</a></li>
+					  	  	<li><a href="#menu-tab-3">tab3</a></li>
+					  	</ul>
+					  	<div id="menu-tab-1">
+					  	 	<h2>Content heading 1</h2>
+
+					  	</div>
+					  	<div id="menu-tab-2">
+							<div id="settings-tabs" class="tabs">
+							  	<ul>
+							  	  	<li><a href="#settings-tab-1">Genral</a></li>
+							  	  	<li><a href="#settings-tab-2">Grapics</a></li>
+							  	  	<li><a href="#settings-tab-3">Keyboard</a></li>
+							  	</ul>
+							  	<div id="settings-tab-1">
+							  	 	<h2>Genral</h2>
+							  	</div>
+							  	<div id="settings-tab-2">
+							  	  	<h2>Grapics</h2>
+
+									<label>Render Mode</label>
+									<select data-bind="value: graphics.renderMode, foreach: graphics.renderModes">
+										<option data-bind="value: data, text: name"></option>
+									</select>
+								</div>
+							  	<div id="settings-tab-3">
+							  	 	<h2>Keyboard</h2>
+
+							  	 	<table id="settings-keybindings" data-bind="foreach: keyboard">
+							  	 		<tr>
+							  	 			<td data-bind="text: name"></td>
+							  	 			<td data-bind="text: key"></td>
+							  	 		</tr>
+							  	 	</table>
+							  	</div>
+
+								<button id="settings-save" class="button">Save</button>
+							</div>
+						</div>
+					  	<div id="menu-tab-3">
+					  	 	<h2>Content heading 3</h2>
+					  	</div>
+					</div>
+
+					<div id="reload-popup">You are going to have to reload the game for the settings to take effect</div>
 				</div>
 			</div>
 		</div>
