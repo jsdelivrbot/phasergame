@@ -217,3 +217,21 @@ $(document).ready(function() {
 // 		engin.renderer.resize(width, height);
 // 	}
 // }
+
+function $combind(obj,obj2){
+	for (var val in obj2){
+		if(typeof obj2[val] !== 'object'){
+			obj[val] = obj2[val]
+		}
+		else{
+			if(typeof obj[val] == 'object'){
+				obj[val] = $combind(obj[val],obj2[val])
+			}
+			else{
+				obj[val] = $combind({},obj2[val])
+			}
+		}
+	}
+
+	return obj;
+}

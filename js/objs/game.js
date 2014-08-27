@@ -20,6 +20,8 @@ Game = Class.$extend({
 		this.engin = _engin
 		this.server = _server
 		this.players = new Players()
+
+		this.loadMap(0,0)
 	},
 
 	//engin events
@@ -36,7 +38,7 @@ Game = Class.$extend({
 			if(_islands[_island].maps[_map]){
 
 				//when the map is loaded call this
-				function _createMap(){
+				this._createMap = function(){
 					//see if the old map is there
 					if(this.map){
 						this.layers.ground.destroy()
@@ -64,7 +66,10 @@ Game = Class.$extend({
 					this.layers.col.visible = false
 
 					//get the layers fixed
-		    		// this.player.bringToTop()
+					for (var i in  game.players.players) {
+						game.players.players[i].sprite.bringToTop()
+					};
+		    		this.players.player.sprite.bringToTop()
 					this.layers.layer4.bringToTop()
 
 					//set up the collition
@@ -96,6 +101,18 @@ Game = Class.$extend({
 						_door.properties.y = parseInt(this.map.objects.doors[i].properties.y)
 					};
 
+					// set the players position
+					game.players.player.update({
+						position: {
+							body: {
+								x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
+								y: parseInt(game.map.properties.spawnY) * game.map.tileHeight
+							},
+							island: _island,
+							map: _map
+						}
+					})
+
 					if(callback){
 						callback()
 					}
@@ -105,11 +122,11 @@ Game = Class.$extend({
 				if(!this.engin.cache.checkTilemapKey('map-'+_islands[_island].maps[_map].id)){
 					// engin.load.onLoadComplete.removeAll()
 					this.engin.load.tilemap('map-'+_islands[_island].maps[_map].id,'maps/'+_islands[_island].maps[_map].url, null, Phaser.Tilemap.TILED_JSON)
-					this.engin.load.onLoadComplete.add(_createMap,this)
+					this.engin.load.onLoadComplete.add(this._createMap,this)
 					this.engin.load.start()
 				}
 				else{
-					_createMap()
+					this._createMap()
 				}
 			}
 		}

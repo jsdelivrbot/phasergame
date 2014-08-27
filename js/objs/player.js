@@ -1,71 +1,104 @@
-//NOT USED
+PlayerData = Class.$extend({
+	data: {
+		id: {
+			id: 0,
+			name: '',
+			email: '',
+			passowrd: ''
+		},
+		position: {
+			body: {
+				x: 0,
+				y: 0,
+				vx: 0,
+				vy: 0
+			},
+			island: 0,
+			map: 0,
+		},
+		sprite: {
+			image: '',
+			animations: {
+				animation: '',
+				playing: false
+			}
+		}
+	},
 
-function Player(){
-	//player
-	_player = game.engin.add.sprite(0, 0,'player/1')
+	__init__: function(_data){
+		this.data = fn.combind({},this.data)
+		// put the data into this.data
+		fn.combind(this.data,_data)
+	},
 
-	//set up the animations
-	_player.animations.add('down',[0,1,2,3],10,true,true)
-	_player.animations.add('left',[4,5,6,7],10,true,true)
-	_player.animations.add('right',[8,9,10,11],10,true,true)
-	_player.animations.add('up',[12,13,14,15],10,true,true)
+	update: function(_data){
+		// put the data into this.data
+		fn.combind(this.data,_data)
+	}
+})
 
-    game.engin.physics.enable(_player, Phaser.Physics.ARCADE);
-    _player.body.setSize(20,18,6,30);
+Player = Class.$extend({
+	sprite: null,
+	data: null,
 
-    _player.update = function(){
-		if (game.engin.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
-	    {
-	        game.player.body.velocity.x = 200;
-	    	game.player.body.velocity.y = 0
-	        game.player.animations.play('right')
-	    }
-	 	else if (game.engin.input.keyboard.isDown(Phaser.Keyboard.LEFT))
-	    {
-	        game.player.body.velocity.x = -200;
-	    	game.player.body.velocity.y = 0
-	        game.player.animations.play('left')
-	    }
-	    else if (game.engin.input.keyboard.isDown(Phaser.Keyboard.UP))
-	    {
-	        game.player.body.velocity.y = -200;
-	    	game.player.body.velocity.x = 0
-	        game.player.animations.play('up')
-	    }
-	    else if (game.engin.input.keyboard.isDown(Phaser.Keyboard.DOWN))
-	    {
-	        game.player.body.velocity.y = 200;
-	    	game.player.body.velocity.x = 0
-	        game.player.animations.play('down')
-	    }
-	    else{
-	    	game.player.body.velocity.y = 0
-	    	game.player.body.velocity.x = 0
-	    	game.player.animations.stop()
-	    }
+	__init__:function(_playerDataJson){
+		this.sprite = game.engin.add.sprite(0, 0, _playerDataJson.sprite.image)
 
-	    //col
-	    if(game.col){
-	    	game.engin.physics.arcade.collide(game.player, game.col);
-	    }
+		//set up the animations
+		this.sprite.animations.add('down',[0,1,2,3],10,true,true)
+		this.sprite.animations.add('left',[4,5,6,7],10,true,true)
+		this.sprite.animations.add('right',[8,9,10,11],10,true,true)
+		this.sprite.animations.add('up',[12,13,14,15],10,true,true)
 
-	    if(game.doors){
-	    	game.engin.physics.arcade.collide(player, doors, function(_player,_door){
-				//set the player invisible so when the world if loading we dont see him
-				game.player.visible = false
+	    game.engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+	    this.sprite.body.setSize(20,18,6,30);
 
-	    		game.loadMap(_door.properties.island,_door.properties.map,function(){
-					game.player.visible = true
+	    this.data = new PlayerData(_playerDataJson)
+	    this.update(_playerDataJson)
+	},
+	update: function(_playerDataJson,dontSetXY){
+		// update the this.data
+		if(_playerDataJson){
+			this.data.update(_playerDataJson)
+		}
 
-					//move the player to spawn
-					game.player.x = (_door.properties.x || parseInt(map.properties.spawnX)) * map.tileWidth;
-					game.player.y = (_door.properties.y || parseInt(map.properties.spawnY)) * map.tileHeight;
-	    		})
-	    	},null,this)
-	    }
-    }
+		if(!dontSetXY){
+			this.sprite.position.x = this.data.data.position.body.x - this.sprite.body.offset.x
+			this.sprite.position.y = this.data.data.position.body.y - this.sprite.body.offset.y
+		}
+		this.sprite.body.velocity.x = this.data.data.position.body.vx
+		this.sprite.body.velocity.y = this.data.data.position.body.vy
 
-    _player.remove
 
-	return _player
-}
+		//update sprite
+		if(this.sprite.animations.currentAnim.name != this.data.data.sprite.animations.animation || this.sprite.animations.currentAnim.isPlaying != this.data.data.sprite.animations.playing){
+			this.sprite.animations.play(this.data.data.sprite.animations.animation)
+			if(!this.data.data.sprite.animations.playing){
+				this.sprite.animations.stop()
+			}
+		}
+
+		// update the x/y
+		this.data.update({
+			position: {
+				body: {
+					x: this.sprite.body.position.x,
+					y: this.sprite.body.position.y
+				}
+			}
+		})
+
+		return true
+	},
+	remove: function(){
+		// remove the sprite
+		this.sprite.destroy()
+
+		// remove my self from the players array
+		for (var i in game.players.players) {
+			if(game.players.players[i].data.data.id.id == this.data.data.id.id){
+				game.players.players.splice(i,1)
+			}
+		};
+	}
+});
