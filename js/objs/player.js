@@ -17,9 +17,9 @@ PlayerData = Class.$extend({
 			map: 0,
 		},
 		sprite: {
-			image: '',
+			image: 'player/1',
 			animations: {
-				animation: '',
+				animation: 'down',
 				playing: false
 			}
 		}
