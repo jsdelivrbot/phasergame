@@ -1,4 +1,4 @@
-PlayerData = Class.$extend({
+PlayerData = Klass({
 	data: {
 		id: {
 			id: 0,
@@ -14,7 +14,7 @@ PlayerData = Class.$extend({
 				vy: 0
 			},
 			island: 0,
-			map: 0,
+			map: 0
 		},
 		sprite: {
 			image: 'player/1',
@@ -25,10 +25,12 @@ PlayerData = Class.$extend({
 		}
 	},
 
-	__init__: function(_data){
-		this.data = fn.combind({},this.data)
+	initialize: function(_data){
+		this.data = fn.duplicate(this.data)
 		// put the data into this.data
-		fn.combind(this.data,_data)
+		if(_data){
+			fn.combind(this.data,_data)
+		}
 	},
 
 	update: function(_data){
@@ -37,11 +39,11 @@ PlayerData = Class.$extend({
 	}
 })
 
-Player = Class.$extend({
+Player = Klass({
 	sprite: null,
 	data: null,
 
-	__init__:function(_playerDataJson){
+	initialize: function(_playerDataJson){
 		this.sprite = game.engin.add.sprite(0, 0, _playerDataJson.sprite.image)
 
 		//set up the animations

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="32" tileheight="32">
  <properties>
-  <property name="spawnX" value="8"/>
-  <property name="spawnY" value="17"/>
+  <property name="spawnX" value="0"/>
+  <property name="spawnY" value="0"/>
  </properties>
- <tileset firstgid="1" source="../../tilesets/land.tsx"/>
+ <tileset firstgid="1" source="../tilesets/land.tsx"/>
  <tileset firstgid="369" name="PortTown2" tilewidth="32" tileheight="32">
-  <image source="../../../imgs/PortTown2.png" width="256" height="672"/>
+  <image source="../../imgs/PortTown2.png" width="256" height="672"/>
   <tile id="0">
    <properties>
     <property name="down" value="false"/>
@@ -386,46 +386,31 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="537" source="../../tilesets/col.tsx"/>
+ <tileset firstgid="537" source="../tilesets/col.tsx"/>
  <layer name="ground" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC6tiZGCoGsWjeBSP4lE8iknEAIWPcrhABgAA
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkgHADV9EcVABgAA
   </data>
  </layer>
  <layer name="layer2" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoD5oZGRgaCISNzNi1wMTB4FOILuLSNzNiF1PNyOmO0fBKICBRrS02ExheulES4vI6a8RSxrHlWeIcUcnljSOK88MhXzQRGU3dg0BPw9VAABufXM4QAYAAA==
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkgHADV9EcVABgAA
   </data>
  </layer>
  <layer name="layer3" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC82T30vCUBTH751PFQQa9JdnoqayyiRfxF4iQcHAwIGo0aqH7El7Sl+lJ/1c3GDsF9vYoC98OOzcc793ZztXiGzUlUI8wAUU4VIe8iXpXz8n/wpjeHPVnGpCPJHrwRXUoG7VNIhHrB/DCXSs/JQ4CzjrnLoha89wC024c9TmWS/AGTxa+Q/iJ5hgwCTAO0gtV73hejZ9/NSeMlSgKr0eYXoPqNXJX8NNzPfPUuUE/YVJj9GffeY9sZ3iN7HnValPHET01pi5nObN2/OqNCK+JHhXdY+2Kfao7tEugt9fyrP2n/y+2LuAb4eH9Pl/UbXEZwU/KfX4i88aNhnd9z1w+OvrQAYAAA==
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkgHADV9EcVABgAA
   </data>
  </layer>
  <layer name="layer4" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACytlZGAopTImFeDSMxTNmwjkTwLiyXjsGer+nUjAf/RwH7JeUtMfehwRch82s8nJA0Mlfj+SaCa13YfPnuFoHr3jl1C6JaWsBwA2AtePQAYAAA==
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkgHADV9EcVABgAA
   </data>
  </layer>
  <layer name="col" width="20" height="20">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC3NiYmBwGsEYF4DJIas1JdEMfGaj68NlHiluJUafKRMCk2IeLncTAwiZR6q5tDAPWQ+p5uDTj808bGaTkl6pYR4+f5AbbqTK4zN3MJuHzx5KzTOD6rWhsHxBNg/Et8GRDkhNX+gYABwkZwZABgAA
+   H4sIAAAAAAAAC2NgGAWjYBSMglEwCkgHADV9EcVABgAA
   </data>
  </layer>
- <objectgroup name="doors" width="20" height="20">
-  <object name="island_1" type="door" x="256" y="640" width="32" height="32">
-   <properties>
-    <property name="island" value="0"/>
-    <property name="map" value="0"/>
-    <property name="x" value="220"/>
-    <property name="y" value="280"/>
-   </properties>
-  </object>
-  <object name="room_3" type="door" x="544" y="544" width="32" height="32">
-   <properties>
-    <property name="island" value="0"/>
-    <property name="map" value="3"/>
-   </properties>
-  </object>
- </objectgroup>
+ <objectgroup name="doors" width="20" height="20"/>
 </map>

@@ -1,8 +1,8 @@
-Players = Class.$extend({
+Players = Klass({
 	player: null,
 	players: [],
 
-	__init__:function(){
+	initialize:function(){
 		
 	},
 
@@ -156,6 +156,6 @@ Players = Class.$extend({
 	    	},null,this)
 	    }
 
-	    game.server.out.player.data(this.player.data.data)
+	    game.server.out.update.data(this.player.data.data)
 	}
 })

@@ -1,56 +1,62 @@
-ServerOut = Class.$extend({
+ServerOut = Klass({
 	name: '',
-	_data: {},
- 	changed: false,
- 	interval: null,
- 	callback: null,
-	__init__: function(name,timing,callback){
-		if(timing){
-			this.interval = window.setInterval(this.send,timing,this)
-		}
-		this.name = name || ''
+	socket: null,
+	initialize: function(name){
+		this.name = name
 	},
 	data: function(data){
-		if(data){
-			if(JSON.stringify(data) !== JSON.stringify(this._data)){
-				this.changed = true;
-
-				$combind(this._data,data)
-			}
+		if(this.socket){
+			this.socket.emit(this.name,data)
 		}
-		return this._data;
 	},
-	send: function(_this){
-		if(server){
-			if(server.socket && _this.changed){
-				if(this.callback){
-					server.socket.emit(_this.name,_this._data,_this.callback)
-				}
-				else{
-					server.socket.emit(_this.name,_this._data)
-				}
-				_this.changed = false
-			}
-		}
+	bind: function(socket){
+		this.socket = socket
 	}
 })
 
-ServerIn = Class.$extend({
+ServerIn = Klass({
 	name: '',
 	callback: null,
 	data: {},
-	__init__: function(name,callback){
+	initialize: function(name,callback){
 		this.name = name || ''
 		this.callback = callback
 	},
-	bind: function(){
+	bind: function(socket){
 		if(this.callback){
-			server.socket.on(this.name,this.callback)
+			socket.on(this.name,this.callback)
 		}
 	}
 })
 
-Server = Class.$extend({
+ServerOutCache = ServerOut.extend({
+	_data: null,
+	changed: false,
+	initialize: function(name,timing){
+		this.supr(name)
+
+		window.setInterval(this.test,timing,this)
+	},
+	data: function(data){
+		if(JSON.stringify(data) !== JSON.stringify(this._data)){
+			this._data = fn.duplicate(data)
+			this.changed = true
+		}
+	},
+	test: function(_this){
+		if(_this.changed){
+			_this.send(_this._data)
+		}
+	},
+	send: function(data){
+		if(this.socket){
+			this.socket.emit(this.name,data)
+			this.changed = false
+		}
+	}
+})
+
+Server = Klass({
 	//data from the server is stored here
 	in: {
 		players: new ServerIn('players',function(data){
@@ -61,7 +67,7 @@ Server = Class.$extend({
 		}),
 	},
 	out: {
-		player: new ServerOut('update',100),
+		update: new ServerOutCache('update',100),
 		message: new ServerOut('message',500)
 	},
 	socket: null,
@@ -75,7 +81,10 @@ Server = Class.$extend({
 			this.socket.on('disconnect',disconnect)
 
 			for (var index in this.in) {
-				this.in[index].bind()
+				this.in[index].bind(this.socket)
+			};
+			for (var index in this.out) {
+				this.out[index].bind(this.socket)
 			};
 		}
 	},

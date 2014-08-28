@@ -1,5 +1,5 @@
 //main game obj, created when we have a connection and the engin running
-Game = Class.$extend({
+Game = Klass({
 	engin: null,
 	server: null,
 
@@ -16,7 +16,7 @@ Game = Class.$extend({
 	players: null,
 
 	//functions
-	__init__: function(_engin,_server){
+	initialize: function(_engin,_server){
 		this.engin = _engin
 		this.server = _server
 		this.players = new Players()
@@ -65,10 +65,7 @@ Game = Class.$extend({
 
 					this.layers.col.visible = false
 
-					//get the layers fixed
-					for (var i in  game.players.players) {
-						game.players.players[i].sprite.bringToTop()
-					};
+					//get the layers fixed, cant move the other players yet becuace they have not been created
 		    		this.players.player.sprite.bringToTop()
 					this.layers.layer4.bringToTop()
 
@@ -106,10 +103,10 @@ Game = Class.$extend({
 						position: {
 							body: {
 								x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
-								y: parseInt(game.map.properties.spawnY) * game.map.tileHeight
-							},
-							island: _island,
-							map: _map
+								y: parseInt(game.map.properties.spawnY) * game.map.tileHeight,
+								island: _island,
+								map: _map
+							}
 						}
 					})
 
