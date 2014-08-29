@@ -277,7 +277,7 @@ function preload(){
 	})
 
 	engin.load.onFileComplete.add(function(){
-		$('#progress-bar').progressbar('value',engin.load.progressFloat)
+		$('#loading-bar>span').css('width',engin.load.progressFloat + '%')
 	})
 
 	engin.load.onLoadComplete.add(function(){
@@ -286,6 +286,7 @@ function preload(){
 		engin.load.onFileComplete.removeAll()
 		engin.load.onLoadComplete.removeAll()
 
-		$("#connect").dialog('open')
+
+		page.modules.connect.open()
 	})
 }

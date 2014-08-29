@@ -1,0 +1,49 @@
+body{
+	margin: 0px;
+	background-color: black;
+	overflow: hidden;
+}
+#game>canvas{
+	margin: auto;
+}
+
+/*ui*/
+#ui{
+	width:100%;
+	height:100%;
+	position:absolute;
+}
+
+/*loading*/
+#loading-overlay{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	background-color: black;
+}
+
+#chat{
+	position: absolute !important;
+	height: auto;
+	overflow: hidden;
+	opacity: 0.3;
+	left: 85%;
+
+	-webkit-transition: all .2s;
+	-moz-transition: all .2s;
+	-o-transition: all .2s;
+	transition: all .2s;
+}
+#chat.out{
+	left: 67%;
+	opacity: 1;
+}
+#chat:hover{
+	left: 67%;
+	opacity: 1;
+}
+#chat-messages{
+	overflow: auto;
+	max-height: 400px;
+}

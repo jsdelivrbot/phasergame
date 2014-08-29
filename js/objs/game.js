@@ -22,12 +22,30 @@ Game = Klass({
 		this.players = new Players()
 
 		this.loadMap(0,0)
+
+		// keys
+		this.engin.input.keyboard.addCallbacks(this,function(event){
+			switch(event.keyIdentifier){
+				case "Enter": 
+					if($("#chat-message").is(":focus") == false){
+						$("#chat-message").focus();
+						event.stopPropagation()
+					}
+					break;
+				case "U+001B":
+					if($("#chat-message").is(":focus") == true){
+						$("#chat-message").blur();
+						event.stopPropagation()
+					}
+					break;
+			}
+		})
 	},
 
 	//engin events
-	update: function(){
+	step: function(){
 		//send updates to controlers/objs that need it
-		this.players.update()
+		this.players.step()
 		this.players.updatePlayer()
 	},
 

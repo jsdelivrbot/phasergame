@@ -61,14 +61,16 @@ Server = Klass({
 	in: {
 		players: new ServerIn('players',function(data){
 			server.in.players.data = data
+
+			game.players.update()
 		}),
 		chat: new ServerIn('chat',function(data){
-			server.in.chat.data = data
+			page.chat.messages.push(data)
 		}),
 	},
 	out: {
 		update: new ServerOutCache('update',100),
-		message: new ServerOut('message',500)
+		chat: new ServerOut('chat')
 	},
 	socket: null,
 

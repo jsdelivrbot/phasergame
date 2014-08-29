@@ -16,6 +16,12 @@ Players = Klass({
 		game.engin.camera.follow(this.player.sprite)
 	},
 
+	step: function(){
+		for (var i in this.players) {
+			this.players[i].step()
+		};
+	},
+
 	update: function(){
 		// remove the players that are not there
 		for (var i in this.players) {
@@ -134,27 +140,7 @@ Players = Klass({
 
 	    this.player.update(data,true)
 
-		//col
-	    if(game.layers.col){
-	    	game.engin.physics.arcade.collide(this.player.sprite, game.layers.col);
-	    }
-
-	    if(game.layers.doors){
-	    	game.engin.physics.arcade.collide(this.player.sprite, game.layers.doors, function(_player,_door){
-	    		game.loadMap(_door.properties.island,_door.properties.map,function(){
-	    			if(_door.properties.x && _door.properties.y){
-						game.players.player.update({
-							position: {
-								body: {
-									x: (_door.properties.x) * game.map.tileWidth,
-									y: (_door.properties.y) * game.map.tileHeight
-								}
-							}
-						})
-	    			}
-	    		})
-	    	},null,this)
-	    }
+	    this.player.step()
 
 	    game.server.out.update.data(this.player.data.data)
 	}

@@ -44,7 +44,9 @@ Player = Klass({
 	data: null,
 
 	initialize: function(_playerDataJson){
-		this.sprite = game.engin.add.sprite(0, 0, _playerDataJson.sprite.image)
+	    this.data = new PlayerData(_playerDataJson)
+
+		this.sprite = game.engin.add.sprite(0, 0, this.data.data.sprite.image)
 
 		//set up the animations
 		this.sprite.animations.add('down',[0,1,2,3],10,true,true)
@@ -55,8 +57,21 @@ Player = Klass({
 	    game.engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	    this.sprite.body.setSize(20,18,6,30);
 
-	    this.data = new PlayerData(_playerDataJson)
 	    this.update(_playerDataJson)
+	},
+	step: function(){
+		//col
+	    if(game.layers.col){
+	    	game.engin.physics.arcade.collide(this.sprite, game.layers.col);
+	    }
+
+		//update sprite
+		if(this.sprite.animations.currentAnim.name != this.data.data.sprite.animations.animation || this.sprite.animations.currentAnim.isPlaying != this.data.data.sprite.animations.playing){
+			this.sprite.animations.play(this.data.data.sprite.animations.animation)
+			if(!this.data.data.sprite.animations.playing){
+				this.sprite.animations.stop()
+			}
+		}
 	},
 	update: function(_playerDataJson,dontSetXY){
 		// update the this.data
@@ -70,15 +85,6 @@ Player = Klass({
 		}
 		this.sprite.body.velocity.x = this.data.data.position.body.vx
 		this.sprite.body.velocity.y = this.data.data.position.body.vy
-
-
-		//update sprite
-		if(this.sprite.animations.currentAnim.name != this.data.data.sprite.animations.animation || this.sprite.animations.currentAnim.isPlaying != this.data.data.sprite.animations.playing){
-			this.sprite.animations.play(this.data.data.sprite.animations.animation)
-			if(!this.data.data.sprite.animations.playing){
-				this.sprite.animations.stop()
-			}
-		}
 
 		// update the x/y
 		this.data.update({
