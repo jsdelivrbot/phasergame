@@ -41,7 +41,8 @@ html, body{
 }
 #chat #chat-messages{
 	height: 250px;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	padding: 0px !important;
 	padding-left: 10px !important;
 	transform: rotateX(180deg);
@@ -87,6 +88,7 @@ html, body{
 #chat #chat-in-messages .chat-message>*{
 	margin: 0px;
 	color: white;
+	word-wrap:break-word;
 }
 
 #chat{

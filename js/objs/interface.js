@@ -78,10 +78,9 @@ page = {
 					page.chat.activeChanel.chanel(page.chat.chanels()[i])
 
 					// see if i own it
-					page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
-
-					// $("#chat-messages").scrollTop($("#chat-messages").get(0).scrollHeight - $("#chat-messages").outerHeight())
-					// $("#chat-in-messages").scrollTop($("#chat-in-messages").get(0).scrollHeight - $("#chat-in-messages").outerHeight())
+					if(game){
+						page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
+					}
 					break;
 				}
 			};
@@ -99,9 +98,6 @@ page = {
 
 			// see if i own it
 			page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
-
-			// $("#chat-messages").scrollTop($("#chat-messages").get(0).scrollHeight - $("#chat-messages").outerHeight())
-			// $("#chat-in-messages").scrollTop($("#chat-in-messages").get(0).scrollHeight - $("#chat-in-messages").outerHeight())
 		},
 		invite: function(){
 			if($("#chat-invite-name").val().length){
