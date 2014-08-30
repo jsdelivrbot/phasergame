@@ -85,8 +85,10 @@ html, body{
 #chat #chat-messages .chat-message,#chat #chat-in-messages .chat-message{
 	transform: rotateX(180deg);
 }
+#chat #chat-messages .chat-message>*{
+	word-wrap:break-word;
+}
 #chat #chat-in-messages .chat-message>*{
-	margin: 0px;
 	color: white;
 	word-wrap:break-word;
 }
