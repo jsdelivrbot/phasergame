@@ -66,15 +66,6 @@
 					<div data-bind="template:{name: template}"></div>
 				</div>
 
-				<div id="chat" class="panel large-4">
-					<div id="chat-messages" class="panel" data-bind="foreach: chat.messages">
-						<div><h5 data-bind="text: name" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
-					</div>
-					<form id="chat-send" class="no-action">
-						<input id="chat-message" type="text" style="width: 100%;">
-					</form>
-				</div>
-
 				<!-- <div id="connect" class="reveal-modal tiny" data-reveal>
 				  	<form class="no-action">
 					  	<div class="row">
@@ -90,6 +81,100 @@
 					</form>
 				</div> -->
 				
+			</div>
+		</div>
+
+		<div id="chat" class="panel large-4">
+
+	  		<div id="chat-in-messages" data-bind="foreach: chat.activeChanel.messages">
+	  			<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
+	  		</div>
+	  		
+			<div class="off-canvas-wrap" data-offcanvas style="height: 100%;">
+			  	<div class="inner-wrap" style="height: 100%;">
+
+			  	 	<nav class="tab-bar">
+				      	<section class="left-small">
+				      	  	<a class="left-off-canvas-toggle menu-icon" href="#"><span></span></a>
+				      	</section>
+
+				      	<section class="middle tab-bar-section">
+				      	  	<h1 class="title">Chat: <span data-bind="text: chat.activeChanel.title"></span></h1>
+				      	</section>
+
+				      	<section class="right-small">
+				      	  	<a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
+				      	</section>
+				    </nav>
+
+			  	 	<!-- Off Canvas Menu -->
+			  	 	<nav class="left-off-canvas-menu">
+					  	<ul class="off-canvas-list">
+					  	  	<li>
+						  	  	<label>Chanels</label> 
+					  	  	</li>
+					  	  	<div id="chat-chanels" data-bind="foreach: chat.chanels">
+					  	  		<li><a href="#" data-bind="text: title, attr:{'data-id': id}"></a></li>
+					  	  	</div>
+					  	  	<li>
+							    <div class="large-12 columns" style="padding: 0px;">
+							      	<div class="row collapse">
+							      	  	<div class="small-8 columns">
+							      	  	  	<input id="chat-new-title" type="text" placeholder="Title">
+							      	  	</div>
+							      	  	<div class="small-4 columns">
+							      	  	  	<a id="chat-new" href="#" class="button postfix" data-bind="click: chat.create">Create</a>
+							      	  	</div>
+							      	</div>
+							    </div>
+					  	  	</li>
+					  	</ul>
+					</nav>
+
+			  	 	<nav class="right-off-canvas-menu">
+					  	<ul class="off-canvas-list">
+					        <li class="has-submenu">
+					        	<a href="#">Actions</a>
+					            <ul class="right-submenu">
+					                <li class="back"><a href="#">Back</a></li>
+					                <li data-bind="visible: chat.activeChanel.canLeave == true && chat.activeChanel.own == false"><a href="#" data-bind="click: chat.leave">Leave</a></li>
+							  	  	<li data-bind="visible: chat.activeChanel.own">
+									    <div class="large-12 columns" style="padding: 0px;">
+									      	<div class="row collapse">
+									      	  	<div class="small-8 columns">
+									      	  	  	<input id="chat-invite-name" type="text" placeholder="Title">
+									      	  	</div>
+									      	  	<div class="small-4 columns">
+									      	  	  	<a href="#" class="button postfix" data-bind="click: chat.invite">Invite</a>
+									      	  	</div>
+									      	</div>
+									    </div>
+							  	  	</li>
+					                <li data-bind="visible: chat.activeChanel.own"><a href="#" data-bind="click: chat.close">Close</a></li>
+					            </ul>
+					        </li>
+					  	</ul>
+					  	<ul class="off-canvas-list">
+					  	  	<li><label>Players</label></li>
+					  	  	<div id="chat-players" data-bind="foreach: chat.activeChanel.players">
+					  	  		<li><a href="#" data-bind="text: name"></a></li>
+					  	  	</div>
+					  	</ul>
+					</nav>
+
+			  	 	<div>
+			  	 		<div id="chat-messages" class="content" data-bind="foreach: chat.activeChanel.messages">
+						  	<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
+					  	</div>
+
+						<form id="chat-send" class="no-action">
+							<input id="chat-message" type="text" style="width: 100%;">
+						</form>
+			  	 	</div>
+
+			  		<!-- close the off-canvas menu -->
+			  		<a class="exit-off-canvas"></a>
+			  	</div>
 			</div>
 		</div>
 	</body>

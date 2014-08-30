@@ -6,14 +6,14 @@ Players = Klass({
 		
 	},
 
-	createPlayer: function(){
-		this.player = new Player(new PlayerData({
-			sprite: {
-				image: 'player/1'
-			}
-		}).data)
+	createPlayer: function(_playerData){
+		console.log(_playerData)
+
+		this.player = new Player(_playerData)
 
 		game.engin.camera.follow(this.player.sprite)
+
+		game.loadMap(_playerData.position.island,_playerData.position.map)
 	},
 
 	step: function(){
@@ -50,10 +50,6 @@ Players = Klass({
 	},
 
 	updatePlayer: function(){
-		if(!this.player){
-			this.createPlayer()
-		}
-
 		if (game.engin.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
 	    {
 	    	data = {
@@ -138,10 +134,12 @@ Players = Klass({
 	    	}
 	    }
 
-	    this.player.update(data,true)
+	    if(this.player){
+		    this.player.update(data,true)
 
-	    this.player.step()
+		    this.player.step()
 
-	    game.server.out.update.data(this.player.data.data)
+		    game.server.out.update.data(this.player.data.data)
+	    }
 	}
 })

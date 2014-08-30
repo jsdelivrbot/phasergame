@@ -21,23 +21,10 @@ Game = Klass({
 		this.server = _server
 		this.players = new Players()
 
-		this.loadMap(0,0)
-
 		// keys
 		this.engin.input.keyboard.addCallbacks(this,function(event){
 			switch(event.keyIdentifier){
-				case "Enter": 
-					if($("#chat-message").is(":focus") == false){
-						$("#chat-message").focus();
-						event.stopPropagation()
-					}
-					break;
-				case "U+001B":
-					if($("#chat-message").is(":focus") == true){
-						$("#chat-message").blur();
-						event.stopPropagation()
-					}
-					break;
+				
 			}
 		})
 	},
@@ -117,16 +104,18 @@ Game = Klass({
 					};
 
 					// set the players position
-					game.players.player.update({
-						position: {
-							body: {
-								x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
-								y: parseInt(game.map.properties.spawnY) * game.map.tileHeight,
-								island: _island,
-								map: _map
+					if(game.players.player){
+						game.players.player.update({
+							position: {
+								body: {
+									x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
+									y: parseInt(game.map.properties.spawnY) * game.map.tileHeight,
+									island: _island,
+									map: _map
+								}
 							}
-						}
-					})
+						})
+					}
 
 					if(callback){
 						callback()

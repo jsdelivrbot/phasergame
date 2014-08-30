@@ -19,9 +19,9 @@ function update(){
 }
 
 function render(){
-	// if(game){
-	// 	game.engin.debug.text('fps: '+game.engin.time.fps,32,32)
-	// }
+	if(game){
+		game.engin.debug.text('fps: '+game.engin.time.fps,32,32)
+	}
 }
 
 $(document).ready(function() {
@@ -37,7 +37,7 @@ $(document).ready(function() {
 		/* Act on the event */
 		event.preventDefault()
 	});
-	$("a[href=#]").click(function(event) {
+	$("ht, body").on('click','a[href=#]',function(event) {
 		/* Act on the event */
 		event.preventDefault()
 	});
@@ -47,18 +47,33 @@ $(document).ready(function() {
 	$("#chat-send").submit(function(event) {
 		/* Act on the event */
 		if($("#chat-message").val().length){
-			server.out.chat.data($("#chat-message").val())
+			server.out.chat.data({
+				type: 'message',
+				chanel: page.chat.activeChanel.id(),
+				message: $("#chat-message").val()
+			})
 			$("#chat-message").val('')
 		}
 	});
 
-	$("#chat-message").focusin(function(event) {
+	$("#chat, #chat *").click(function(event) {
 		/* Act on the event */
 		$("#chat").addClass('out')
-	}).focusout(function(event) {
+	})
+	$(':not(#chat, #chat *)').click(function(event) {
 		/* Act on the event */
-		$("#chat").removeClass('out')
+		if(!$("#chat").is(":hover")){
+			$("#chat").removeClass('out')
+			$("#chat .off-canvas-wrap").removeClass('move-right')
+			$("#chat .off-canvas-wrap").removeClass('move-left')
+		}
 	});
+
+	$("#chat-chanels").on('click','a',function(event){
+		page.chat.open($(this).data('id'))
+		$("#chat .off-canvas-wrap").removeClass('move-right')
+		$("#chat .off-canvas-wrap").removeClass('move-left')
+	})
 
 	//resize
 	$(window).resize(function(event) {

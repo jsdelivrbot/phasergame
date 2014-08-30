@@ -65,7 +65,96 @@ Server = Klass({
 			game.players.update()
 		}),
 		chat: new ServerIn('chat',function(data){
-			page.chat.messages.push(data)
+			switch(data.type){
+				case 'you joined': 
+					// add the chanel
+					page.chat.chanels.push({
+						id: data.chanel.id,
+						title: data.chanel.title,
+						owner: data.chanel.owner,
+						canLeave: data.chanel.canLeave,
+						newMessage: false,
+						messages: [],
+						players: data.players
+					})
+
+					if(!page.chat.activeChanel.chanel()){
+						page.chat.open(0)
+					}
+					break;
+				case 'joined':
+					// add the player
+					for (var i = 0; i < page.chat.chanels().length; i++) {
+						if(page.chat.chanels()[i].id == data.chanel){
+							page.chat.chanels()[i].players.push(data.player)
+							
+							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
+								page.chat.update()
+							}
+							break;
+						}
+					};
+					break;
+				case 'message':
+					// add the message
+					for (var i = 0; i < page.chat.chanels().length; i++) {
+						if(page.chat.chanels()[i].id == data.chanel){
+							page.chat.chanels()[i].messages.unshift({
+								player: data.player.name,
+								message: data.message
+							})
+
+							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
+								page.chat.update()
+							}
+							break;
+						}
+					};
+					break;
+				case 'left':
+					// remove the player
+					for (var i = 0; i < page.chat.chanels().length; i++) {
+						if(page.chat.chanels()[i].id == data.chanel){
+							for (var j = 0; j < page.chat.chanels()[i].players.length; j++) {
+								if(page.chat.chanels()[i].players[j].id == data.player){
+									page.chat.chanels()[i].players.splice(j,1)
+								}
+							};
+
+							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
+								page.chat.update()
+							}
+							break;
+						}
+					};
+					break;
+				case 'you left':
+					// find the chanel
+					for (var i = 0; i < page.chat.chanels().length; i++) {
+						if(page.chat.chanels()[i].id == data.chanel){
+							// see if its the one that open
+							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
+								page.chat.open(0)
+							}
+							page.chat.chanels.splice(i,1)
+							break;
+						}
+					};
+					break;
+				case 'closed':
+					// find the chanel
+					for (var i = 0; i < page.chat.chanels().length; i++) {
+						if(page.chat.chanels()[i].id == data.chanel){
+							// see if its the one that open
+							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
+								page.chat.open(0)
+							}
+							page.chat.chanels.splice(i,1)
+							break;
+						}
+					};
+					break;
+			}
 		}),
 	},
 	out: {
@@ -93,7 +182,17 @@ Server = Klass({
 
 	login: function(email,password,callback){
 		if(this.socket){
-			this.socket.emit('login',{email:email,password:password},callback)
+			this.socket.emit('login',{email:email,password:password},function(data){
+				if(data){
+					//start the game
+					game = new Game(engin,server)
+					game.players.createPlayer(data)
+				}
+
+				if(callback){
+					callback(data)
+				}
+			})
 			return true
 		}
 		else{
