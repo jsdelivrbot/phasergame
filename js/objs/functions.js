@@ -49,5 +49,23 @@ fn = {
 		else{
 			return obj2
 		}
+	},
+	template: function(temp,obj2){
+		var obj = {}
+		for (var i in temp) {
+			if(obj2[i]){
+				if(typeof obj2[i] !== 'object'){
+					obj[i] = obj2[i]
+				}
+				else if(obj2[i].length){
+					
+				}
+				else{
+					fn.template(temp[i],obj2[i])
+				}
+			}
+		};
+
+		return obj;
 	}
 }

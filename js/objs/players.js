@@ -139,6 +139,22 @@ Players = Klass({
 
 		    this.player.step()
 
+		    // check for collision
+		    game.engin.physics.arcade.collide(this.player.sprite,game.layers.doors,function(_player,_door){
+		    	game.loadMap(_door.properties.island,_door.properties.map,function(){
+		    		if(_door.properties.x && _door.properties.y){
+		    			game.players.player.update({
+							position: {
+								body: {
+									x: parseInt(_door.properties.x) * game.map.tileWidth,
+									y: parseInt(_door.properties.y) * game.map.tileHeight
+								}
+							}
+						})
+		    		}
+		    	})
+		    },null,this)
+
 		    game.server.out.update.data(this.player.data.data)
 	    }
 	}
