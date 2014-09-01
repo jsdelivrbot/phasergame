@@ -12,6 +12,7 @@ Players = Klass({
 		this.player = new Player(_playerData)
 
 		game.engin.camera.follow(this.player.sprite)
+		game.engin.camera.deadzone = new Phaser.Rectangle(302.5,225,195,150)
 
 		game.loadMap(_playerData.position.island,_playerData.position.map)
 	},

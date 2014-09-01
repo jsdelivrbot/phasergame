@@ -20,13 +20,6 @@ Game = Klass({
 		this.engin = _engin
 		this.server = _server
 		this.players = new Players()
-
-		// keys
-		this.engin.input.keyboard.addCallbacks(this,function(event){
-			switch(event.keyIdentifier){
-				
-			}
-		})
 	},
 
 	//engin events
@@ -109,10 +102,10 @@ Game = Klass({
 							position: {
 								body: {
 									x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
-									y: parseInt(game.map.properties.spawnY) * game.map.tileHeight,
-									island: _island,
-									map: _map
-								}
+									y: parseInt(game.map.properties.spawnY) * game.map.tileHeight
+								},
+								island: _island,
+								map: _map
 							}
 						})
 					}

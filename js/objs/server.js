@@ -105,8 +105,8 @@ Server = Klass({
 							})
 
 							// see if we should remove some of the messages from the bottom of the array
-							if(page.caht.chanels()[i].messages.length > 100){
-								page.caht.chanels()[i].messages.length = 100
+							if(page.chat.chanels()[i].messages.length > 100){
+								page.chat.chanels()[i].messages.length = 100
 							}
 
 							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
