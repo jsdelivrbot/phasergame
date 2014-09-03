@@ -9,9 +9,7 @@ PlayerData = Klass({
 		position: {
 			body: {
 				x: 0,
-				y: 0,
-				vx: 0,
-				vy: 0
+				y: 0
 			},
 			island: 0,
 			map: 0
@@ -46,7 +44,7 @@ Player = Klass({
 	initialize: function(_playerDataJson){
 	    this.data = new PlayerData(_playerDataJson)
 
-		this.sprite = game.engin.add.sprite(0, 0, this.data.data.sprite.image)
+		this.sprite = game.engin.add.sprite(this.data.data.position.body.x, this.data.data.position.body.y, this.data.data.sprite.image)
 
 		//set up the animations
 		this.sprite.animations.add('down',[0,1,2,3],10,true,true)
@@ -56,48 +54,76 @@ Player = Klass({
 
 	    game.engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	    this.sprite.body.setSize(20,18,6,30);
-
-	    this.update(_playerDataJson)
 	},
 	step: function(){
-		//col
+		this.move()
+	    this.checkCol()
+		this.animate()
+	},
+	move: function(){
+		// x
+		if(Math.abs(this.data.data.position.body.x - this.sprite.position.x) < 200){
+			if(this.data.data.position.body.x - this.sprite.position.x > 5){
+				this.sprite.body.velocity.x = 175
+			}
+			else if(this.data.data.position.body.x - this.sprite.position.x < -5){
+				this.sprite.body.velocity.x = -175
+			}
+			else{
+				this.sprite.body.velocity.x = 0
+			}
+		}
+		else{
+			this.sprite.position.x = this.data.data.position.body.x
+			this.sprite.position.y = this.data.data.position.body.y
+		}
+		// y
+		if(Math.abs(this.data.data.position.body.y - this.sprite.position.y) < 200){
+			if(this.data.data.position.body.y - this.sprite.position.y > 5){
+				this.sprite.body.velocity.y = 175
+			}
+			else if(this.data.data.position.body.y - this.sprite.position.y < -5){
+				this.sprite.body.velocity.y = -175
+			}
+			else{
+				this.sprite.body.velocity.y = 0
+			}
+		}
+		else{
+			this.sprite.position.x = this.data.data.position.body.x
+			this.sprite.position.y = this.data.data.position.body.y
+		}
+	},
+	checkCol: function(){
 	    if(game.layers.col){
 	    	game.engin.physics.arcade.collide(this.sprite, game.layers.col);
 	    }
+	},
+	animate: function(){
+		// up/down
+		if(this.sprite.body.velocity.y > 0){
+			this.sprite.animations.play('down')
+		}
+		else if(this.sprite.body.velocity.y < 0){
+			this.sprite.animations.play('up')
+		}
 
-		//update sprite
-		if(this.sprite.animations.currentAnim.name != this.data.data.sprite.animations.animation || this.sprite.animations.currentAnim.isPlaying != this.data.data.sprite.animations.playing){
-			this.sprite.animations.play(this.data.data.sprite.animations.animation)
-			if(!this.data.data.sprite.animations.playing){
-				this.sprite.animations.stop()
-			}
+		// right/left
+		if(this.sprite.body.velocity.x > 0){
+			this.sprite.animations.play('right')
+		}
+		else if(this.sprite.body.velocity.x < 0){
+			this.sprite.animations.play('left')
+		}
+
+		// nothing
+		if(this.sprite.body.velocity.x == 0 && this.sprite.body.velocity.y == 0){
+			// stoped
+			this.sprite.animations.stop()
+			return;
 		}
 	},
-	update: function(_playerDataJson,dontSetXY){
-		// update the this.data
-		if(_playerDataJson){
-			this.data.update(_playerDataJson)
-		}
 
-		if(!dontSetXY){
-			this.sprite.position.x = this.data.data.position.body.x - this.sprite.body.offset.x
-			this.sprite.position.y = this.data.data.position.body.y - this.sprite.body.offset.y
-		}
-		this.sprite.body.velocity.x = this.data.data.position.body.vx
-		this.sprite.body.velocity.y = this.data.data.position.body.vy
-
-		// update the x/y
-		this.data.update({
-			position: {
-				body: {
-					x: this.sprite.body.position.x,
-					y: this.sprite.body.position.y
-				}
-			}
-		})
-
-		return true
-	},
 	remove: function(){
 		// remove the sprite
 		this.sprite.destroy()

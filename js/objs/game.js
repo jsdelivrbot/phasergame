@@ -26,7 +26,6 @@ Game = Klass({
 	step: function(){
 		//send updates to controlers/objs that need it
 		this.players.step()
-		this.players.updatePlayer()
 	},
 
 	loadMap: function(_island,_map,callback){
@@ -98,7 +97,7 @@ Game = Klass({
 
 					// set the players position
 					if(game.players.player){
-						game.players.player.update({
+						game.players.player.data.update({
 							position: {
 								body: {
 									x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
@@ -107,7 +106,8 @@ Game = Klass({
 								island: _island,
 								map: _map
 							}
-						})
+						},true)
+						game.players.player.jump()
 					}
 
 					if(callback){
