@@ -25,7 +25,7 @@ function render(){
 }
 
 $(document).ready(function() {
-	ko.applyBindings(_page)
+	ko.applyBindings(page)
 	$(document).foundation();
 	//start the engin / server
 	engin = new Phaser.Game(800,600,'auto','game', { preload: preload, create: create, update: update, render: render},false,false)

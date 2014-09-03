@@ -286,7 +286,6 @@ function preload(){
 		engin.load.onFileComplete.removeAll()
 		engin.load.onLoadComplete.removeAll()
 
-
-		page.modules.connect.open()
+		$("#connect-module").foundation('reveal', 'open')
 	})
 }
