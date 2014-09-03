@@ -1,4 +1,7 @@
 function preload(){
+	// engin settings
+	engin.stage.disableVisibilityChange = true;
+	
 	//data
 	engin.load.json('islands','data/islands.json')
 

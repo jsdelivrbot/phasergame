@@ -26,13 +26,13 @@ html, body{
 #chat{
 	position: relative !important;
 	overflow: hidden;
-	height: 332px;
 	padding: 0px;
 	border: 0px;
 
 	/*in*/
 	top: -45px;
 	width: 25%;
+	height: 45px;
 
 	-webkit-transition: all .2s;
 	-moz-transition: all .2s;
@@ -100,6 +100,7 @@ html, body{
 #chat.out{
 	top: -332px;
 	width: 35%;
+	height: 332px;
 }
 #chat.out #chat-in-messages{
 	display: none;

@@ -57,7 +57,6 @@ Player = Klass({
 	},
 	step: function(){
 		this.move()
-	    this.checkCol()
 		this.animate()
 	},
 	move: function(){
@@ -65,9 +64,11 @@ Player = Klass({
 		if(Math.abs(this.data.data.position.body.x - this.sprite.position.x) < 200){
 			if(this.data.data.position.body.x - this.sprite.position.x > 5){
 				this.sprite.body.velocity.x = 175
+				this.sprite.body.velocity.y = 0
 			}
 			else if(this.data.data.position.body.x - this.sprite.position.x < -5){
 				this.sprite.body.velocity.x = -175
+				this.sprite.body.velocity.y = 0
 			}
 			else{
 				this.sprite.body.velocity.x = 0
@@ -81,9 +82,11 @@ Player = Klass({
 		if(Math.abs(this.data.data.position.body.y - this.sprite.position.y) < 200){
 			if(this.data.data.position.body.y - this.sprite.position.y > 5){
 				this.sprite.body.velocity.y = 175
+				this.sprite.body.velocity.x = 0
 			}
 			else if(this.data.data.position.body.y - this.sprite.position.y < -5){
 				this.sprite.body.velocity.y = -175
+				this.sprite.body.velocity.x = 0
 			}
 			else{
 				this.sprite.body.velocity.y = 0
@@ -93,11 +96,6 @@ Player = Klass({
 			this.sprite.position.x = this.data.data.position.body.x
 			this.sprite.position.y = this.data.data.position.body.y
 		}
-	},
-	checkCol: function(){
-	    if(game.layers.col){
-	    	game.engin.physics.arcade.collide(this.sprite, game.layers.col);
-	    }
 	},
 	animate: function(){
 		// up/down

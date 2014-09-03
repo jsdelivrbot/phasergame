@@ -24,6 +24,10 @@ PlayerControl = Player.extend({
 			this.sprite.body.velocity.x = 0
 			this.sprite.body.velocity.y = 0
 	    }
+	    
+	    if(game.layers.col){
+	    	game.engin.physics.arcade.collide(this.sprite, game.layers.col);
+	    }
 
 	    this.data.update({
 	    	position: {
