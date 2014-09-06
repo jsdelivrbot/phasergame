@@ -15,12 +15,16 @@ page = {
 		password: ko.observable('password'),
 		login: function(){
 			server.login(this.email(),this.password(),function(data){
-				if(data == false){
-					console.log('failed')
-				}
-				else{
+				if(data){
 					console.log('logged in')
 					$("#login-module").foundation('reveal', 'close')
+					
+					//start the game
+					game = new Game(engin,server)
+					game.players.createPlayer(data)
+				}
+				else{
+					console.log('failed')
 				}
 		 	})
 		}

@@ -161,6 +161,9 @@ Server = Klass({
 					break;
 			}
 		}),
+		player: new ServerIn('player',function(data){
+			// update the player
+		})
 	},
 	out: {
 		update: new ServerOutCache('update',100),
@@ -188,12 +191,6 @@ Server = Klass({
 	login: function(email,password,callback){
 		if(this.socket){
 			this.socket.emit('login',{email:email,password:password},function(data){
-				if(data){
-					//start the game
-					game = new Game(engin,server)
-					game.players.createPlayer(data)
-				}
-
 				if(callback){
 					callback(data)
 				}

@@ -22,9 +22,11 @@ Players = Klass({
 			this.players[i].step()
 		};
 
-		this.player.step()
+		if(this.player){
+			this.player.step()
 
-		game.server.out.update.data(this.player.data.data)
+			game.server.out.update.data(this.player.data.data)
+		}
 	},
 
 	update: function(){
@@ -50,7 +52,15 @@ Players = Klass({
 			}
 			else{
 				this.players[game.server.in.players.data[i].id.id] = new Player(game.server.in.players.data[i])
+				this.fixPlayersLevels()
 			}
 		};
+	},
+	fixPlayersLevels: function(){
+		this.player.sprite.bringToTop()
+		for (var i in this.players) {
+			this.players[i].sprite.bringToTop()
+		};
+		game.layers.layer4.bringToTop()
 	}
 })

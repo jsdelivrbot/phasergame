@@ -63,8 +63,7 @@ Game = Klass({
 					this.layers.col.visible = false
 
 					//get the layers fixed, cant move the other players yet becuace they have not been created
-		    		this.players.player.sprite.bringToTop()
-					this.layers.layer4.bringToTop()
+		    		this.players.fixPlayersLevels()
 
 					//set up the collition
 					for (var i = 0; i < this.map.tilesets.length; i++) {

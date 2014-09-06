@@ -1,4 +1,8 @@
 PlayerControl = Player.extend({
+	initialize: function(_playerDataJson){
+		this.supr(_playerDataJson)
+		this.data = new PlayerDataFull(_playerDataJson)
+	},
 	move: function(){
 		if (game.engin.input.keyboard.isDown(Phaser.Keyboard.RIGHT))
 	    {
@@ -42,9 +46,11 @@ PlayerControl = Player.extend({
 		this.sprite.position.x = this.data.data.position.body.x
 		this.sprite.position.y = this.data.data.position.body.y
 	},
-	checkCol: function(){
+	step: function(){
 		this.supr()
-
+		this.checkCol()
+	},
+	checkCol: function(){
 	    // check for collision
 	    game.engin.physics.arcade.collide(this.sprite,game.layers.doors,function(_player,_door){
 	    	game.loadMap(_door.properties.island,_door.properties.map,function(){
