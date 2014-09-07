@@ -61,6 +61,8 @@ Players = Klass({
 		for (var i in this.players) {
 			this.players[i].sprite.bringToTop()
 		};
-		game.layers.layer4.bringToTop()
+		if(game.layers.layer4){
+			game.layers.layer4.bringToTop()
+		}
 	}
 })
