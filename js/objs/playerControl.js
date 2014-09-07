@@ -43,8 +43,8 @@ PlayerControl = Player.extend({
 	    })
 	},
 	jump: function(){
-		this.sprite.position.x = this.data.data.position.body.x
-		this.sprite.position.y = this.data.data.position.body.y
+		this.sprite.position.x = this.position.body.x
+		this.sprite.position.y = this.position.body.y
 	},
 	step: function(){
 		this.supr()

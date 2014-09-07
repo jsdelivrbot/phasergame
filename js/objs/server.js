@@ -67,97 +67,22 @@ Server = Klass({
 		chat: new ServerIn('chat',function(data){
 			switch(data.type){
 				case 'you joined': 
-					// add the chanel
-					page.chat.chanels.push({
-						id: data.chanel.id,
-						title: data.chanel.title,
-						owner: data.chanel.owner,
-						canLeave: data.chanel.canLeave,
-						newMessage: false,
-						messages: [],
-						players: data.players
-					})
-
-					if(!page.chat.activeChanel.chanel()){
-						page.chat.open(0)
-					}
+					chat.youJoined(data)
 					break;
 				case 'joined':
-					// add the player
-					for (var i = 0; i < page.chat.chanels().length; i++) {
-						if(page.chat.chanels()[i].id == data.chanel){
-							page.chat.chanels()[i].players.push(data.player)
-							
-							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
-								page.chat.update()
-							}
-							break;
-						}
-					};
+					chat.joined(data)
 					break;
 				case 'message':
-					// add the message
-					for (var i = 0; i < page.chat.chanels().length; i++) {
-						if(page.chat.chanels()[i].id == data.chanel){
-							page.chat.chanels()[i].messages.unshift({
-								player: data.player.name,
-								message: data.message
-							})
-
-							// see if we should remove some of the messages from the bottom of the array
-							if(page.chat.chanels()[i].messages.length > 100){
-								page.chat.chanels()[i].messages.length = 100
-							}
-
-							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
-								page.chat.update()
-							}
-							break;
-						}
-					};
+					chat.message(data)
 					break;
 				case 'left':
-					// remove the player
-					for (var i = 0; i < page.chat.chanels().length; i++) {
-						if(page.chat.chanels()[i].id == data.chanel){
-							for (var j = 0; j < page.chat.chanels()[i].players.length; j++) {
-								if(page.chat.chanels()[i].players[j].id == data.player){
-									page.chat.chanels()[i].players.splice(j,1)
-								}
-							};
-
-							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
-								page.chat.update()
-							}
-							break;
-						}
-					};
+					chat.left(data)
 					break;
 				case 'you left':
-					// find the chanel
-					for (var i = 0; i < page.chat.chanels().length; i++) {
-						if(page.chat.chanels()[i].id == data.chanel){
-							// see if its the one that open
-							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
-								page.chat.open(0)
-							}
-							page.chat.chanels.splice(i,1)
-							break;
-						}
-					};
+					chat.youLeft(data)
 					break;
 				case 'closed':
-					// find the chanel
-					for (var i = 0; i < page.chat.chanels().length; i++) {
-						if(page.chat.chanels()[i].id == data.chanel){
-							// see if its the one that open
-							if(page.chat.activeChanel.id() == page.chat.chanels()[i].id){
-								page.chat.open(0)
-							}
-							page.chat.chanels.splice(i,1)
-							break;
-						}
-					};
+					chat.closed(data)
 					break;
 			}
 		}),

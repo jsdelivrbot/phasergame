@@ -118,6 +118,11 @@ Player = Klass({
 	sprite: null,
 	data: null,
 
+	// short hands
+	id: 0,
+	name: '',
+	position: null,
+
 	initialize: function(_playerDataJson){
 	    this.data = new PlayerData(_playerDataJson)
 
@@ -131,6 +136,11 @@ Player = Klass({
 
 	    game.engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	    this.sprite.body.setSize(20,18,6,30);
+
+	    // set up short hands
+	    this.id = this.data.data.id.id
+	    this.name = this.data.data.id.name
+	    this.position = this.data.data.position
 	},
 	step: function(){
 		this.move()
@@ -138,12 +148,12 @@ Player = Klass({
 	},
 	move: function(){
 		// x
-		if(Math.abs(this.data.data.position.body.x - this.sprite.position.x) < 200){
-			if(this.data.data.position.body.x - this.sprite.position.x > 5){
+		if(Math.abs(this.position.body.x - this.sprite.position.x) < 200){
+			if(this.position.body.x - this.sprite.position.x > 5){
 				this.sprite.body.velocity.x = 175
 				this.sprite.body.velocity.y = 0
 			}
-			else if(this.data.data.position.body.x - this.sprite.position.x < -5){
+			else if(this.position.body.x - this.sprite.position.x < -5){
 				this.sprite.body.velocity.x = -175
 				this.sprite.body.velocity.y = 0
 			}
@@ -152,16 +162,16 @@ Player = Klass({
 			}
 		}
 		else{
-			this.sprite.position.x = this.data.data.position.body.x
-			this.sprite.position.y = this.data.data.position.body.y
+			this.sprite.position.x = this.position.body.x
+			this.sprite.position.y = this.position.body.y
 		}
 		// y
-		if(Math.abs(this.data.data.position.body.y - this.sprite.position.y) < 200){
-			if(this.data.data.position.body.y - this.sprite.position.y > 5){
+		if(Math.abs(this.position.body.y - this.sprite.position.y) < 200){
+			if(this.position.body.y - this.sprite.position.y > 5){
 				this.sprite.body.velocity.y = 175
 				this.sprite.body.velocity.x = 0
 			}
-			else if(this.data.data.position.body.y - this.sprite.position.y < -5){
+			else if(this.position.body.y - this.sprite.position.y < -5){
 				this.sprite.body.velocity.y = -175
 				this.sprite.body.velocity.x = 0
 			}
@@ -170,8 +180,8 @@ Player = Klass({
 			}
 		}
 		else{
-			this.sprite.position.x = this.data.data.position.body.x
-			this.sprite.position.y = this.data.data.position.body.y
+			this.sprite.position.x = this.position.body.x
+			this.sprite.position.y = this.position.body.y
 		}
 	},
 	animate: function(){
@@ -204,9 +214,9 @@ Player = Klass({
 		this.sprite.destroy()
 
 		// remove my self from the players array
-		for (var i in game.players.players) {
-			if(game.players.players[i].data.data.id.id == this.data.data.id.id){
-				game.players.players.splice(i,1)
+		for (var i in players) {
+			if(players[i].id == this.id){
+				players.splice(i,1)
 			}
 		};
 	}

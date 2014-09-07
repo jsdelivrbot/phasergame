@@ -18,10 +18,7 @@ page = {
 				if(data){
 					console.log('logged in')
 					$("#login-module").foundation('reveal', 'close')
-					
-					//start the game
-					game = new Game(engin,server)
-					game.players.createPlayer(data)
+					startGame(data)
 				}
 				else{
 					console.log('failed')
@@ -88,6 +85,112 @@ page = {
 		},
 		leave: function(){
 			server.out.chat.data({type: 'leave',chanel: page.chat.activeChanel.id()})
-		}	
+		},
+
+		// in-comming events
+		youJoined: function(data){
+			// add the chanel
+			this.chanels.push({
+				id: data.chanel.id,
+				title: data.chanel.title,
+				owner: data.chanel.owner,
+				canLeave: data.chanel.canLeave,
+				newMessage: false,
+				messages: [],
+				players: data.players
+			})
+
+			if(!this.activeChanel.chanel()){
+				this.open(0)
+			}
+		},
+		joined: function(data){
+			// add the player
+			for (var i = 0; i < this.chanels().length; i++) {
+				if(this.chanels()[i].id == data.chanel){
+					this.chanels()[i].players.push(data.player)
+					
+					if(this.activeChanel.id() == this.chanels()[i].id){
+						this.update()
+					}
+					break;
+				}
+			};
+		},
+		message: function(data){
+			// add the message
+			for (var i = 0; i < this.chanels().length; i++) {
+				if(this.chanels()[i].id == data.chanel){
+					this.chanels()[i].messages.unshift({
+						player: data.player.name,
+						message: data.message
+					})
+
+					// see if we should remove some of the messages from the bottom of the array
+					if(this.chanels()[i].messages.length > 100){
+						this.chanels()[i].messages.length = 100
+					}
+
+					if(this.activeChanel.id() == this.chanels()[i].id){
+						this.update()
+					}
+					break;
+				}
+			};
+		},
+		left: function(data){
+			// remove the player
+			for (var i = 0; i < this.chanels().length; i++) {
+				if(this.chanels()[i].id == data.chanel){
+					for (var j = 0; j < this.chanels()[i].players.length; j++) {
+						if(this.chanels()[i].players[j].id == data.player){
+							this.chanels()[i].players.splice(j,1)
+						}
+					};
+
+					if(this.activeChanel.id() == this.chanels()[i].id){
+						this.update()
+					}
+					break;
+				}
+			};
+		},
+		youLeft: function(data){
+			// find the chanel
+			for (var i = 0; i < this.chanels().length; i++) {
+				if(this.chanels()[i].id == data.chanel){
+					// see if its the one that open
+					if(this.activeChanel.id() == this.chanels()[i].id){
+						this.open(0)
+					}
+					this.chanels.splice(i,1)
+					break;
+				}
+			};
+		},
+		closed: function(data){
+			// find the chanel
+			for (var i = 0; i < this.chanels().length; i++) {
+				if(this.chanels()[i].id == data.chanel){
+					// see if its the one that open
+					if(this.activeChanel.id() == this.chanels()[i].id){
+						this.open(0)
+					}
+					this.chanels.splice(i,1)
+					break;
+				}
+			};
+		},
+	},
+	player: {
+		data: ko.mapping.fromJS(new PlayerDataFull().data),
+		update: {
+			up: function(){
+				// pulls data from game.players.player.data.data
+			},
+			down: function(){
+
+			}
+		}
 	}
 }

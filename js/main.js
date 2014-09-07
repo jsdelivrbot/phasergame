@@ -1,7 +1,26 @@
 var game = null;
 var engin = null;
-// var socket = null;
-var server = null
+var server = null;
+// page is defined in the interface.js
+var chat = page.chat;
+
+// short hands
+var player = null
+var playerData = null
+var players = null
+var mapsJSON = null
+
+function startGame(_playerData){
+	//start the game
+	game = new Game(engin,server)
+	game.players.createPlayer(_playerData)
+
+	// set the short hands
+	player = game.players.player
+	playerData = game.players.player.data
+	players = game.players.players
+	mapsJSON = game.engin.cache.getJSON("islands")
+}
 
 function create(){
 	//set up
