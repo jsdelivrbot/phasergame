@@ -1,7 +1,25 @@
-//main game obj, created when we have a connection and the engin running
+//engin events
+function create(){
+	//set up
+	engin.time.advancedTiming = true
+	engin.physics.startSystem(Phaser.Physics.ARCADE);
+
+	//resize the engin to fit the screen
+	$(window).trigger('resize')
+}
+function update(){
+	if(game.active){
+		game.step()
+	}
+}
+function render(){
+	if(game.active){
+		engin.debug.text('fps: '+engin.time.fps,32,32)
+	}
+}
+
 Game = Klass({
-	engin: null,
-	server: null,
+	active: false,
 
 	map: null,
 	layers: {
@@ -13,24 +31,68 @@ Game = Klass({
 		doors: null
 	},
 
+	timers: {
+		sendPlayerData: -1,
+	},
+
 	players: null,
 
 	//functions
-	initialize: function(_engin,_server){
-		this.engin = _engin
-		this.server = _server
+	initialize: function(){
 		this.players = new Players()
 	},
 
 	//engin events
 	step: function(){
-		//send updates to controlers/objs that need it
-		this.players.step()
+		//see if im active
+		if(this.active){
+			//send updates to controlers/objs that need it
+			this.players.step()
+		}
 	},
 
+	//clear canvas and start the game state
+	enter: function(){
+		if(this.active){
+			return;
+		}
+
+		this.active = true;
+
+		this.players.createPlayer(page.player());
+
+
+		f = _(this.players.sendData).bind(this.players)
+		this.timers.sendPlayerData = window.setInterval(f,100)
+	},
+
+	//clear canvas and end game state
+	exit: function(){
+		if(!this.active){
+			return;
+		}
+
+		this.active = false;
+		//tell players to get rid of all players
+		this.players.destroyAll();
+		//remove map
+		if(this.map){
+			this.layers.ground.destroy()
+			this.layers.layer2.destroy()
+			this.layers.layer3.destroy()
+			this.layers.layer4.destroy()
+			this.layers.col.destroy()
+			this.map.destroy()
+		}
+
+		//timers
+		window.clearInterval(this.timers.sendPlayerData);
+	},
+
+	//functions
 	loadMap: function(_island,_map,callback){
 		//see if we have the map
-		_islands = this.engin.cache.getJSON("islands")
+		_islands = engin.cache.getJSON("islands")
 		if(_islands[_island]){
 			if(_islands[_island].maps[_map]){
 
@@ -46,10 +108,12 @@ Game = Klass({
 						this.map.destroy()
 					}
 
-					this.map = this.engin.add.tilemap('map-'+_islands[_island].maps[_map].id)
+					this.map = engin.add.tilemap('map-'+_islands[_island].maps[_map].id)
+					this.map.properties.spawnX = parseInt(this.map.properties.spawnX)
+					this.map.properties.spawnY = parseInt(this.map.properties.spawnY)
 					//add the tilesets
-					for (var i = 0; i < this.engin.cache.getTilemapData('map-'+_islands[_island].maps[_map].id).data.tilesets.length; i++) {
-						_t = this.engin.cache.getTilemapData('map-'+_islands[_island].maps[_map].id).data.tilesets[i].name;
+					for (var i = 0; i < engin.cache.getTilemapData('map-'+_islands[_island].maps[_map].id).data.tilesets.length; i++) {
+						_t = engin.cache.getTilemapData('map-'+_islands[_island].maps[_map].id).data.tilesets[i].name;
 						this.map.addTilesetImage(_t,'tileset/'+_t)
 					};
 
@@ -75,7 +139,7 @@ Game = Klass({
 					this.layers.ground.resizeWorld();
 
 					//loop through the doors and create the col
-					this.layers.doors = this.engin.add.group()
+					this.layers.doors = engin.add.group()
 				    this.layers.doors.enableBody = true;
 				    this.layers.doors.physicsBodyType = Phaser.Physics.ARCADE;
 					for (var i = 0; i < this.map.objects.doors.length; i++) {
@@ -94,32 +158,17 @@ Game = Klass({
 						_door.properties.y = parseInt(this.map.objects.doors[i].properties.y)
 					};
 
-					// set the players position
-					if(game.players.player){
-						game.players.player.data.update({
-							position: {
-								body: {
-									x: parseInt(game.map.properties.spawnX) * game.map.tileWidth,
-									y: parseInt(game.map.properties.spawnY) * game.map.tileHeight
-								},
-								island: _island,
-								map: _map
-							}
-						},true)
-						game.players.player.jump()
-					}
-
 					if(callback){
 						callback()
 					}
 				}
 
 				//load the tile map
-				if(!this.engin.cache.checkTilemapKey('map-'+_islands[_island].maps[_map].id)){
+				if(!engin.cache.checkTilemapKey('map-'+_islands[_island].maps[_map].id)){
 					// engin.load.onLoadComplete.removeAll()
-					this.engin.load.tilemap('map-'+_islands[_island].maps[_map].id,'maps/'+_islands[_island].maps[_map].url, null, Phaser.Tilemap.TILED_JSON)
-					this.engin.load.onLoadComplete.add(this._createMap,this)
-					this.engin.load.start()
+					engin.load.tilemap('map-'+_islands[_island].maps[_map].id,'maps/'+_islands[_island].maps[_map].url, null, Phaser.Tilemap.TILED_JSON)
+					engin.load.onLoadComplete.add(this._createMap,this)
+					engin.load.start()
 				}
 				else{
 					this._createMap()

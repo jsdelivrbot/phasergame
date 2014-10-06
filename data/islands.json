@@ -32,6 +32,11 @@
 				"id":"5",
 				"name":"",
 				"url":"island_1/room_5.json"
+			},
+			{
+				"id":"6",
+				"name":"",
+				"url":"island_1/room_6.json"
 			}
 		]
 	}

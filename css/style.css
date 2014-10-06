@@ -24,13 +24,14 @@ html, body{
 }
 
 #chat{
-	position: relative !important;
+	position: absolute;
 	overflow: hidden;
 	padding: 0px;
+	margin: 0px;
 	border: 0px;
 
 	/*in*/
-	top: -45px;
+	bottom: 0px;
 	width: 25%;
 	height: 45px;
 
@@ -98,7 +99,6 @@ html, body{
 }
 
 #chat.out{
-	top: -332px;
 	width: 35%;
 	height: 332px;
 }

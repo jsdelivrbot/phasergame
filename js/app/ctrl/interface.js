@@ -1,3 +1,10 @@
+observable = function(val,update){
+	o = new ko.observable(val);
+	o.subscribe(update);
+
+	return o;
+}
+
 page = {
 	connect: {
 		serverIp: ko.observable('127.0.0.1:8181'),
@@ -16,12 +23,10 @@ page = {
 		login: function(){
 			server.login(this.email(),this.password(),function(data){
 				if(data){
-					console.log('logged in')
 					$("#login-module").foundation('reveal', 'close')
-					startGame(data)
+					game.enter()
 				}
 				else{
-					console.log('failed')
 				}
 		 	})
 		}
@@ -41,6 +46,12 @@ page = {
 		activeChanelPlayers: ko.observableArray([]),
 		activeChanelOwn: ko.observable(false),
 		chanels: ko.observableArray([]),
+		sendMessageVal: ko.observable(''),
+		chanelSelect: function(event){
+			page.chat.open(this.id);
+			$("#chat .off-canvas-wrap").removeClass('move-right')
+			$("#chat .off-canvas-wrap").removeClass('move-left')
+		},
 		open: function(id){
 			for (var i = 0; i < this.chanels().length; i++) {
 				if(this.chanels()[i].id == id){
@@ -69,6 +80,16 @@ page = {
 
 			// see if i own it
 			page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
+		},
+		sendMessage: function(event){
+			if(page.chat.sendMessageVal().length){
+				server.out.chat.data({
+					type: 'message',
+					chanel: page.chat.activeChanel.id(),
+					message: page.chat.sendMessageVal()
+				})
+				page.chat.sendMessageVal('')
+			}
 		},
 		invite: function(){
 			if($("#chat-invite-name").val().length){
@@ -182,15 +203,18 @@ page = {
 			};
 		},
 	},
-	player: {
-		data: ko.mapping.fromJS(new PlayerDataFull().data),
-		update: {
-			up: function(){
-				// pulls data from game.players.player.data.data
-			},
-			down: function(){
+	settings: {
+		connect: {
 
-			}
+		},
+		login: {
+
+		},
+		menu: {
+			
 		}
-	}
+	},
+	player: observable(new PlayerDataFull().data,function(data){
+		//send to server
+	})
 }

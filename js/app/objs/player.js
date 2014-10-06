@@ -4,7 +4,7 @@ PlayerDataFull = Klass({
 			id: 0,
 			name: '',
 			email: '',
-			passowrd: ''
+			password: ''
 		},
 		position: {
 			body: {
@@ -22,7 +22,7 @@ PlayerDataFull = Klass({
 	},
 
 	initialize: function(_data){
-		this.data = fn.duplicate(this.data)
+		this.data = fn.duplicate(this.data);
 		// put the data into this.data
 		if(_data){
 			this.update(_data)
@@ -78,7 +78,7 @@ PlayerData = Klass({
 	},
 
 	initialize: function(_data){
-		this.data = fn.duplicate(this.data)
+		this.data = fn.duplicate(this.data);
 		// put the data into this.data
 		if(_data){
 			this.update(_data)
@@ -125,7 +125,7 @@ Player = Klass({
 	initialize: function(_playerDataJson){
 	    this.data = new PlayerData(_playerDataJson)
 
-		this.sprite = game.engin.add.sprite(this.data.data.position.body.x, this.data.data.position.body.y, this.data.data.sprite.image)
+		this.sprite = engin.add.sprite(this.data.data.position.body.x, this.data.data.position.body.y, this.data.data.sprite.image)
 
 		//set up the animations
 		this.sprite.animations.add('down',[0,1,2,3],10,true,true)
@@ -133,7 +133,7 @@ Player = Klass({
 		this.sprite.animations.add('right',[8,9,10,11],10,true,true)
 		this.sprite.animations.add('up',[12,13,14,15],10,true,true)
 
-	    game.engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+	    engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	    this.sprite.body.setSize(20,18,6,30);
 
 	    // set up short hands
@@ -206,16 +206,19 @@ Player = Klass({
 			return;
 		}
 	},
-
 	remove: function(){
 		// remove the sprite
 		this.sprite.destroy()
 
 		// remove my self from the players array
-		for (var i in players) {
-			if(players[i].id == this.id){
-				players.splice(i,1)
-			}
-		};
+		index = game.players.players.indexOf(this);
+		if(index !== -1){
+			game.players.players.splice(index,1)
+		}
+		// for (var i in players) {
+		// 	if(players[i].id == this.id){
+		// 		game.players.players.splice(i,1)
+		// 	}
+		// };
 	}
 });
