@@ -7,7 +7,7 @@ observable = function(val,update){
 
 page = {
 	connect: {
-		serverIp: ko.observable('127.0.0.1:8181'),
+		serverIp: ko.observable('127.0.0.1'),
 		connect: function(){
 			// socket = new Socket($("#server-ip").val())
 			server.connect(this.serverIp(),function(){

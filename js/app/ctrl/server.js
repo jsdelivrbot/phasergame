@@ -131,13 +131,23 @@ Server = Klass({
 		chat: new ServerOut('chat')
 	},
 	socket: null,
+	host: '',
 
 	connect: function(url,connect,disconnect){
 		if(!this.socket){
-			this.socket = new io(url)
+			url = url.replace('http://','')
+			url = url.replace('https://','')
+			url = url.replace('www.','')
+			url = 'http://'+url;
+
+
+			this.socket = new io(url + ':8181')
 
 			//set up events
-			this.socket.on('connect',connect)
+			this.socket.on('connect',function(){
+				server.host = url;
+				connect()
+			})
 			this.socket.on('disconnect',disconnect)
 			this.socket.on('error',this.error)
 
