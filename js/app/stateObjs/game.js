@@ -59,7 +59,7 @@ Game = Klass({
 
 		this.active = true;
 
-		this.players.createPlayer(page.player());
+		this.players.createPlayer(server.in.player.data);
 
 
 		f = _(this.players.sendData).bind(this.players)

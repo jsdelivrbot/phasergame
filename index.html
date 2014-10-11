@@ -7,6 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		
 		<script src="js/lib/jquery.js" type="text/javascript"></script>
+		<script src="js/lib/modernizr.min.js" type="text/javascript"></script>
 		<script src="js/lib/foundation.min.js" type="text/javascript"></script>
 		<script src="js/lib/knockout.js" type="text/javascript"></script>
 		<script src="js/lib/knockout-mapping.js" type="text/javascript"></script>
@@ -136,39 +137,73 @@
 			</div>
 		</div>
 
-		<div id="connect-module" class="reveal-modal tiny" data-reveal data-bind="with: connect">
-		  	<form class="no-action" data-bind="events:{submit: connect}">
-		  		<div class="row">
-			  		<h4>Server IP</h4>
-		  		</div>
-			  	<div class="row collapse">
-			  		<div class="small-9 columns">
-			          	<input type="text" data-bind="value: serverIp"/>
-			        </div>
-			        <div class="small-3 columns">
-			          	<a type="submit" href="#" class="button postfix" data-bind="click: connect"style="margin: 0px;">Connect</a>
-			        </div>
+		<div id="connect-module" class="reveal-modal xlarge" data-reveal data-bind="with: connect">
+	  		<div class="row">
+		  		<h4>Servers</h4>
+	  		</div>
+	  		<table>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Description</th>
+						<th>Server Ip</th>
+						<th>Players</th>
+					</tr>
+				</thead>
+				<tbody data-bind="foreach: servers">
+					<tr class="server" data-bind="css:{'selected': $index() === $root.connect.selectedServer(), 'pinging': status() == 0, 'failed': status() == 2}, click: $parent.select">
+						<td data-bind="text: title"></td>
+						<td data-bind="text: description"></td>
+						<td data-bind="text: ip"></td>
+						<td data-bind="text: players"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="row">
+			  	<div class="small-5 columns">
+			  		<ul class="button-group">
+			  		  <li><a href="#" class="button tiny" data-reveal-id="add-server-module">Add Server</a></li>
+			  		  <li><a href="#" class="button tiny" data-bind="css:{'disabled': selectedServer() == -1}, click: removeServer">Remove Server</a></li>
+			  		  <li><a href="#" class="button tiny" data-bind="click: refresh">Refresh</a></li>
+			  		</ul>
 			  	</div>
-			</form>
+			  	<div class="small-7 columns">
+			  		<form data-bind="event:{'submit':connect}">
+						<div class="row">
+							<div class="small-4 columns">
+								<input type="email" placeholder="Email" required data-bind="value: login.email, valueUpdate: 'keyup'">
+							</div>
+							<div class="small-4 columns">
+								<input type="password" placeholder="Password" required data-bind="value: login.password, valueUpdate: 'keyup'">
+							</div>
+							<div class="small-2 columns">
+							 	<div class="switch">
+								  	<input id="exampleCheckboxSwitch" type="checkbox" data-bind="checked: login.remember">
+								  	<label for="exampleCheckboxSwitch"></label>
+								</div> 
+							</div>
+							<div class="small-2 columns">
+								<a type="submit" href="#" class="button tiny" data-bind="css:{'disabled': selectedServer() == -1}, click: connect">Connect</a>
+							</div>
+						</div>
+					</form>
+			  	</div>
+			</div>
 		</div>
 
-		<div id="login-module" class="reveal-modal tiny" data-reveal data-bind="with: login">
-		  	<form class="no-action" data-bind="events:{submit: login}">
-			  	<div class="row">
-			  		<h4>Login</h4>
-			  	</div>
-			  	<div class="row">
-			  		<label>Email</label>
-	  	 	  	  	<input type="text" data-bind="value: email"/>
-			  	</div>
-			  	<div class="row">
-			  		<label>Password</label>
-	  	 	  	  	<input type="text" data-bind="value: password"/>
-			  	</div>
-			  	<div class="row">
-		  	 	  	<a type="submit" href="#" class="button tiny right" data-bind="click: login"style="margin: 0px;">Login</a>
-			  	</div>
-			</form>
+		<div id="add-server-module" class="reveal-modal small" data-reveal data-bind="with: connect">
+	  		<div class="row">
+		  		<h4>Add Servers</h4>
+	  		</div>
+	  		<form data-bind="event: {'submit': add}">
+	  			<div class="row">
+	  				<input type="text" placeholder="Server Ip" data-bind="value: newServer.ip"/>
+	  			</div>
+	  			<div class="row">
+	  				<a href="#" class="button tiny left secondary" data-reveal-id="connect-module">Cancel</a>
+	  				<input class="button tiny right" type="submit" value="Ok" />
+	  			</div>
+	  		</form>
 		</div>
 	</body>
 </html>

@@ -44,9 +44,9 @@ Players = Klass({
 	},
 
 	updateData: function(data){
-		page.player(data);
+		ko.mapping.fromJS({player:data},page);
 		// server.out.player.data(data);
-		server.in.player._data = fn.duplicate(data)
+		server.in.player.data = fn.duplicate(data)
 	},
 
 	update: function(){

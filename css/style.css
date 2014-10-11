@@ -114,3 +114,14 @@ html, body{
 #chat.out #chat-send{
 	display: block;
 }
+
+/*connect*/
+.server.selected{
+	background: lightgrey;
+}
+.server.pinging{
+	background: lightblue;
+}
+.server.failed{
+	background: pink;
+}

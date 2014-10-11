@@ -1,38 +1,105 @@
-observable = function(val,update){
-	o = new ko.observable(val);
-	o.subscribe(update);
-
-	return o;
-}
-
 page = {
 	connect: {
-		serverIp: ko.observable('127.0.0.1'),
+		newServer: {
+			ip: ''
+		},
+		servers: [],
+		login: {
+			email: '',
+			password: '',
+			remember: false
+		},
+		selectedServer: -1,
 		connect: function(){
-			// socket = new Socket($("#server-ip").val())
-			server.connect(this.serverIp(),function(){
-				$("#login-module").foundation('reveal', 'open')
-			},function(){
-				$("#connect-module").foundation('reveal', 'open')
-			})
-		}
-	},
-	login: {
-		email: ko.observable('account1@gmail.com'),
-		password: ko.observable('password'),
-		login: function(){
-			server.login(this.email(),this.password(),function(data){
-				if(data){
-					$("#login-module").foundation('reveal', 'close')
-					game.enter()
+			if(page.connect.servers()[page.connect.selectedServer()].status() === 1){
+				server.connect(page.connect.servers()[page.connect.selectedServer()].ip(),function(){
+					$("#connect-module").foundation('reveal', 'close')
+
+					server.login(page.connect.login.email(),page.connect.login.password(),function(data){
+						if(data){
+							$("#login-module").foundation('reveal', 'close')
+							game.enter()
+						}
+						else{
+						}
+			 		})
+				},function(){
+					$("#connect-module").foundation('reveal', 'open')
+				})
+			}
+			
+		},
+		select: function(){
+			//find the index
+			for (var i = 0; i < page.connect.servers().length; i++) {
+				if(page.connect.servers()[i].ip() == this.ip()){
+					if(page.connect.selectedServer() !== i){
+						page.connect.selectedServer(i)
+					}
+					else{
+						page.connect.selectedServer(-1)
+					}
+					break;
 				}
-				else{
-				}
-		 	})
+			};
+		},
+		add: function(){
+			page.connect.newServer.ip(page.connect.newServer.ip().replace('http://',''))
+			page.connect.newServer.ip(page.connect.newServer.ip().replace('https://',''))
+			page.connect.newServer.ip(page.connect.newServer.ip().replace('www.',''))
+			page.connect.newServer.ip(page.connect.newServer.ip().replace('/',''))
+
+			page.connect.servers.push(ko.mapping.fromJS({
+				status: 0, // 0: connecting, 1: connected, 2: failed
+				title: '',
+				description: '',
+				ip: page.connect.newServer.ip(),
+				players: 0,
+			}))
+			page.connect.newServer.ip('')
+
+			page.connect.refresh();
+
+			$('#connect-module').foundation('reveal', 'open')
+
+			page.connect.refresh()
+		},
+		refresh: function(){
+			//call all the servers
+			for (var i = 0; i < page.connect.servers().length; i++) {
+				page.connect.servers()[i].status(0)
+				$.ajax({
+					url: 'http://' + page.connect.servers()[i].ip() + ':8282',
+					type: 'GET',
+					dataType: 'json',
+					data: {type: 'info'},
+				})
+				.done(_(function(data) {
+
+					if(data.status){
+						this.status(1)
+						this.title(data.serverTitle)
+						this.description(data.serverDescription)
+						this.players(data.numberOfPlayers)
+					}
+
+				}).bind(page.connect.servers()[i]))
+				.fail(_(function() {
+
+					this.status(2)
+					this.players(0)
+
+				}).bind(page.connect.servers()[i]))
+			};
+		},
+		removeServer: function(){
+			page.connect.servers.splice(page.connect.selectedServer(),1)
+
+			page.connect.selectedServer(-1);
 		}
 	},
 	chat: {
-		activeChanel: ko.mapping.fromJS({
+		activeChanel: {
 			chanel: null,
 			id: -1,
 			title: '',
@@ -42,11 +109,9 @@ page = {
 			newMessage: false,
 			players: [],
 			messages: []
-		}),
-		activeChanelPlayers: ko.observableArray([]),
-		activeChanelOwn: ko.observable(false),
-		chanels: ko.observableArray([]),
-		sendMessageVal: ko.observable(''),
+		},
+		chanels: [],
+		sendMessageVal: '',
 		chanelSelect: function(event){
 			page.chat.open(this.id);
 			$("#chat .off-canvas-wrap").removeClass('move-right')
@@ -55,7 +120,7 @@ page = {
 		open: function(id){
 			for (var i = 0; i < this.chanels().length; i++) {
 				if(this.chanels()[i].id == id){
-					ko.mapping.fromJS(page.chat.chanels()[i],page.chat.activeChanel)
+					ko.mapping.fromJS({chat:{activeChanel:page.chat.chanels()[i]}},page)
 
 					page.chat.activeChanel.chanel(page.chat.chanels()[i])
 
@@ -76,7 +141,7 @@ page = {
 			$("#chat-new-title").val('')
 		},
 		update: function(event){
-			ko.mapping.fromJS(this.activeChanel.chanel(),page.chat.activeChanel)
+			ko.mapping.fromJS({chat:{activeChanel:this.activeChanel.chanel()}},page)
 
 			// see if i own it
 			page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
@@ -203,18 +268,34 @@ page = {
 			};
 		},
 	},
-	settings: {
-		connect: {
-
-		},
-		login: {
-
-		},
-		menu: {
-			
-		}
-	},
-	player: observable(new PlayerDataFull().data,function(data){
-		//send to server
-	})
+	player: new PlayerDataFull().data
 }
+
+//load from localStorage
+page = ko.mapping.fromJS(ko.toJS(page))
+
+
+if(localStorage.settings){
+	json = JSON.parse(localStorage.settings);
+
+	//dont overwrite these
+	page.__ko_mapping__.ignore.push('connect.selectedServer')
+	page.__ko_mapping__.ignore.push('connect.newServer')
+	if(!json.connect.login.remember){
+		page.__ko_mapping__.ignore.push('connect.login')
+	}
+
+	ko.mapping.fromJS(json,page)
+}
+$(window).unload(function(){
+	//dont export these things
+	page.__ko_mapping__.mappedProperties['chat'] = false;
+	page.__ko_mapping__.mappedProperties['player'] = false;
+	page.__ko_mapping__.mappedProperties['connect.login'] = false;
+	page.__ko_mapping__.mappedProperties['connect.newServer'] = false;
+	page.__ko_mapping__.mappedProperties['connect.selectedServer'] = false;
+
+	localStorage.settings = ko.mapping.toJSON(page)
+})
+
+page.connect.refresh();

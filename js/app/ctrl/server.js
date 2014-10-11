@@ -90,7 +90,7 @@ ServerOutDiff = ServerOut.extend({
 Server = Klass({
 	//data from the server is stored here
 	in: {
-		player: new ServerOutDiff('player', function(data){
+		player: new ServerInDiff('player', function(data){
 			game.players.updateData(data);
 		}),
 		players: new ServerIn('players',function(data){
@@ -117,10 +117,6 @@ Server = Klass({
 					page.chat.closed(data)
 					break;
 			}
-		}),
-		player: new ServerInDiff('player',function(data){
-			// update the player
-			page.player(data);
 		}),
 		disconnect: new ServerIn('disconnect',function(){
 			game.exit();
