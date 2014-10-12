@@ -1,22 +1,32 @@
-var game = null;
 var engin = null;
-var server = null;
 
-function startGame(_playerData){
-	//might want to to pass the events only to the state that is active
-	engin = new Phaser.Game(800,600,'auto','game', { preload: preload, create: create, update: update, render: render},false,false)
-	server = new Server()
-	//start the game
-	game = new Game()
+function loadData(cb){
+	cb = _.after(1,cb)
+
+	//sound.json
+	$.ajax({
+		url: 'snd/sound.json',
+		type: 'GET',
+		dataType: 'json'
+	})
+	.done(function(data) {
+		sound.json = data
+
+		cb()
+	})
+	.fail(function() {
+		throw new Error('failed to load sound json')
+	})
 }
 
 $(document).ready(function() {
 	ko.applyBindings(page);
 	$(document).foundation();
 
-	//start the engin / server / states
-	startGame();
-	
+	loadData(function(){
+		engin = new Phaser.Game(800,600,'auto','game', { preload: preload, create: create, update: update, render: render},false,false)
+	})
+
 	
 	//---------------------background----------------------
 

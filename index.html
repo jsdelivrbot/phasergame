@@ -19,15 +19,14 @@
 
 		<script src="js/app/init/functions.js" type="text/javascript"></script>
 		<script src="js/app/init/preload.js" type="text/javascript"></script>
-		
+		<script src="js/app/objs/players.js" type="text/javascript"></script>
 		<script src="js/app/objs/player.js" type="text/javascript"></script>
 		<script src="js/app/objs/playerControl.js" type="text/javascript"></script>
-
 		<script src="js/app/ctrl/interface.js" type="text/javascript"></script>
 		<script src="js/app/ctrl/server.js" type="text/javascript"></script>
-
+		<script src="js/app/ctrl/sound.js" type="text/javascript"></script>
 		<script src="js/app/stateObjs/game.js" type="text/javascript"></script>
-		<script src="js/app/objs/players.js" type="text/javascript"></script>
+		<script src="js/app/stateObjs/connect.js" type="text/javascript"></script>
 
 		<!-- main -->
 		<script src="js/app/app.js" type="text/javascript"></script>
@@ -183,7 +182,7 @@
 								</div> 
 							</div>
 							<div class="small-2 columns">
-								<a type="submit" href="#" class="button tiny" data-bind="css:{'disabled': selectedServer() == -1}, click: connect">Connect</a>
+								<a type="submit" href="#" class="button tiny" data-bind="css:{'disabled': (selectedServer() !== -1)? servers()[selectedServer()].status() !== 1 : true }, click: connect">Connect</a>
 							</div>
 						</div>
 					</form>
@@ -204,6 +203,10 @@
 	  				<input class="button tiny right" type="submit" value="Ok" />
 	  			</div>
 	  		</form>
+		</div>
+
+		<div id="menu" class="reveal-modal full" data-reveal data-bind="with: settings">
+			
 		</div>
 	</body>
 </html>

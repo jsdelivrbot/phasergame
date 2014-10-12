@@ -12,20 +12,7 @@ page = {
 		selectedServer: -1,
 		connect: function(){
 			if(page.connect.servers()[page.connect.selectedServer()].status() === 1){
-				server.connect(page.connect.servers()[page.connect.selectedServer()].ip(),function(){
-					$("#connect-module").foundation('reveal', 'close')
-
-					server.login(page.connect.login.email(),page.connect.login.password(),function(data){
-						if(data){
-							$("#login-module").foundation('reveal', 'close')
-							game.enter()
-						}
-						else{
-						}
-			 		})
-				},function(){
-					$("#connect-module").foundation('reveal', 'open')
-				})
+				server.connect(page.connect.servers()[page.connect.selectedServer()].ip())
 			}
 			
 		},
@@ -96,6 +83,14 @@ page = {
 			page.connect.servers.splice(page.connect.selectedServer(),1)
 
 			page.connect.selectedServer(-1);
+		}
+	},
+	settings:{
+		graphics: {
+
+		},
+		keys: {
+
 		}
 	},
 	chat: {

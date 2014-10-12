@@ -225,8 +225,15 @@ function preload(){
 	// engin.load.image('item/049','imgs/items/049-Skill06.png')
 	// engin.load.image('item/050','imgs/items/050-Skill07.png')
 
-	// //sound
-	// engin.load.audio('background/credits','snd/background/credits.mp3',true)
+	//sound
+
+	//load the background sound
+	for (var k in sound.json.background) {
+		for (var i = 0; i < sound.json.background[k].length; i++) {
+			s = sound.json.background[k][i]
+			engin.load.audio(s.url,'snd/background/'+s.url,true)
+		};
+	};
 
 
 	//tile sets

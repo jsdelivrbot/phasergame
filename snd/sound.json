@@ -1,0 +1,55 @@
+{
+	"background": {
+		"default": [
+			{
+				"url":"ancient-secrets.mp3",
+				"volume": 0.35
+			}
+		],
+		"dark": [
+			{
+				"url": "the-lord-of-evil.mp3",
+				"volume": 0.5
+			},
+			{
+				"url": "espionage.mp3",
+				"volume": 0.5
+			}
+		],
+		"fast": [
+			{
+				"url": "kill-zone.mp3",
+				"volume": 0.5
+			},
+			{
+				"url": "the-war-is-not-lost.mp3",
+				"volume": 0.5
+			},
+			{
+				"url": "dark-skies-of-doom.mp3",
+				"volume": 0.5
+			},
+			{
+				"url": "playing-to-win.mp3",
+				"volume": 0.5
+			},
+			{
+				"url": "resistance.mp3",
+				"volume": 0.5
+			}
+		],
+		"action": [
+			{
+				"url": "the-report.mp3",
+				"volume": 0.5
+			},
+			{
+				"url": "heroic-struggle.mp3",
+				"volume": 0.5
+			}
+		]
+	},
+	"fx": {
+
+	}
+}

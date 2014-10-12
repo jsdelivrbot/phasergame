@@ -15,6 +15,9 @@ ServerIn = Klass({
 			},this,this.callback)
 			socket.on(this.name,f)
 		}
+	},
+	unbind: function(){
+		//nothing to do right now
 	}
 })
 
@@ -44,6 +47,9 @@ ServerOut = Klass({
 	},
 	bind: function(socket){
 		this.socket = socket
+	},
+	unbind: function(){
+		this.socket = null
 	}
 })
 
@@ -87,7 +93,7 @@ ServerOutDiff = ServerOut.extend({
 	}
 })
 
-Server = Klass({
+server = {
 	//data from the server is stored here
 	in: {
 		player: new ServerInDiff('player', function(data){
@@ -117,43 +123,65 @@ Server = Klass({
 					page.chat.closed(data)
 					break;
 			}
-		}),
-		disconnect: new ServerIn('disconnect',function(){
-			game.exit();
 		})
 	},
 	out: {
 		player: new ServerOutDiff('player'),
 		chat: new ServerOut('chat')
 	},
+	options: {
+		reconnection: false,
+	},
 	socket: null,
-	host: '',
+	url: fn.parseURL(''),
 
-	connect: function(url,connect,disconnect){
-		if(!this.socket){
-			url = url.replace('http://','')
-			url = url.replace('https://','')
-			url = url.replace('www.','')
-			url = 'http://'+url;
+	connect: function(url){
+		url = url.replace('http://','')
+		url = url.replace('https://','')
+		url = url.replace('www.','')
+		url = 'http://'+url;
 
+		this.socket = new io(url+':8181',server.options)
 
-			this.socket = new io(url + ':8181')
+		//set up events
+		this.socket.on('connect',_(this.connectEvent).bind(this,url))
+		this.socket.on('disconnect',this.disconnectEvent)
+		this.socket.on('error',this.error)
+	},
 
-			//set up events
-			this.socket.on('connect',function(){
-				server.host = url;
-				connect()
-			})
-			this.socket.on('disconnect',disconnect)
-			this.socket.on('error',this.error)
+	disconnect: function(){
+		server.socket.close();
+	},
 
-			for (var index in this.in) {
-				this.in[index].bind(this.socket)
-			};
-			for (var index in this.out) {
-				this.out[index].bind(this.socket)
-			};
-		}
+	connectEvent: function(url){
+		console.log('server connected')
+		server.url = fn.parseURL(url);
+
+		for (var index in server.in) {
+			server.in[index].bind(server.socket)
+		};
+		for (var index in server.out) {
+			server.out[index].bind(server.socket)
+		};
+
+		server.login(page.connect.login.email(),page.connect.login.password(),function(data){
+			if(data){
+				connect.exit()
+				game.enter()
+			}
+			else{
+				//make the login inputs turn red
+			}
+ 		})
+	},
+
+	disconnectEvent: function(){
+		console.log('server disconnected')
+
+		//remove old socket
+
+		game.exit()
+		connect.enter()
 	},
 
 	login: function(email,password,callback){
@@ -170,16 +198,7 @@ Server = Klass({
 		}
 	},
 
-	logout: function(callback){
-		if(this.socket){
-
-		}
-		else{
-			return false
-		}
-	},
-
 	error: function(error){
 		throw error.description
 	}
-})
+}
