@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html manifest="appcache.mf">
+<!-- <html> -->
 	<head>
 		<title>phaser game</title>
 
@@ -32,17 +33,22 @@
 		<script src="js/app/app.js" type="text/javascript"></script>
 	</head>
 	<body>
-		<div id="loading">
-			
-		</div>
+		<div id="game"></div>
 
-		<div id="game">
-			<div id="ui">
-				<div id="loading-overlay">
-					<div class="progress" id="loading-bar">
-					  	<span class="meter"></span>
-					</div>
+		<!-- loading modal -->
+		<div id="loading-modal" class="reveal-modal large open" data-reveal style="opacity: 1; visibility: visible; top: 100px;" data-bind="with: loading">
+			<div class="top">
+				<h2>PhaserGame</h2>
+			</div>
+			<div class="middle">
+				
+			</div>
+			<div class="bottom panel radius">
+			  	<span id="loading-text" class="label secondary radius">Loading...</span>
+				<div id="loading-bar" class="progress large radius">
+				  	<span class="meter"></span>
 				</div>
+				<a id="loading-play" href="#" class="button success radius tiny disabled" data-bind="click: play">Play</a>
 			</div>
 		</div>
 

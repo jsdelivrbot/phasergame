@@ -20,16 +20,15 @@ function loadData(cb){
 }
 
 $(document).ready(function() {
-	appCache = window.applicationCache;
+	console.log('-----DOC READY-----')
 
 	ko.applyBindings(page);
 	$(document).foundation();
 
-	loadData(function(){
-		engin = new Phaser.Game(800,600,'auto','game', { preload: preload, create: create, update: update, render: render},false,false)
-	})
+	//open the loading screen
+	// $("#loading-modal").foundation('reveal', 'open')
+	page.loading.setUpAppCache()
 
-	
 	//---------------------background----------------------
 
 	$(".no-action").submit(function(event) {
@@ -58,8 +57,10 @@ $(document).ready(function() {
 
 	//resize
 	$(window).resize(function(event) {
-		engin.scale.scaleMode = 2;
-		engin.scale.setMaximum()
-		engin.scale.refresh()
+		if(engin){
+			engin.scale.scaleMode = 2;
+			engin.scale.setMaximum()
+			engin.scale.refresh()
+		}
 	});
 });

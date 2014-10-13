@@ -1,4 +1,71 @@
 page = {
+	loading: {
+		setUpAppCache: function(){
+			appCache = window.applicationCache;
+
+			appCache.addEventListener('checking',function(){
+				$("#loading-text").text('Checking for updates')
+			})
+
+			appCache.addEventListener('obsolete',function(event){
+				$("#loading-text").text('out of date')
+			})
+
+			appCache.addEventListener('noupdate',function(){
+				$("#loading-text").text('No Update')
+				$("#loading-play").removeClass('disabled')
+			})
+
+			appCache.addEventListener('downloading',function(){
+				$("#loading-text").text('Starting Download')
+			})
+
+			appCache.addEventListener('progress',function(event){
+				$("#loading-bar>span").css('width',((event.loaded / event.total) * 100)+'%')
+
+				if(event.loaded >= event.total -1){
+					$("#loading-text").text('Preparing Update...')
+				}
+				else{
+					$("#loading-text").text('Downloading...')
+				}
+			})
+
+			appCache.addEventListener('error',function(){
+				$("#loading-text").text('Failed')
+				$("#loading-bar").addClass('alert')
+				$("#loading-play").removeClass('disabled')
+			})
+
+			appCache.addEventListener('updateready',function(){
+				$("#loading-text").text('Updated!')
+				$("#loading-play").removeClass('disabled')
+			})
+
+			appCache.addEventListener('cached',function(){
+				$("#loading-text").text('Updated!')
+				$("#loading-play").removeClass('disabled')
+			})
+		},
+		play: function(){
+			if(!$("#loading-play").hasClass('disabled')){
+				$("#loading-play").text('Playing').addClass('disabled')
+				loadData(function(){
+					engin = new Phaser.Game(800,600,'auto','game', { 
+						preload: preload, 
+						create: function(){
+							// $("#connect-module").foundation('reveal', 'open')
+							connect.enter()
+
+							create()
+						}, 
+						update: update, 
+						render: render
+					},false,false)
+				})
+			}
+		}
+	},
 	connect: {
 		newServer: {
 			ip: ''
@@ -292,5 +359,3 @@ $(window).unload(function(){
 
 	localStorage.settings = ko.mapping.toJSON(page)
 })
-
-page.connect.refresh();

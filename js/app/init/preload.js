@@ -278,21 +278,13 @@ function preload(){
 
 	engin.load.image('tileset/Woods','imgs/Woods.png')	
 
-	//loading
-	engin.load.onLoadStart.add(function(){
-		$('#loading-overlay').show()
-	})
-
 	engin.load.onFileComplete.add(function(){
-		$('#loading-bar>span').css('width',engin.load.progressFloat + '%')
+		// $('#loading-bar>span').css('width',engin.load.progressFloat + '%')
 	})
 
 	engin.load.onLoadComplete.add(function(){
-		$('#loading-overlay').hide()
 		engin.load.onLoadStart.removeAll()
 		engin.load.onFileComplete.removeAll()
 		engin.load.onLoadComplete.removeAll()
-
-		$("#connect-module").foundation('reveal', 'open')
 	})
 }
