@@ -156,13 +156,9 @@ server = {
 	connectEvent: function(url){
 		console.log('server connected')
 		server.url = fn.parseURL(url);
-
-		for (var index in server.in) {
-			server.in[index].bind(server.socket)
-		};
-		for (var index in server.out) {
-			server.out[index].bind(server.socket)
-		};
+		
+		_(server.in).invoke('bind', server.socket)
+		_(server.out).invoke('bind', server.socket)
 
 		server.login(page.connect.login.email(),page.connect.login.password(),function(data){
 			if(data){
@@ -179,6 +175,10 @@ server = {
 		console.log('server disconnected')
 
 		//remove old socket
+
+		//unbind the ports
+		_(server.in).invoke('unbind', server.socket)
+		_(server.out).invoke('unbind', server.socket)
 
 		game.exit()
 		connect.enter()

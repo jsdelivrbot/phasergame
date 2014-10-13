@@ -20,6 +20,8 @@ function loadData(cb){
 }
 
 $(document).ready(function() {
+	appCache = window.applicationCache;
+
 	ko.applyBindings(page);
 	$(document).foundation();
 
