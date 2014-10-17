@@ -1,13 +1,13 @@
 connect = {
 	enter: function(){
-		$("#connect-module").foundation('reveal', 'open')
+		$("#connect-modal").foundation('reveal', 'open')
 
 		page.connect.refresh();
 
 		//tell the server to disconnect, just in case it has not
 	},
 	exit: function(){
-		//hide module
-		$("#connect-module").foundation('reveal', 'close')
+		//hide modal
+		$("#connect-modal").foundation('reveal', 'close')
 	}
 }

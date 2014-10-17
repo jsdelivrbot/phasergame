@@ -4,22 +4,22 @@ PlayerControl = Player.extend({
 		this.data = new PlayerDataFull(_playerDataJson)
 	},
 	move: function(){
-		if (engin.input.keyboard.isDown(Phaser.Keyboard.D))
+		if (engin.input.keyboard.isDown(controls.right()))
 	    {
 			this.sprite.body.velocity.x = 175
 			this.sprite.body.velocity.y = 0
 	    }
-	 	else if (engin.input.keyboard.isDown(Phaser.Keyboard.A))
+	 	else if (engin.input.keyboard.isDown(controls.left()))
 	    {
 			this.sprite.body.velocity.x = -175
 			this.sprite.body.velocity.y = 0
 	    }
-	    else if (engin.input.keyboard.isDown(Phaser.Keyboard.W))
+	    else if (engin.input.keyboard.isDown(controls.up()))
 	    {
 			this.sprite.body.velocity.x = 0
 			this.sprite.body.velocity.y = -175
 	    }
-	    else if (engin.input.keyboard.isDown(Phaser.Keyboard.S))
+	    else if (engin.input.keyboard.isDown(controls.down()))
 	    {
 			this.sprite.body.velocity.x = 0
 			this.sprite.body.velocity.y = 175

@@ -3,40 +3,128 @@
 <!-- <html> -->
 	<head>
 		<title>phaser game</title>
-
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
+		<link rel="stylesheet" type="text/css" href="css/foundation-icons.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		
-		<script src="js/lib/jquery.js" type="text/javascript"></script>
-		<script src="js/lib/modernizr.min.js" type="text/javascript"></script>
-		<script src="js/lib/foundation.min.js" type="text/javascript"></script>
-		<script src="js/lib/knockout.js" type="text/javascript"></script>
-		<script src="js/lib/knockout-mapping.js" type="text/javascript"></script>
-		<script src="js/lib/phaser.min.js" type="text/javascript"></script>
-		<script src="js/lib/socket.io.js" type="text/javascript"></script>
-		<script src="js/lib/klass.js" type="text/javascript"></script>
-		<script src="js/lib/jspath.min.js" type="text/javascript"></script>
-		<script src="js/lib/underscore-min.js" type="text/javascript"></script>
-
-		<script src="js/app/init/functions.js" type="text/javascript"></script>
-		<script src="js/app/init/preload.js" type="text/javascript"></script>
-		<script src="js/app/objs/players.js" type="text/javascript"></script>
-		<script src="js/app/objs/player.js" type="text/javascript"></script>
-		<script src="js/app/objs/playerControl.js" type="text/javascript"></script>
-		<script src="js/app/ctrl/interface.js" type="text/javascript"></script>
-		<script src="js/app/ctrl/server.js" type="text/javascript"></script>
-		<script src="js/app/ctrl/sound.js" type="text/javascript"></script>
-		<script src="js/app/stateObjs/game.js" type="text/javascript"></script>
-		<script src="js/app/stateObjs/connect.js" type="text/javascript"></script>
-
+		<script src="js/lib/jquery.js" type="text/javascript" defer></script>
+		<script src="js/lib/modernizr.min.js" type="text/javascript" defer></script>
+		<script src="js/lib/foundation.min.js" type="text/javascript" defer></script>
+		<script src="js/lib/knockout.js" type="text/javascript" defer></script>
+		<script src="js/lib/knockout-mapping.js" type="text/javascript" defer></script>
+		<script src="js/lib/phaser.min.js" type="text/javascript" defer></script>
+		<script src="js/lib/socket.io.js" type="text/javascript" defer></script>
+		<script src="js/lib/klass.js" type="text/javascript" defer></script>
+		<script src="js/lib/jspath.min.js" type="text/javascript" defer></script>
+		<script src="js/lib/underscore-min.js" type="text/javascript" defer></script>
+		<script src="js/app/init/functions.js" type="text/javascript" defer></script>
+		<script src="js/app/init/preload.js" type="text/javascript" defer></script>
+		<script src="js/app/objs/players.js" type="text/javascript" defer></script>
+		<script src="js/app/objs/player.js" type="text/javascript" defer></script>
+		<script src="js/app/objs/playerControl.js" type="text/javascript" defer></script>
+		<script src="js/app/ctrl/interface.js" type="text/javascript" defer></script>
+		<script src="js/app/ctrl/server.js" type="text/javascript" defer></script>
+		<script src="js/app/ctrl/sound.js" type="text/javascript" defer></script>
+		<script src="js/app/stateObjs/game.js" type="text/javascript" defer></script>
+		<script src="js/app/stateObjs/connect.js" type="text/javascript" defer></script>
 		<!-- main -->
-		<script src="js/app/app.js" type="text/javascript"></script>
+		<script src="js/app/app.js" type="text/javascript" defer></script>
 	</head>
 	<body>
 		<div id="game"></div>
-
+		
+		<!-- chat -->
+		<div id="chat" class="panel large-4" style="display: none;" data-bind="visible: chat.activeChanel.id() !== -1">
+			<div id="chat-in-messages" data-bind="foreach: chat.activeChanel.messages">
+				<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
+			</div>
+			
+			<div class="off-canvas-wrap" data-offcanvas style="height: 100%;">
+				<div class="inner-wrap" style="height: 100%;">
+					<nav class="tab-bar">
+						<section class="left-small">
+							<a class="left-off-canvas-toggle menu-icon" href="#"><span></span></a>
+						</section>
+						<section class="middle tab-bar-section">
+							<h1 class="title">Chat: <span data-bind="text: chat.activeChanel.title"></span></h1>
+						</section>
+						<section class="right-small">
+							<a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
+						</section>
+					</nav>
+					
+					<!-- Off Canvas Menu -->
+					<nav class="left-off-canvas-menu">
+						<ul class="off-canvas-list">
+							<li>
+								<label>Chanels</label>
+							</li>
+							<div id="chat-chanels" data-bind="foreach: chat.chanels">
+								<li><a href="#" data-bind="text: title, click: $root.chat.chanelSelect"></a></li>
+							</div>
+							<li>
+								<div class="large-12 columns" style="padding: 0px;">
+									<div class="row collapse">
+										<div class="small-8 columns">
+											<input id="chat-new-title" type="text" placeholder="Title">
+										</div>
+										<div class="small-4 columns">
+											<a id="chat-new" href="#" class="button postfix" data-bind="click: chat.create">Create</a>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</nav>
+					
+					<nav class="right-off-canvas-menu">
+						<ul class="off-canvas-list">
+							<li class="has-submenu">
+								<a href="#">Actions</a>
+								<ul class="right-submenu">
+									<li class="back"><a href="#">Back</a></li>
+									<li data-bind="visible: chat.activeChanel.canLeave == true && chat.activeChanel.own == false"><a href="#" data-bind="click: chat.leave">Leave</a></li>
+									<li data-bind="visible: chat.activeChanel.own">
+										<div class="large-12 columns" style="padding: 0px;">
+											<div class="row collapse">
+												<div class="small-8 columns">
+													<input id="chat-invite-name" type="text" placeholder="Player Name">
+												</div>
+												<div class="small-4 columns">
+													<a href="#" class="button postfix" data-bind="click: chat.invite">Invite</a>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li data-bind="visible: chat.activeChanel.own"><a href="#" data-bind="click: chat.close">Close</a></li>
+								</ul>
+							</li>
+						</ul>
+						<ul class="off-canvas-list">
+							<li><label>Players</label></li>
+							<div id="chat-players" data-bind="foreach: chat.activeChanel.players">
+								<li><a href="#" data-bind="text: name"></a></li>
+							</div>
+						</ul>
+					</nav>
+					<div>
+						<div id="chat-messages" class="content" data-bind="foreach: chat.activeChanel.messages">
+							<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
+						</div>
+						<form class="no-action" style="margin: 0px;" data-bind="event:{'submit':chat.sendMessage}">
+							<input type="text" style="margin: 0px; width: 100%;" maxlength="100" data-bind="value: chat.sendMessageVal">
+						</form>
+					</div>
+					<!-- close the off-canvas menu -->
+					<a class="exit-off-canvas"></a>
+				</div>
+			</div>
+		</div>
+		
 		<!-- loading modal -->
-		<div id="loading-modal" class="reveal-modal large open" data-reveal style="opacity: 1; visibility: visible; top: 100px;" data-bind="with: loading">
+		<div id="loading-modal" class="reveal-modal menu large open" data-reveal style="opacity: 1; visibility: visible; top: 100px;" data-bind="with: loading">
+			<i class="fi-widget modal-button" data-reveal-id="loading-settings"></i>
+
 			<div class="top">
 				<h2>PhaserGame</h2>
 			</div>
@@ -44,179 +132,186 @@
 				
 			</div>
 			<div class="bottom panel radius">
-			  	<span id="loading-text" class="label secondary radius">Loading...</span>
+				<span id="loading-text" class="label secondary radius" style="flex-shrink:0;">Loading...</span>
 				<div id="loading-bar" class="progress large radius">
-				  	<span class="meter"></span>
+					<span class="meter"></span>
 				</div>
-				<a id="loading-play" href="#" class="button success radius tiny disabled" data-bind="click: play">Play</a>
+				<a id="loading-play" href="#" class="button success radius tiny" data-bind="click: play" style="flex-shrink: 0;">Play</a>
 			</div>
 		</div>
 
-		<div id="chat" class="panel large-4">
+		<!-- launcher settings -->
+		<div id="loading-settings" class="reveal-modal menu large" data-reveal>
+		  	<i class="fi-x modal-button" data-reveal-id="loading-modal"></i>
+		  	
+			<div class="small-6">
+				<fieldset>
+			    	<legend>Graphics</legend>
 
-	  		<div id="chat-in-messages" data-bind="foreach: chat.activeChanel.messages">
-	  			<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
-	  		</div>
-	  		
-			<div class="off-canvas-wrap" data-offcanvas style="height: 100%;">
-			  	<div class="inner-wrap" style="height: 100%;">
-
-			  	 	<nav class="tab-bar">
-				      	<section class="left-small">
-				      	  	<a class="left-off-canvas-toggle menu-icon" href="#"><span></span></a>
-				      	</section>
-
-				      	<section class="middle tab-bar-section">
-				      	  	<h1 class="title">Chat: <span data-bind="text: chat.activeChanel.title"></span></h1>
-				      	</section>
-
-				      	<section class="right-small">
-				      	  	<a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
-				      	</section>
-				    </nav>
-
-			  	 	<!-- Off Canvas Menu -->
-			  	 	<nav class="left-off-canvas-menu">
-					  	<ul class="off-canvas-list">
-					  	  	<li>
-						  	  	<label>Chanels</label> 
-					  	  	</li>
-					  	  	<div id="chat-chanels" data-bind="foreach: chat.chanels">
-					  	  		<li><a href="#" data-bind="text: title, click: $root.chat.chanelSelect"></a></li>
-					  	  	</div>
-					  	  	<li>
-							    <div class="large-12 columns" style="padding: 0px;">
-							      	<div class="row collapse">
-							      	  	<div class="small-8 columns">
-							      	  	  	<input id="chat-new-title" type="text" placeholder="Title">
-							      	  	</div>
-							      	  	<div class="small-4 columns">
-							      	  	  	<a id="chat-new" href="#" class="button postfix" data-bind="click: chat.create">Create</a>
-							      	  	</div>
-							      	</div>
-							    </div>
-					  	  	</li>
-					  	</ul>
-					</nav>
-
-			  	 	<nav class="right-off-canvas-menu">
-					  	<ul class="off-canvas-list">
-					        <li class="has-submenu">
-					        	<a href="#">Actions</a>
-					            <ul class="right-submenu">
-					                <li class="back"><a href="#">Back</a></li>
-					                <li data-bind="visible: chat.activeChanel.canLeave == true && chat.activeChanel.own == false"><a href="#" data-bind="click: chat.leave">Leave</a></li>
-							  	  	<li data-bind="visible: chat.activeChanel.own">
-									    <div class="large-12 columns" style="padding: 0px;">
-									      	<div class="row collapse">
-									      	  	<div class="small-8 columns">
-									      	  	  	<input id="chat-invite-name" type="text" placeholder="Player Name">
-									      	  	</div>
-									      	  	<div class="small-4 columns">
-									      	  	  	<a href="#" class="button postfix" data-bind="click: chat.invite">Invite</a>
-									      	  	</div>
-									      	</div>
-									    </div>
-							  	  	</li>
-					                <li data-bind="visible: chat.activeChanel.own"><a href="#" data-bind="click: chat.close">Close</a></li>
-					            </ul>
-					        </li>
-					  	</ul>
-					  	<ul class="off-canvas-list">
-					  	  	<li><label>Players</label></li>
-					  	  	<div id="chat-players" data-bind="foreach: chat.activeChanel.players">
-					  	  		<li><a href="#" data-bind="text: name"></a></li>
-					  	  	</div>
-					  	</ul>
-					</nav>
-
-			  	 	<div>
-			  	 		<div id="chat-messages" class="content" data-bind="foreach: chat.activeChanel.messages">
-						  	<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
-					  	</div>
-
-						<form class="no-action" data-bind="event:{'submit':chat.sendMessage}">
-							<input type="text" style="width: 100%;" maxlength="100" data-bind="value: chat.sendMessageVal">
-						</form>
-			  	 	</div>
-
-			  		<!-- close the off-canvas menu -->
-			  		<a class="exit-off-canvas"></a>
-			  	</div>
+			    	<label>Render Type</label>
+			    	<select data-bind="value: menu.settings.graphics.renderMode, foreach: menu.settings.graphics.renderModes">
+			    		<option data-bind="text: title, value: value"></option>
+			    	</select>
+			  	</fieldset>
+				
 			</div>
 		</div>
-
-		<div id="connect-module" class="reveal-modal xlarge" data-reveal data-bind="with: connect">
-	  		<div class="row">
-		  		<h4>Servers</h4>
-	  		</div>
-	  		<table>
-				<thead>
-					<tr>
-						<th>Title</th>
-						<th>Description</th>
-						<th>Server Ip</th>
-						<th>Players</th>
-					</tr>
-				</thead>
-				<tbody data-bind="foreach: servers">
-					<tr class="server" data-bind="css:{'selected': $index() === $root.connect.selectedServer(), 'pinging': status() == 0, 'failed': status() == 2}, click: $parent.select">
-						<td data-bind="text: title"></td>
-						<td data-bind="text: description"></td>
-						<td data-bind="text: ip"></td>
-						<td data-bind="text: players"></td>
-					</tr>
-				</tbody>
-			</table>
+		
+		<!-- connect -->
+		<div id="connect-modal" class="reveal-modal menu cant-close xlarge" data-reveal data-bind="with: connect">
+			<div class="top">
+				<h4>Servers</h4>
+			</div>
+			<div class="middle">
+				<table>
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Description</th>
+							<th>Server Ip</th>
+							<th>Players</th>
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: servers">
+						<tr class="server" data-bind="css:{'selected': $index() === $root.connect.selectedServer(), 'pinging': status() == 0, 'failed': status() == 2}, click: $parent.select">
+							<td data-bind="text: title"></td>
+							<td data-bind="text: description"></td>
+							<td data-bind="text: ip"></td>
+							<td data-bind="text: players"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="bottom panel radius">
+				<a href="#" class="button radius tiny" data-reveal-id="add-server-modal" style="flex-shrink: 0;">Add Server</a>
+				<a href="#" class="button radius tiny disabled" data-bind="css:{'disabled': selectedServer() == -1}, click: removeServer" style="flex-shrink: 0;">Remove Server</a>
+				<a href="#" class="button radius tiny" data-bind="click: refresh" style="flex-shrink: 0;margin-right: 20px;">Refresh</a>
+				<input type="email" placeholder="Email" data-bind="css:{'error': login.failed}, value: login.email, valueUpdate: 'keyup'" style="margin-right: 20px;">
+				<input type="password" placeholder="Password" data-bind="css:{'error': login.failed}, value: login.password, valueUpdate: 'keyup'" style="margin-right: 20px;">
+				
+				<div class="switch" style="flex-shrink: 0;margin-right: 20px;">
+					<input id="exampleCheckboxSwitch" type="checkbox" data-bind="checked: login.remember">
+					<label for="exampleCheckboxSwitch"></label>
+				</div>
+				
+				<a type="submit" href="#" class="button tiny radius disabled" data-bind="css:{'disabled': (selectedServer() !== -1)? servers()[selectedServer()].status() !== 1 : true }, click: connect" style="flex-shrink: 0;">Connect</a>
+			</div>
+		</div>
+		
+		<!-- add server -->
+		<div id="add-server-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect">
 			<div class="row">
-			  	<div class="small-5 columns">
-			  		<ul class="button-group">
-			  		  <li><a href="#" class="button tiny" data-reveal-id="add-server-module">Add Server</a></li>
-			  		  <li><a href="#" class="button tiny" data-bind="css:{'disabled': selectedServer() == -1}, click: removeServer">Remove Server</a></li>
-			  		  <li><a href="#" class="button tiny" data-bind="click: refresh">Refresh</a></li>
-			  		</ul>
-			  	</div>
-			  	<div class="small-7 columns">
-			  		<form data-bind="event:{'submit':connect}">
-						<div class="row">
-							<div class="small-4 columns">
-								<input type="email" placeholder="Email" required data-bind="value: login.email, valueUpdate: 'keyup'">
-							</div>
-							<div class="small-4 columns">
-								<input type="password" placeholder="Password" required data-bind="value: login.password, valueUpdate: 'keyup'">
-							</div>
-							<div class="small-2 columns">
-							 	<div class="switch">
-								  	<input id="exampleCheckboxSwitch" type="checkbox" data-bind="checked: login.remember">
-								  	<label for="exampleCheckboxSwitch"></label>
-								</div> 
-							</div>
-							<div class="small-2 columns">
-								<a type="submit" href="#" class="button tiny" data-bind="css:{'disabled': (selectedServer() !== -1)? servers()[selectedServer()].status() !== 1 : true }, click: connect">Connect</a>
-							</div>
-						</div>
-					</form>
-			  	</div>
+				<h4>Add Servers</h4>
 			</div>
+			<form data-bind="event: {'submit': add}">
+				<div class="row">
+					<input type="text" placeholder="Server Ip" data-bind="value: newServer.ip"/>
+				</div>
+				<div class="row">
+					<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Cancel</a>
+					<input class="button tiny right" type="submit" value="Ok" />
+				</div>
+			</form>
 		</div>
 
-		<div id="add-server-module" class="reveal-modal small" data-reveal data-bind="with: connect">
-	  		<div class="row">
-		  		<h4>Add Servers</h4>
-	  		</div>
-	  		<form data-bind="event: {'submit': add}">
-	  			<div class="row">
-	  				<input type="text" placeholder="Server Ip" data-bind="value: newServer.ip"/>
-	  			</div>
-	  			<div class="row">
-	  				<a href="#" class="button tiny left secondary" data-reveal-id="connect-module">Cancel</a>
-	  				<input class="button tiny right" type="submit" value="Ok" />
-	  			</div>
-	  		</form>
+		<!-- menu -->
+		<div id="menu" class="reveal-modal menu full" data-reveal data-bind="with: menu">
+			<div class="tabs" data-tab>
+				<dd class="active">
+					<a href="#profile-tab">Profile</a>
+				</dd>
+				<dd>
+					<a href="#settings-tab">Settings</a>
+				</dd>
+			</div>
+
+			<div class="tabs-content">
+				<div class="content active" id="profile-tab">
+
+					<dl class="tabs vertical" data-tab>
+					  	<dd class="active"><a href="#profile-stats">Stats</a></dd>
+				  		<dd><a href="#profile-players">Players</a></dd>
+					  	<dd><a href="#profile-friends">Friends</a></dd>
+					</dl>
+					<div class="tabs-content vertical">
+					  	<div class="content active" id="profile-stats">
+					    	<h5>profile 1.</h5>
+					  	</div>
+					  	<div class="content" id="profile-players">
+					    	<h5>profile 2.</h5>
+					  	</div>
+					  	<div class="content" id="profile-friends">
+					    	<h5>profile 3.</h5>
+					  	</div>
+					</div>
+
+				</div>
+				<div class="content" id="settings-tab" data-bind="with: settings">
+					<dl class="tabs vertical" data-tab>
+					  	<dd class="active"><a href="#settings-graphics">Graphics</a></dd>
+				  		<dd><a href="#settings-controls">Controls</a></dd>
+					  	<dd><a href="#settings-sound">Sound</a></dd>
+					</dl>
+					<div class="tabs-content vertical">
+					  	<div class="content active" id="settings-graphics" data-bind="with: graphics">
+					    	<h5>Graphics</h5>
+					    	<div class="small-6">
+						    	<label>Render Type</label>
+						    	<select data-bind="value: renderMode, foreach: renderModes">
+						    		<option data-bind="text: title, value: value"></option>
+						    	</select>
+					    	</div>
+					    	<div class="small-6">
+					    		
+					    	</div>
+					  	</div>
+					  	<div class="content" id="settings-controls" data-bind="with: keyBindings">
+					    	<h5>Controls</h5>
+					    	<table>
+					    		<thead>
+					    			<tr>
+					    				<td>Control</td>
+					    				<td>Key</td>
+					    				<td>Action</td>
+					    			</tr>
+					    		</thead>
+					    		<tbody data-bind="foreach: bindings">
+					    			<!-- up -->
+					    			<tr> 
+					    				<td data-bind="text: title"></td>
+					    				<td>
+					    					<kbd data-bind="text: String.fromCharCode(key())"></kbd>
+					    				</td>
+					    				<td>
+					    					<a href="#" class="button tiny radius secondary" style="margin: 0px;" data-bind="click: $parent.select">Change</a>
+					    				</td>
+					    			</tr>
+					    		</tbody>
+					    	</table>
+					  	</div>
+					  	<div class="content" id="settings-sound" data-bind="with: sound">
+					    	<h5>Sound</h5>
+					    	<div class="small-6">
+					    		<label>Master Volume <span class="lable" data-bind="text: Math.round(volume()*100) + '%'"></span></label>
+					    		<input type="range" min="0.01" max="1" step="0.01" style="width:100%;" data-bind="value: volume, valueUpdate: 'mousemove'">
+
+						    	<label>Mute</label>
+						    	<div class="switch">
+								  	<input id="settings-sound-mute" type="checkbox" data-bind="checked: mute">
+								  	<label for="settings-sound-mute"></label>
+								</div> 
+					    	</div>
+					  	</div>
+					</div>
+				</div>
+			</div>
+
+		  	<a class="close-reveal-modal"><i class="fi-x"></i></a>
 		</div>
 
-		<div id="menu" class="reveal-modal full" data-reveal data-bind="with: settings">
-			
+		<!-- keybinding -->
+		<div id="keybinding" data-bind="event:{'mousedown': menu.settings.keyBindings.bind, 'keydown': menu.settings.keyBindings.bind}">
+			Press Any Key
 		</div>
 	</body>
 </html>

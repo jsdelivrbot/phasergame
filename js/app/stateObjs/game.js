@@ -4,8 +4,37 @@ function create(){
 	engin.time.advancedTiming = true
 	engin.physics.startSystem(Phaser.Physics.ARCADE);
 
+	//set up the settings
+	engin.sound.mute = page.menu.settings.sound.mute();
+	engin.sound.volume = page.menu.settings.sound.volume();
+
 	//sound
 	sound.background.start();
+
+	// keys
+	engin.input.keyboard.addKey(Phaser.Keyboard.ENTER).onUp.add(function(){
+		//open chat if there are no menus showing and game is started
+		if(game.active && $(".menu.open").length == 0){
+			$("#chat").addClass('out')
+			$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('focus')
+		}
+	})
+	engin.input.keyboard.addKey(Phaser.Keyboard.ESC).onUp.add(function(){
+		//see if there are menus open
+		if($(".menu.open").length){
+			$(".menu.open:not(.cant-close)").foundation('reveal','close')
+		}
+		else if($("#chat").hasClass('out')){
+			$("#chat").removeClass('out')
+			$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('blur')
+		}
+		else{
+			//open menu if game is running
+			if(game.active){
+				$("#menu").foundation('reveal','open')
+			}
+		}
+	})
 
 	//resize the engin to fit the screen
 	$(window).trigger('resize')

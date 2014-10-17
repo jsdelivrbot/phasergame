@@ -1,29 +1,47 @@
+function observable(val,change){
+	o = ko.observable(val)
+	o.subscribe(change)
+	return o;
+}
+
+function keyBinding(title,key){
+	k = {
+		title: title,
+		id: title.toLowerCase(),
+		key: key
+	}
+
+	return k;
+}
+
 page = {
+	version: 1/1,
 	loading: {
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
 
-			appCache.addEventListener('checking',function(){
+			appCache.addEventListener('checking',function(event){
 				$("#loading-text").text('Checking for updates')
+				$("#loading-play").addClass('disabled')
 			})
 
 			appCache.addEventListener('obsolete',function(event){
 				$("#loading-text").text('out of date')
 			})
 
-			appCache.addEventListener('noupdate',function(){
-				$("#loading-text").text('No Update')
+			appCache.addEventListener('noupdate',function(event){
+				$("#loading-text").text('Up to Date')
 				$("#loading-play").removeClass('disabled')
 			})
 
-			appCache.addEventListener('downloading',function(){
+			appCache.addEventListener('downloading',function(event){
 				$("#loading-text").text('Starting Download')
 			})
 
 			appCache.addEventListener('progress',function(event){
 				$("#loading-bar>span").css('width',((event.loaded / event.total) * 100)+'%')
 
-				if(event.loaded >= event.total -1){
+				if(event.loaded >= event.total -2){
 					$("#loading-text").text('Preparing Update...')
 				}
 				else{
@@ -31,18 +49,25 @@ page = {
 				}
 			})
 
-			appCache.addEventListener('error',function(){
-				$("#loading-text").text('Failed')
-				$("#loading-bar").addClass('alert')
+			appCache.addEventListener('error',function(event){
+				if(event.reason !== "manifest"){
+					$("#loading-text").text('Failed')
+					$("#loading-bar").addClass('alert')
+				}
+				else{
+					$("#loading-text").text('Up to Date')
+				}
 				$("#loading-play").removeClass('disabled')
 			})
 
-			appCache.addEventListener('updateready',function(){
-				$("#loading-text").text('Updated!')
+			appCache.addEventListener('updateready',function(event){
+				$("#loading-text").text('Reloading!')
 				$("#loading-play").removeClass('disabled')
+
+				location.reload();
 			})
 
-			appCache.addEventListener('cached',function(){
+			appCache.addEventListener('cached',function(event){
 				$("#loading-text").text('Updated!')
 				$("#loading-play").removeClass('disabled')
 			})
@@ -51,10 +76,9 @@ page = {
 			if(!$("#loading-play").hasClass('disabled')){
 				$("#loading-play").text('Playing').addClass('disabled')
 				loadData(function(){
-					engin = new Phaser.Game(800,600,'auto','game', { 
+					engin = new Phaser.Game(800,600,page.menu.settings.graphics.renderMode(),'game', { 
 						preload: preload, 
 						create: function(){
-							// $("#connect-module").foundation('reveal', 'open')
 							connect.enter()
 
 							create()
@@ -74,14 +98,16 @@ page = {
 		login: {
 			email: '',
 			password: '',
-			remember: false
+			remember: false,
+			failed: false
 		},
 		selectedServer: -1,
 		connect: function(){
-			if(page.connect.servers()[page.connect.selectedServer()].status() === 1){
-				server.connect(page.connect.servers()[page.connect.selectedServer()].ip())
+			if(page.connect.selectedServer() !== -1){
+				if(page.connect.servers()[page.connect.selectedServer()].status() === 1){
+					server.connect(page.connect.servers()[page.connect.selectedServer()].ip())
+				}
 			}
-			
 		},
 		select: function(){
 			//find the index
@@ -89,9 +115,11 @@ page = {
 				if(page.connect.servers()[i].ip() == this.ip()){
 					if(page.connect.selectedServer() !== i){
 						page.connect.selectedServer(i)
+						page.connect.login.failed(false)
 					}
 					else{
 						page.connect.selectedServer(-1)
+						page.connect.login.failed(false)
 					}
 					break;
 				}
@@ -114,7 +142,7 @@ page = {
 
 			page.connect.refresh();
 
-			$('#connect-module').foundation('reveal', 'open')
+			$('#connect-modal').foundation('reveal', 'open')
 
 			page.connect.refresh()
 		},
@@ -152,13 +180,66 @@ page = {
 			page.connect.selectedServer(-1);
 		}
 	},
-	settings:{
-		graphics: {
+	menu:{
+		settings: {
+			graphics: {
+				renderMode: Phaser.AUTO,
+				renderModes: [
+					{
+						title: 'Auto',
+						value: Phaser.AUTO
+					},
+					{
+						title: 'Web GL',
+						value: Phaser.WEBGL
+					},
+					{
+						title: 'Canvas',
+						value: Phaser.CANVAS
+					}
+				]
+			},
+			keyBindings:{
+				bind: function(event){
+					// see if its a mouse event or keyboard
+					switch(event.type){
+						case 'keydown':
+							page.menu.settings.keyBindings.currentBinding.key(event.keyCode)
+							break;
+						case 'mousedown':
+							break;
+					}
 
+					$("#keybinding").hide()
+					engin.input.disabled = false
+				},
+				select: function(){
+					page.menu.settings.keyBindings.currentBinding = this;
+
+					$("#keybinding").show()
+					engin.input.disabled = true
+				},
+				currentBinding: null,
+				bindings: [
+					keyBinding('Up',87),
+					keyBinding('Down',83),
+					keyBinding('Right',68),
+					keyBinding('Left',65)
+				]
+			},
+			sound: {
+				volume: observable(0.75, function(val){
+					if(typeof engin === 'object'){
+						engin.sound.volume = parseFloat(val);
+					}
+				}),
+				mute: observable(false, function(val){
+					if(typeof engin === 'object'){
+						engin.sound.mute = val;
+					}
+				})
+			}
 		},
-		keys: {
-
-		}
 	},
 	chat: {
 		activeChanel: {
@@ -334,20 +415,31 @@ page = {
 }
 
 //load from localStorage
-page = ko.mapping.fromJS(ko.toJS(page))
-
+page = ko.mapping.fromJS(page)
 
 if(localStorage.settings){
 	json = JSON.parse(localStorage.settings);
 
-	//dont overwrite these
-	page.__ko_mapping__.ignore.push('connect.selectedServer')
-	page.__ko_mapping__.ignore.push('connect.newServer')
-	if(!json.connect.login.remember){
-		page.__ko_mapping__.ignore.push('connect.login')
-	}
+	// see if its the same version
+	if(page.version() == json.version){
+		//dont overwrite these
+		page.__ko_mapping__.ignore.push('chat')
+		page.__ko_mapping__.ignore.push('player')
+		page.__ko_mapping__.ignore.push('version')
+		page.__ko_mapping__.ignore.push('connect.selectedServer')
+		page.__ko_mapping__.ignore.push('connect.newServer')
+		page.__ko_mapping__.ignore.push('connect.login.failed')
+		if(!json.connect.login.remember){
+			page.__ko_mapping__.ignore.push('connect.login')
+		}
 
-	ko.mapping.fromJS(json,page)
+		ko.mapping.fromJS(json,page)
+
+		page.__ko_mapping__.ignore = [];
+	}
+	else{
+		console.log('localStorage out of date')
+	}
 }
 $(window).unload(function(){
 	//dont export these things
@@ -359,3 +451,10 @@ $(window).unload(function(){
 
 	localStorage.settings = ko.mapping.toJSON(page)
 })
+
+//create the controls obj
+controls = {}
+a = page.menu.settings.keyBindings.bindings()
+for (var i = 0; i < a.length; i++) {
+	controls[a[i].id()] = a[i].key.peek;
+};

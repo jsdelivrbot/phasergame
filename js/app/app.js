@@ -23,10 +23,15 @@ $(document).ready(function() {
 	console.log('-----DOC READY-----')
 
 	ko.applyBindings(page);
-	$(document).foundation();
+	$(document).foundation({
+		reveal:{
+            animation: 'fade',
+            close_on_esc: false,
+            close_on_background_click: false
+		}
+	});
 
 	//open the loading screen
-	// $("#loading-modal").foundation('reveal', 'open')
 	page.loading.setUpAppCache()
 
 	//---------------------background----------------------

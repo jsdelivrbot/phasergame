@@ -47,17 +47,21 @@ sound = {
 								s.playing.trackKey = sound.json.background[s.mood][Math.round(Math.random() * (sound.json.background[s.mood].length-1))]
 					
 								//play
-								s.playing.track = engin.sound.play(s.playing.trackKey.url)
+								if(!engin.sound.mute){
+									s.playing.track = engin.sound.play(s.playing.trackKey.url,0)
+									s.playing.track.volume = 0;
+									s.playing.track.maxVolume = s.playing.trackKey.volume
+									s.state = 'fadeIn';
+								}
+							}
+						}
+						else{
+							if(!engin.sound.mute){
+								s.playing.track = engin.sound.play(s.playing.trackKey.url,0)
 								s.playing.track.volume = 0;
 								s.playing.track.maxVolume = s.playing.trackKey.volume
 								s.state = 'fadeIn';
 							}
-						}
-						else{
-							s.playing.track = engin.sound.play(s.playing.trackKey.url)
-							s.playing.track.volume = 0;
-							s.playing.track.maxVolume = s.playing.trackKey.volume
-							s.state = 'fadeIn';
 						}
 						break;
 				}

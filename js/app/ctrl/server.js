@@ -131,6 +131,7 @@ server = {
 	},
 	options: {
 		reconnection: false,
+		forceNew: true
 	},
 	socket: null,
 	url: fn.parseURL(''),
@@ -166,15 +167,14 @@ server = {
 				game.enter()
 			}
 			else{
-				//make the login inputs turn red
+				//make the login inputs turn red and dissconnect
+				page.connect.login.failed(true)
 			}
  		})
 	},
 
 	disconnectEvent: function(){
 		console.log('server disconnected')
-
-		//remove old socket
 
 		//unbind the ports
 		_(server.in).invoke('unbind', server.socket)
