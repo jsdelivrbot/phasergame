@@ -4,18 +4,35 @@ function observable(val,change){
 	return o;
 }
 
-function keyBinding(title,key){
+function keyBinding(title,key,events){
 	k = {
 		title: title,
-		id: title.toLowerCase(),
-		key: key
+		id: title.toLowerCase().replace(' ',''),
+		keyCode: key,
+		key: {},
+		isDown: function(){return (this.group.enabled())? this.key.isDown : false},
+		isUp: function(){return (this.group.enabled())? this.key.isUp : true},
+	}
+
+	if(events){
+		if(events.up){
+			k.up = events.up
+		}
+
+		if(events.down){
+			k.down = events.down
+		}
+
+		if(events.rebind){
+			k.rebind = events.rebind
+		}
 	}
 
 	return k;
 }
 
 page = {
-	version: 1/1,
+	version: 1.3,
 	loading: {
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
@@ -200,31 +217,187 @@ page = {
 				]
 			},
 			keyBindings:{
-				bind: function(event){
-					// see if its a mouse event or keyboard
-					switch(event.type){
-						case 'keydown':
-							page.menu.settings.keyBindings.currentBinding.key(event.keyCode)
-							break;
-						case 'mousedown':
-							break;
-					}
-
-					$("#keybinding").hide()
-					engin.input.disabled = false
+				currentBinding: null,
+				enable: function(groupID){
+					_(this.bindings()).each(function(group){
+						group.enabled(false);
+						if(group.id() == groupID){
+							group.enabled(true);
+						}
+					})
 				},
-				select: function(){
+				bind: function(event){
+					if(typeof page.menu.settings.keyBindings.currentBinding === 'object'){
+						keybinding = page.menu.settings.keyBindings.currentBinding
+
+						// see if its a mouse event or keyboard
+						switch(event.type){
+							case 'keydown':
+								keyCode = event.keyCode
+								break;
+							case 'mousedown':
+								keyCode = event.which-1
+								break;
+						}
+
+						//tell the key its being rebound
+						if(keybinding.rebind){
+							// if its dose not like the key then return
+							if(!keybinding.rebind(keyCode)){
+								$("#keybinding").hide()
+								engin.input.disabled = false
+								return;
+							}
+						}
+
+						// if there are up/down events on the key the unbind them
+						if(keybinding.up){
+							if(keybinding.key){
+								keybinding.key.onUp.remove(keybinding.up)
+							}
+						}
+						if(keybinding.down){
+							if(keybinding.key){
+								keybinding.key.onDown.remove(keybinding.down)
+							}
+						}
+
+						// see if its a mouse event or keyboard
+						switch(event.type){
+							case 'keydown':
+								keybinding.keyCode(keyCode)
+								break;
+							case 'mousedown':
+								keybinding.keyCode(keyCode)
+								break;
+						}
+
+						// bind
+						keybinding.key = engin.input.keyboard.addKey(keybinding.keyCode());
+
+						//remove the capture
+						engin.input.keyboard.removeKeyCapture(keybinding.keyCode());
+
+						// find events
+						if(keybinding.up){
+							keybinding.key.onUp.add(keybinding.up)
+						}
+						if(keybinding.down){
+							keybinding.key.onDown.add(keybinding.down)
+						}
+
+						$("#keybinding").hide()
+						engin.input.disabled = false
+					}
+				},
+				changeBinding: function(){
 					page.menu.settings.keyBindings.currentBinding = this;
 
 					$("#keybinding").show()
 					engin.input.disabled = true
 				},
-				currentBinding: null,
+				bindKeys: _(function(){
+					for (var k = 0; k < this.bindings().length; k++) {
+						keys = this.bindings()[k].keys()
+
+						for (var i = 0; i < keys.length; i++) {
+							// create the key
+							keys[i].key = engin.input.keyboard.addKey(keys[i].keyCode())
+
+							//remove the capture
+							engin.input.keyboard.removeKeyCapture(keys[i].keyCode())
+
+							keys[i].group = this.bindings()[k];
+
+							// events
+							if(keys[i].down){
+								keys[i].key.onDown.add(keys[i].down)
+							}
+							if(keys[i].up){
+								keys[i].key.onUp.add(keys[i].up)
+							}
+						};
+						
+					};
+				}).once(),
 				bindings: [
-					keyBinding('Up',87),
-					keyBinding('Down',83),
-					keyBinding('Right',68),
-					keyBinding('Left',65)
+					{
+						title: 'None',
+						display: false,
+						id: 'none',
+						enabled: false,
+						keys: []
+					},
+					{
+						title: 'Menu',
+						display: true,
+						id: 'menu',
+						enabled: false,
+						keys: [
+							keyBinding('Close Menu',Phaser.Keyboard.ESC,{
+								down: function(){
+									//see if there are menus open
+									if($(".menu.open").length){
+										$(".menu.open:not(.cant-close)").foundation('reveal','close')
+										keyBindings.enable('game')
+									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							})
+						]
+					},
+					{
+						title: 'Game',
+						display: true,
+						id: 'game',
+						enabled: false,
+						keys: [
+							keyBinding('Up',Phaser.Keyboard.W),
+							keyBinding('Down',Phaser.Keyboard.S),
+							keyBinding('Right',Phaser.Keyboard.D),
+							keyBinding('Left',Phaser.Keyboard.A),
+							keyBinding('Open Chat',Phaser.Keyboard.ENTER,{
+								up: function(){
+									//open chat if there are no menus showing
+									if($(".menu.open").length == 0){
+										$("#chat").addClass('out')
+										$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('focus')
+									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							}),
+							keyBinding('Close Chat',Phaser.Keyboard.ESC,{
+								up: function(){
+									if($("#chat").hasClass('out')){
+										$("#chat").removeClass('out')
+										$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('blur')
+									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							}),
+							keyBinding('Open Menu',Phaser.Keyboard.ESC,{
+								down: function(){
+									if($("#chat").hasClass('out')){
+										return;
+									}
+									$menu = $("#menu")
+									if(!$menu.hasClass('open')){
+										$menu.foundation('reveal','open')
+										keyBindings.enable('menu')
+									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							})
+						]
+					}
 				]
 			},
 			sound: {
@@ -239,7 +412,7 @@ page = {
 					}
 				})
 			}
-		},
+		}
 	},
 	chat: {
 		activeChanel: {
@@ -423,17 +596,9 @@ if(localStorage.settings){
 	// see if its the same version
 	if(page.version() == json.version){
 		//dont overwrite these
-		page.__ko_mapping__.ignore.push('chat')
-		page.__ko_mapping__.ignore.push('player')
 		page.__ko_mapping__.ignore.push('version')
-		page.__ko_mapping__.ignore.push('connect.selectedServer')
-		page.__ko_mapping__.ignore.push('connect.newServer')
-		page.__ko_mapping__.ignore.push('connect.login.failed')
-		if(!json.connect.login.remember){
-			page.__ko_mapping__.ignore.push('connect.login')
-		}
 
-		ko.mapping.fromJS(json,page)
+		// ko.mapping.fromJS(json,page)
 
 		page.__ko_mapping__.ignore = [];
 	}
@@ -442,19 +607,27 @@ if(localStorage.settings){
 	}
 }
 $(window).unload(function(){
-	//dont export these things
-	page.__ko_mapping__.mappedProperties['chat'] = false;
-	page.__ko_mapping__.mappedProperties['player'] = false;
-	page.__ko_mapping__.mappedProperties['connect.login'] = false;
-	page.__ko_mapping__.mappedProperties['connect.newServer'] = false;
-	page.__ko_mapping__.mappedProperties['connect.selectedServer'] = false;
+	json = ko.mapping.toJS(page)
 
-	localStorage.settings = ko.mapping.toJSON(page)
+	delete json.chat;
+	delete json.player;
+	if(!json.connect.login.remember){
+		delete json.connect.login;
+	}
+	delete json.connect.newServer;
+	delete json.connect.selectedServer;
+
+	localStorage.settings = JSON.stringify(json)
 })
 
-//create the controls obj
-controls = {}
-a = page.menu.settings.keyBindings.bindings()
-for (var i = 0; i < a.length; i++) {
-	controls[a[i].id()] = a[i].key.peek;
-};
+//create the keyBindings obj
+keyBindings = {
+	enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
+	bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
+}
+_(page.menu.settings.keyBindings.bindings()).each(function(k){
+	keyBindings[k.id()] = {}
+	_(k.keys()).each(function(i){
+		keyBindings[k.id()][i.id()] = i;
+	})
+})

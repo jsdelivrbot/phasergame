@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html manifest="appcache.mf">
-<!-- <html> -->
+<!-- <html manifest="appcache.mf"> -->
+<html>
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
@@ -249,7 +249,7 @@
 				<div class="content" id="settings-tab" data-bind="with: settings">
 					<dl class="tabs vertical" data-tab>
 					  	<dd class="active"><a href="#settings-graphics">Graphics</a></dd>
-				  		<dd><a href="#settings-controls">Controls</a></dd>
+				  		<dd><a href="#settings-controls">Key bindings</a></dd>
 					  	<dd><a href="#settings-sound">Sound</a></dd>
 					</dl>
 					<div class="tabs-content vertical">
@@ -266,28 +266,38 @@
 					    	</div>
 					  	</div>
 					  	<div class="content" id="settings-controls" data-bind="with: keyBindings">
-					    	<h5>Controls</h5>
-					    	<table>
-					    		<thead>
-					    			<tr>
-					    				<td>Control</td>
-					    				<td>Key</td>
-					    				<td>Action</td>
-					    			</tr>
-					    		</thead>
-					    		<tbody data-bind="foreach: bindings">
-					    			<!-- up -->
-					    			<tr> 
-					    				<td data-bind="text: title"></td>
-					    				<td>
-					    					<kbd data-bind="text: String.fromCharCode(key())"></kbd>
-					    				</td>
-					    				<td>
-					    					<a href="#" class="button tiny radius secondary" style="margin: 0px;" data-bind="click: $parent.select">Change</a>
-					    				</td>
-					    			</tr>
-					    		</tbody>
-					    	</table>
+					    	<dl class="tabs" data-tab data-bind="foreach: bindings">
+					    		<!-- ko if: display -->
+							  	<dd><a data-bind="text: title, attr:{'href': '#keybindings-'+id() }"></a></dd>
+							  	<!-- /ko -->
+							</dl>
+							<div class="tabs-content" data-bind="foreach: bindings">
+								<!-- ko if: display -->
+							  	<div class="content" data-bind="attr:{'id': 'keybindings-'+id() }">
+								    <table>
+							    		<thead>
+							    			<tr>
+							    				<td>Function</td>
+							    				<td>Key</td>
+							    				<td>Action</td>
+							    			</tr>
+							    		</thead>
+							    		<tbody data-bind="foreach: keys">
+							    			<!-- up -->
+							    			<tr> 
+							    				<td data-bind="text: title"></td>
+							    				<td>
+							    					<kbd data-bind="text: keyboardMap[keyCode()]"></kbd>
+							    				</td>
+							    				<td>
+							    					<a href="#" class="button tiny radius secondary" style="margin: 0px;" data-bind="click: $parents[1].changeBinding">Change</a>
+							    				</td>
+							    			</tr>
+							    		</tbody>
+							    	</table>
+								</div>
+								<!-- /ko -->
+							</div>
 					  	</div>
 					  	<div class="content" id="settings-sound" data-bind="with: sound">
 					    	<h5>Sound</h5>
@@ -310,7 +320,7 @@
 		</div>
 
 		<!-- keybinding -->
-		<div id="keybinding" data-bind="event:{'mousedown': menu.settings.keyBindings.bind, 'keydown': menu.settings.keyBindings.bind}">
+		<div id="keybinding">
 			Press Any Key
 		</div>
 	</body>
