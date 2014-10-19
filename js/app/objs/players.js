@@ -9,9 +9,6 @@ Players = Klass({
 	createPlayer: function(_playerData){
 		this.player = new PlayerControl(_playerData)
 
-		engin.camera.follow(this.player.sprite)
-		engin.camera.deadzone = new Phaser.Rectangle(302.5,225,195,150)
-
 		game.loadMap(_playerData.position.island,_playerData.position.map, function(){
 			//see if we are off the map or at spawn
 			p = game.players.player.data.data.position.body
@@ -33,6 +30,43 @@ Players = Klass({
 
 		if(this.player){
 			this.player.step()
+
+			//set the position of the camera
+			switch(page.menu.settings.graphics.cameraMode.peek()){
+				case 'none':
+					x = this.player.sprite.x - (engin.width/2)
+					y = this.player.sprite.y - (engin.height/2)
+					break;
+				case 'dynamic':
+					mx = engin.input.mousePointer.realPageX * (engin.width / window.innerWidth)
+					my = engin.input.mousePointer.realPageY * (engin.height / window.innerHeight)
+
+					mx = (mx < (engin.width/5))? (engin.width/5) : mx;
+					my = (my < (engin.height/5))? (engin.height/5) : my;
+
+					mx = (mx > engin.width-(engin.width/5))? engin.width-(engin.width/5) : mx;
+					my = (my > engin.height-(engin.height/5))? engin.height-(engin.height/5) : my;
+
+					x = this.player.sprite.x - (engin.width/2) + ((mx - (engin.width/2)) / 3)
+					y = this.player.sprite.y - (engin.height/2) + ((my - (engin.height/2)) / 3)
+				break;
+				case 'smooth':
+					if((this.player.sprite.x - (engin.width/2)) - engin.camera.x < engin.width/2){
+						x = engin.camera.x + (((this.player.sprite.x - (engin.width/2)) - engin.camera.x) / page.menu.settings.graphics.cameraSmoothSpeed.peek())
+					}
+					else{
+						x = this.player.sprite.x - (engin.width/2)
+					}
+					if((this.player.sprite.y - (engin.height/2)) - engin.camera.y < engin.height/2){
+						y = engin.camera.y + (((this.player.sprite.y - (engin.height/2)) - engin.camera.y) / page.menu.settings.graphics.cameraSmoothSpeed.peek())
+					}
+					else{
+						y = this.player.sprite.y - (engin.height/2)
+					}
+					break;
+			}
+
+			engin.camera.setPosition(x,y)
 		}
 	},
 

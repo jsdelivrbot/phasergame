@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- <html manifest="appcache.mf"> -->
-<html>
+<html manifest="appcache.mf">
+<!-- <html> -->
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
@@ -255,14 +255,23 @@
 					<div class="tabs-content vertical">
 					  	<div class="content active" id="settings-graphics" data-bind="with: graphics">
 					    	<h5>Graphics</h5>
-					    	<div class="small-6">
+					    	<div class="small-6 columns">
 						    	<label>Render Type</label>
 						    	<select data-bind="value: renderMode, foreach: renderModes">
 						    		<option data-bind="text: title, value: value"></option>
 						    	</select>
 					    	</div>
-					    	<div class="small-6">
-					    		
+					    	<div class="small-6 columns">
+					    		<label>Dynamic Camera</label>
+						    	<select data-bind="value: cameraMode, foreach: cameraModes">
+						    		<option data-bind="text: $data, value: $data"></option>
+						    	</select>
+						    	<!-- ko if: cameraMode() == 'smooth' -->
+					    		<label>Camera Speed</label>
+						    	<select data-bind="value: cameraSmoothSpeed, foreach: cameraSmoothSpeeds">
+						    		<option data-bind="text: title, value: value"></option>
+						    	</select>
+						    	<!-- /ko -->
 					    	</div>
 					  	</div>
 					  	<div class="content" id="settings-controls" data-bind="with: keyBindings">

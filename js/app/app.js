@@ -50,6 +50,13 @@ $(document).ready(function() {
 		event.preventDefault()
 	});
 
+	$(window).on("mousemove", function(event){
+		if(engin){
+			engin.input.mousePointer.realPageX = event.pageX;
+			engin.input.mousePointer.realPageY = event.pageY;
+		}
+	});
+
 	// -----------------------app-------------------------
 
 	// mouse keyboard input
@@ -86,6 +93,11 @@ $(document).ready(function() {
 			$("#chat .off-canvas-wrap").removeClass('move-right')
 			$("#chat .off-canvas-wrap").removeClass('move-left')
 		}
+	});
+
+	// menu
+	$("#menu .close-reveal-modal").click(function(event) {
+		keyBindings.enable('game')
 	});
 
 	//resize

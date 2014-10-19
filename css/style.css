@@ -26,6 +26,9 @@ input.error, textarea.error, select.error{
 	font-weight: bold;
 	cursor: pointer;
 }
+.reveal-modal-bg{
+	display: none;
+}
 
 /*loading*/
 #loading-modal{

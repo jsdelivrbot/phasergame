@@ -214,7 +214,28 @@ page = {
 						title: 'Canvas',
 						value: Phaser.CANVAS
 					}
-				]
+				],
+				cameraModes: [
+					'none',
+					'dynamic',
+					'smooth'
+				],
+				cameraMode: 'smooth',
+				cameraSmoothSpeed: 40,
+				cameraSmoothSpeeds: [
+					{
+						title: 'slow',
+						value: 50
+					},
+					{
+						title: 'normal',
+						value: 40
+					},
+					{
+						title: 'fast',
+						value: 30
+					}
+				],
 			},
 			keyBindings:{
 				currentBinding: null,
@@ -311,10 +332,18 @@ page = {
 
 							// events
 							if(keys[i].down){
-								keys[i].key.onDown.add(keys[i].down)
+								keys[i].key.onDown.add(_(function(event){
+									if(this.enabled()){
+										event();
+									}
+								}).bind(keys[i].group,keys[i].down))
 							}
 							if(keys[i].up){
-								keys[i].key.onUp.add(keys[i].up)
+								keys[i].key.onUp.add(_(function(event){
+									if(this.enabled()){
+										event();
+									}
+								}).bind(keys[i].group,keys[i].up))
 							}
 						};
 						
