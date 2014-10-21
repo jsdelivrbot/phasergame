@@ -29,6 +29,9 @@ input.error, textarea.error, select.error{
 .reveal-modal-bg{
 	display: none;
 }
+.tooltip{
+	z-index: 9999;
+}
 
 /*loading*/
 #loading-modal{

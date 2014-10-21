@@ -3,7 +3,12 @@ fn = {
 	combindOver: function(obj,obj2){
 		for (var val in obj2){
 			if(typeof obj2[val] !== 'object'){
-				obj[val] = obj2[val]
+				if(typeof obj[val] == "function"){
+					obj[val](obj2[val])
+				}
+				else{
+					obj[val] = obj2[val]
+				}
 			}
 			else{
 				if(typeof obj[val] == 'object'){

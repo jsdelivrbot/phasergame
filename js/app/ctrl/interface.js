@@ -9,9 +9,8 @@ function keyBinding(title,key,events){
 		title: title,
 		id: title.toLowerCase().replace(' ',''),
 		keyCode: key,
-		key: {},
-		isDown: function(){return (this.group.enabled())? this.key.isDown : false},
-		isUp: function(){return (this.group.enabled())? this.key.isUp : true},
+		isDown: function(){return (this.group.enabled())? engin.input.keyboard._keys[this.keyCode()].isDown : false},
+		isUp: function(){return (this.group.enabled())? engin.input.keyboard._keys[this.keyCode()].isUp : true},
 	}
 
 	if(events){
@@ -32,7 +31,7 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.3,
+	version: 1.1,
 	loading: {
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
@@ -204,15 +203,18 @@ page = {
 				renderModes: [
 					{
 						title: 'Auto',
-						value: Phaser.AUTO
-					},
-					{
-						title: 'Web GL',
-						value: Phaser.WEBGL
+						value: Phaser.AUTO,
+						desc: 'If your browser dose not suport "Web GL" it will fall back on "Canvas"'
 					},
 					{
 						title: 'Canvas',
-						value: Phaser.CANVAS
+						value: Phaser.CANVAS,
+						desc: 'Uses standard "HTML5 Canvas" to render game'
+					},
+					{
+						title: 'Web GL',
+						value: Phaser.WEBGL,
+						desc: 'Uses "Web GL" to render game'
 					}
 				],
 				cameraModes: [
@@ -273,13 +275,15 @@ page = {
 
 						// if there are up/down events on the key the unbind them
 						if(keybinding.up){
-							if(keybinding.key){
-								keybinding.key.onUp.remove(keybinding.up)
+							a = engin.input.keyboard._keys[keybinding.keyCode()]
+							if(a){
+								a.onUp.remove(keybinding.up)
 							}
 						}
-						if(keybinding.down){
-							if(keybinding.key){
-								keybinding.key.onDown.remove(keybinding.down)
+						if(keybinding.up){
+							a = engin.input.keyboard._keys[keybinding.keyCode()]
+							if(a){
+								a.onDown.remove(keybinding.down)
 							}
 						}
 
@@ -294,17 +298,17 @@ page = {
 						}
 
 						// bind
-						keybinding.key = engin.input.keyboard.addKey(keybinding.keyCode());
+						engin.input.keyboard.addKey(keybinding.keyCode());
 
 						//remove the capture
 						engin.input.keyboard.removeKeyCapture(keybinding.keyCode());
 
 						// find events
 						if(keybinding.up){
-							keybinding.key.onUp.add(keybinding.up)
+							engin.input.keyboard._keys[keybinding.keyCode()].onUp.add(keybinding.up)
 						}
 						if(keybinding.down){
-							keybinding.key.onDown.add(keybinding.down)
+							engin.input.keyboard._keys[keybinding.keyCode()].onDown.add(keybinding.down)
 						}
 
 						$("#keybinding").hide()
@@ -323,7 +327,7 @@ page = {
 
 						for (var i = 0; i < keys.length; i++) {
 							// create the key
-							keys[i].key = engin.input.keyboard.addKey(keys[i].keyCode())
+							engin.input.keyboard.addKey(keys[i].keyCode())
 
 							//remove the capture
 							engin.input.keyboard.removeKeyCapture(keys[i].keyCode())
@@ -332,14 +336,14 @@ page = {
 
 							// events
 							if(keys[i].down){
-								keys[i].key.onDown.add(_(function(event){
+								engin.input.keyboard._keys[keys[i].keyCode()].onDown.add(_(function(event){
 									if(this.enabled()){
 										event();
 									}
 								}).bind(keys[i].group,keys[i].down))
 							}
 							if(keys[i].up){
-								keys[i].key.onUp.add(_(function(event){
+								engin.input.keyboard._keys[keys[i].keyCode()].onUp.add(_(function(event){
 									if(this.enabled()){
 										event();
 									}
@@ -431,12 +435,12 @@ page = {
 			},
 			sound: {
 				volume: observable(0.75, function(val){
-					if(typeof engin === 'object'){
+					if(engin){
 						engin.sound.volume = parseFloat(val);
 					}
 				}),
 				mute: observable(false, function(val){
-					if(typeof engin === 'object'){
+					if(engin){
 						engin.sound.mute = val;
 					}
 				})
@@ -616,38 +620,21 @@ page = {
 	player: new PlayerDataFull().data
 }
 
-//load from localStorage
-page = ko.mapping.fromJS(page)
-
+//load
 if(localStorage.settings){
 	json = JSON.parse(localStorage.settings);
 
 	// see if its the same version
-	if(page.version() == json.version){
-		//dont overwrite these
-		page.__ko_mapping__.ignore.push('version')
-
-		// ko.mapping.fromJS(json,page)
-
-		page.__ko_mapping__.ignore = [];
+	if(page.version == json.version){
+		fn.combindOver(page,json)
 	}
 	else{
 		console.log('localStorage out of date')
 	}
 }
-$(window).unload(function(){
-	json = ko.mapping.toJS(page)
 
-	delete json.chat;
-	delete json.player;
-	if(!json.connect.login.remember){
-		delete json.connect.login;
-	}
-	delete json.connect.newServer;
-	delete json.connect.selectedServer;
-
-	localStorage.settings = JSON.stringify(json)
-})
+//create ko obj
+page = ko.mapping.fromJS(page)
 
 //create the keyBindings obj
 keyBindings = {
@@ -659,4 +646,39 @@ _(page.menu.settings.keyBindings.bindings()).each(function(k){
 	_(k.keys()).each(function(i){
 		keyBindings[k.id()][i.id()] = i;
 	})
+})
+
+//save event
+$(window).unload(function(){
+	json = ko.mapping.toJS(page)
+
+	delete json.chat;
+	delete json.player;
+	delete json.loading;
+	if(!json.connect.login.remember){
+		delete json.connect.login;
+	}
+	delete json.connect.newServer;
+	delete json.connect.selectedServer;
+
+	//graphics
+	delete json.menu.settings.graphics.cameraModes;
+	delete json.menu.settings.graphics.cameraSmoothSpeeds;
+	delete json.menu.settings.graphics.renderModes;
+
+	//keys
+	delete json.menu.settings.keyBindings.currentBinding;
+	_(json.menu.settings.keyBindings.bindings).each(function(i){
+		delete i.title;
+		delete i.id;
+		delete i.display;
+		delete i.enabled;
+		_(i.keys).each(function(i){
+			delete i.title;
+			delete i.id;
+			delete i.group;
+		})
+	})
+
+	localStorage.settings = JSON.stringify(json)
 })
