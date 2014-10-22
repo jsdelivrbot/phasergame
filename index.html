@@ -236,24 +236,27 @@
 		<!-- menu -->
 		<div id="menu" class="reveal-modal menu full" data-reveal data-bind="with: menu">
 			<div class="tabs" data-tab>
-				<dd class="active">
+				<dd>
 					<a href="#profile-tab">Profile</a>
 				</dd>
 				<dd>
 					<a href="#settings-tab">Settings</a>
 				</dd>
+				<dd>
+					<a href="#menu-tab">Menu</a>
+				</dd>
 			</div>
 
 			<div class="tabs-content">
-				<div class="content active" id="profile-tab">
+				<div class="content" id="profile-tab">
 
 					<dl class="tabs vertical" data-tab>
-					  	<dd class="active"><a href="#profile-stats">Stats</a></dd>
+					  	<dd><a href="#profile-stats">Stats</a></dd>
 				  		<dd><a href="#profile-players">Players</a></dd>
 					  	<dd><a href="#profile-friends">Friends</a></dd>
 					</dl>
 					<div class="tabs-content vertical">
-					  	<div class="content active" id="profile-stats">
+					  	<div class="content" id="profile-stats">
 					    	<h5>profile 1.</h5>
 					  	</div>
 					  	<div class="content" id="profile-players">
@@ -266,12 +269,12 @@
 				</div>
 				<div class="content" id="settings-tab" data-bind="with: settings">
 					<dl class="tabs vertical" data-tab>
-					  	<dd class="active"><a href="#settings-graphics">Graphics</a></dd>
+					  	<dd><a href="#settings-graphics">Graphics</a></dd>
 				  		<dd><a href="#settings-controls">Key bindings</a></dd>
 					  	<dd><a href="#settings-sound">Sound</a></dd>
 					</dl>
 					<div class="tabs-content vertical">
-					  	<div class="content active" id="settings-graphics" data-bind="with: graphics">
+					  	<div class="content" id="settings-graphics" data-bind="with: graphics">
 					    	<h5>Graphics</h5>
 					    	<div class="small-6 columns">
 						    	<label><span data-tooltip aria-haspopup="true" class="has-tip tip-top" title="You need to reload the page for the option to take effect">Render Type</span></label>
@@ -343,6 +346,12 @@
 					    	</div>
 					  	</div>
 					</div>
+				</div>
+				<div class="content" id="menu-tab" data-bind="with: menu">
+					<ul class="stack button-group small-4 small-offset-4">
+					  	<li><a href="#" class="button secondary" data-bind="click: disconnect">Disconnect From Server</a></li>
+					  	<li><a href="#" class="button secondary" data-bind="click: exit">Exit Game</a></li>
+					</ul>
 				</div>
 			</div>
 

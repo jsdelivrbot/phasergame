@@ -57,6 +57,9 @@ $(document).ready(function() {
 		}
 	});
 
+	$(".tabs>dd:first-child").addClass('active')
+	$(".tabs-content>.content:first-child").addClass('active')
+
 	// -----------------------app-------------------------
 
 	// mouse keyboard input

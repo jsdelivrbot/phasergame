@@ -13,7 +13,6 @@ function create(){
 
 	// bind the keys
 	keyBindings.bindKeys()
-	keyBindings.enable('game')
 
 	//resize the engin to fit the screen
 	$(window).trigger('resize')
@@ -67,6 +66,8 @@ game = {
 
 		game.players.createPlayer(server.in.player.data);
 
+		//turn the keyboard on
+		keyBindings.enable('game')
 
 		f = _(game.players.sendData).bind(game.players)
 		game.timers.sendPlayerData = window.setInterval(f,100)

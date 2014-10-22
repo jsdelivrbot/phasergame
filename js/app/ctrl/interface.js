@@ -31,7 +31,7 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.1,
+	version: 1.2,
 	loading: {
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
@@ -444,6 +444,14 @@ page = {
 						engin.sound.mute = val;
 					}
 				})
+			}
+		},
+		menu: {
+			disconnect: function(){
+				server.disconnect()
+			},
+			exit: function(){
+				window.close()
 			}
 		}
 	},
