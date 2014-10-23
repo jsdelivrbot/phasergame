@@ -70,15 +70,9 @@ Players = Klass({
 		}
 	},
 
-	sendData: function(data,interface){
+	sendData: function(data){
 		if(this.player){
 			server.out.player.data(data)
-			this.updateData(data,interface)
-		}
-	},
-
-	updateData: function(data,interface){
-		if(!interface){
 			ko.mapping.fromJS({
 				menu: {
 					profile: {
@@ -86,8 +80,8 @@ Players = Klass({
 					}
 				}
 			},page);
+			server.in.player.data = fn.duplicate(data)
 		}
-		server.in.player.data = fn.duplicate(data)
 	},
 
 	update: function(){

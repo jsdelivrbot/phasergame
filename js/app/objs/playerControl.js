@@ -63,13 +63,13 @@ PlayerControl = Player.extend({
 	    		}
 	    		else{
 	    			game.players.player.jumpTo(game.map.properties.spawnX*game.map.tileWidth, game.map.properties.spawnY*game.map.tileHeight)
-	    			game.players.player.data.update({
-	    				position:{
-	    					island: _door.properties.island,
-	    					map: _door.properties.map
-	    				}
-	    			})
 	    		}
+    			game.players.player.data.update({
+    				position:{
+    					island: _door.properties.island,
+    					map: _door.properties.map
+    				}
+    			})
 	    	})
 	    },null,this)
 	}

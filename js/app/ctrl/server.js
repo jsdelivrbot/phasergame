@@ -103,7 +103,16 @@ server = {
 	//data from the server is stored here
 	in: {
 		player: new ServerInDiff('player', function(data){
-			game.players.updateData(data);
+			//update the interface
+			ko.mapping.fromJS({
+				menu: {
+					profile: {
+						playerData: data
+					}
+				}
+			},page);
+			//update the server out, but with out pushing it to the server
+			server.out.player._data = fn.duplicate(data)
 		}),
 		players: new ServerIn('players',function(data){
 			game.players.update()
