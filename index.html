@@ -255,9 +255,9 @@
 				  		<dd><a href="#profile-players">Players</a></dd>
 					  	<dd><a href="#profile-friends">Friends</a></dd>
 					</dl>
-					<div class="tabs-content vertical">
-					  	<div class="content" id="profile-stats">
-					    	<h5>profile 1.</h5>
+					<div class="tabs-content vertical" data-bind="with: profile">
+					  	<div class="content" id="profile-stats" data-bind="with: playerData">
+					    	<h5 data-bind="text: id.name"></h5>
 					  	</div>
 					  	<div class="content" id="profile-players">
 					    	<h5>profile 2.</h5>

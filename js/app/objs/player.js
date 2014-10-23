@@ -117,6 +117,11 @@ PlayerData = Klass({
 Player = Klass({
 	sprite: null,
 	data: null,
+	textStyle: {
+		font: "10px Arial", 
+		fill: "#000000",
+		align: "center"
+	},
 
 	// short hands
 	id: 0,
@@ -139,10 +144,29 @@ Player = Klass({
 	    // set up short hands
 	    this.id = this.data.data.id.id
 	    this.name = this.data.data.id.name
+
+	    //add the name tag
+	    this.sprite.addChild(new Phaser.Text(engin,0,-16,this.name,this.textStyle))
 	},
 	step: function(){
 		this.move()
 		this.animate()
+
+		//check the sprite and see if its the same
+		if(this.data.data.sprite.image !== this.sprite.key){
+			//change sprite
+			this.sprite.destroy();
+			this.sprite = engin.add.sprite(this.data.data.position.body.x, this.data.data.position.body.y, this.data.data.sprite.image)
+
+			//set up the animations
+			this.sprite.animations.add('down',[0,1,2,3],10,true,true)
+			this.sprite.animations.add('left',[4,5,6,7],10,true,true)
+			this.sprite.animations.add('right',[8,9,10,11],10,true,true)
+			this.sprite.animations.add('up',[12,13,14,15],10,true,true)
+
+		    engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
+		    this.sprite.body.setSize(20,18,6,30);
+		}
 	},
 	move: function(){
 		// x
@@ -209,16 +233,5 @@ Player = Klass({
 	remove: function(){
 		// remove the sprite
 		this.sprite.destroy()
-
-		// remove my self from the players array
-		index = game.players.players.indexOf(this);
-		if(index !== -1){
-			game.players.players.splice(index,1)
-		}
-		// for (var i in players) {
-		// 	if(players[i].id == this.id){
-		// 		game.players.players.splice(i,1)
-		// 	}
-		// };
 	}
 });

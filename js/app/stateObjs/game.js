@@ -69,7 +69,7 @@ game = {
 		//turn the keyboard on
 		keyBindings.enable('game')
 
-		f = _(game.players.sendData).bind(game.players)
+		f = _(game.players.sendData).bind(game.players,game.players.player.data.data)
 		game.timers.sendPlayerData = window.setInterval(f,100)
 	},
 

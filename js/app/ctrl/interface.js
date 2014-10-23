@@ -197,6 +197,9 @@ page = {
 		}
 	},
 	menu:{
+		profile: {
+			playerData: new PlayerDataFull().data
+		},
 		settings: {
 			graphics: {
 				renderMode: Phaser.AUTO,
@@ -624,8 +627,7 @@ page = {
 				}
 			};
 		},
-	},
-	player: new PlayerDataFull().data
+	}
 }
 
 //load
@@ -668,6 +670,9 @@ $(window).unload(function(){
 	}
 	delete json.connect.newServer;
 	delete json.connect.selectedServer;
+
+	//profile
+	delete json.menu.profile;
 
 	//graphics
 	delete json.menu.settings.graphics.cameraModes;

@@ -1,6 +1,6 @@
 Players = Klass({
 	player: null,
-	players: [],
+	players: {},
 
 	initialize:function(){
 		
@@ -70,38 +70,38 @@ Players = Klass({
 		}
 	},
 
-	sendData: function(){
+	sendData: function(data,interface){
 		if(this.player){
-			server.out.player.data(this.player.data.data)
-			this.updateData(this.player.data.data)
+			server.out.player.data(data)
+			this.updateData(data,interface)
 		}
 	},
 
-	updateData: function(data){
-		ko.mapping.fromJS({player:data},page);
-		// server.out.player.data(data);
+	updateData: function(data,interface){
+		if(!interface){
+			ko.mapping.fromJS({
+				menu: {
+					profile: {
+						playerData: data
+					}
+				}
+			},page);
+		}
 		server.in.player.data = fn.duplicate(data)
 	},
 
 	update: function(){
 		// remove the players that are not there
 		for (var i in this.players) {
-			found = false
-			for (var j = 0; j < server.in.players.data.length; j++) {
-				if(this.players[i].data.data.id.id == server.in.players.data[j].id.id){
-					found = true
-					break;
-				}
-			};
-
-			if(!found){
+			if(!server.in.players.data[this.players[i].data.data.id.id]){
 				this.players[i].remove()
+				delete this.players[i];
 			}
 		};
 
 		//update the players based on what the servers data is
-		for (var i = 0; i < server.in.players.data.length; i++) {
-			if(server.in.players.data[i].id.id in this.players){
+		for (var i in server.in.players.data) {
+			if(this.players[server.in.players.data[i].id.id]){
 				this.players[server.in.players.data[i].id.id].data.update(server.in.players.data[i])
 			}
 			else{

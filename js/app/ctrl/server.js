@@ -5,6 +5,7 @@ ServerIn = Klass({
 	initialize: function(name,callback){
 		this.name = name || ''
 		this.callback = callback
+		this.data = fn.duplicate(this.data);
 	},
 	bind: function(socket){
 		if(this.callback){
@@ -27,7 +28,7 @@ ServerInDiff = ServerIn.extend({
 			f = _.partial(function(_this,callback,data){
 				fn.combindOver(_this.data,data)
 				callback = _.bind(callback,this);
-				callback(_this.data);
+				callback(data);
 			},this,this.callback)
 			socket.on(this.name,f)
 		}
@@ -58,6 +59,7 @@ ServerOutCache = ServerOut.extend({
 	changed: false,
 	initialize: function(name,timing){
 		this.supr(name)
+		this._data = fn.duplicate(this._data);
 
 		window.setInterval(this.test,timing,this)
 	},
@@ -82,6 +84,10 @@ ServerOutCache = ServerOut.extend({
 
 ServerOutDiff = ServerOut.extend({
 	_data: {},
+	initialize: function(name){
+		this.supr(name)
+		this._data = fn.duplicate(this._data);
+	},
 	data: function(data){
 		if(this.socket){
 			diff = fn.diff(this._data,data)
