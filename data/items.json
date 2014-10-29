@@ -1,0 +1,177 @@
+{
+	"resources":{
+
+	},
+	"items": {
+		"food":{
+
+		},
+		"misc": {
+
+		},
+		"shards":{
+			"circle":{
+				"red":{
+					"title": "Eagle eye",
+					"data": 0.05
+				},
+				"blue":{
+					"title": "Defence",
+					"data": 0.1
+				},
+				"yellow":{
+					"title": "Speed",
+					"data": 0.5
+				},
+				"pruple":{
+					"title": "Regenerate",
+					"data": 0.005
+				},
+				"green":{
+					"title": "Health",
+					"data": 0.1
+				},
+				"orange":{
+					"title": "Disguise",
+					"data": 0.05
+				},
+				"black":{
+					"title": "Night cloaking",
+					"data": 0.4
+				},
+				"white":{
+					"title": "Day cloaking",
+					"data": 0.4
+				}
+			},
+			"square":{
+				"red":{
+					"title": "Damage",
+					"data": 0.5
+				},
+				"blue":{
+					"title": "Durability",
+					"data": 0.5
+				},
+				"yellow":{
+					"title": "Speed",
+					"data": 0.5
+				},
+				"pruple":{
+					"title": "",
+					"data": 0
+				},
+				"green":{
+					"title": "",
+					"data": 0
+				},
+				"orange":{
+					"title": "",
+					"data": 0
+				},
+				"black":{
+					"title": "",
+					"data": 0
+				},
+				"white":{
+					"title": "",
+					"data": 0
+				}
+			}
+		},
+		"crystals":{
+			"circle":{
+				"level1":{
+					"combined":0.10,
+					"same":20
+				},
+				"level2":{
+					"combined":0.20,
+					"same":40
+				},
+				"level3":{
+					"Combined":0.30,
+					"same":60
+				},
+				"level4":{
+					"combined":0.40,
+					"same":80
+				},
+				"level5":{
+					"combined":0.50,
+					"same":100
+				},
+				"level6":{
+					"combined":0.60,
+					"same":120
+				},
+				"level7":{
+					"combined":0.70,
+					"same":140
+				},
+				"level8":{
+					"combined":0.80,
+					"same":160
+				},
+				"level9":{
+					"combined":0.90,
+					"same":180
+				},
+				"level10":{
+					"combined":1.00,
+					"same":200
+				}
+			},
+			"square":{
+				"level1":{
+					"combined":0.10,
+					"same":20
+				},
+				"level2":{
+					"combined":0.20,
+					"same":40
+				},
+				"level3":{
+					"Combined":0.30,
+					"same":60
+				},
+				"level4":{
+					"combined":0.40,
+					"same":80
+				},
+				"level5":{
+					"combined":0.50,
+					"same":100
+				},
+				"level6":{
+					"combined":0.60,
+					"same":120
+				},
+				"level7":{
+					"combined":0.70,
+					"same":140
+				},
+				"level8":{
+					"combined":0.80,
+					"same":160
+				},
+				"level9":{
+					"combined":0.90,
+					"same":180
+				},
+				"level10":{
+					"combined":1.00,
+					"same":200
+				}
+			}
+		}
+	},
+	"tools": {
+		"tools": {
+
+		},
+		"weapons":{
+
+		}
+	}
+}
