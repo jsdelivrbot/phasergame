@@ -31,7 +31,8 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.2,
+	version: 1.21,
+	items: [],
 	loading: {
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
@@ -370,13 +371,31 @@ page = {
 						id: 'menu',
 						enabled: false,
 						keys: [
-							keyBinding('Close Menu',Phaser.Keyboard.ESC,{
+							keyBinding('Close',Phaser.Keyboard.ESC,{
 								down: function(){
 									//see if there are menus open
 									if($(".menu.open").length){
 										$(".menu.open:not(.cant-close)").foundation('reveal','close')
 										keyBindings.enable('game')
 									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							})
+						]
+					},
+					{
+						title: 'Inventory',
+						display: true,
+						id: 'inventory',
+						enabled: false,
+						keys: [
+							keyBinding('Close',Phaser.Keyboard.E,{
+								down: function(){
+									//see if there are menus open
+									$("#inventory").foundation('reveal','close')
+									keyBindings.enable('game')
 								},
 								rebind: function(key){
 									return (key > 2)
@@ -411,6 +430,20 @@ page = {
 									if($("#chat").hasClass('out')){
 										$("#chat").removeClass('out')
 										$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('blur')
+									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							}),
+							keyBinding('Open Inventory',Phaser.Keyboard.E,{
+								down: function(){
+									$("#chat").removeClass('out')
+									$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('blur')
+									$inventory = $("#inventory")
+									if(!$inventory.hasClass('open')){
+										$inventory.foundation('reveal','open')
+										keyBindings.enable('inventory')
 									}
 								},
 								rebind: function(key){
@@ -452,10 +485,19 @@ page = {
 		menu: {
 			disconnect: function(){
 				server.disconnect()
+				page.connect.login.failed(false);
 			},
 			exit: function(){
 				window.close()
 			}
+		}
+	},
+	inventory: {
+		items: {
+			filters: [],
+		},
+		resources: {
+			filters: []
 		}
 	},
 	chat: {

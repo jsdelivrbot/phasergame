@@ -18,9 +18,9 @@ $(document).ready(function() {
 
 	//---------------------background----------------------
 
-	$('html,body').on('contextmenu',function(){
-		return false;
-	})
+	// $('html,body').on('contextmenu',function(){
+	// 	return false;
+	// })
 
 	$(".no-action").submit(function(event) {
 		/* Act on the event */
@@ -37,6 +37,10 @@ $(document).ready(function() {
 			engin.input.mousePointer.realPageY = event.pageY;
 		}
 	});
+
+	$('*[data-keyboard-enable]').click(function(){
+		keyBindings.enable($(this).data('keyboard-enable'));
+	})
 
 	$(".tabs>dd:first-child").addClass('active')
 	$(".tabs-content>.content:first-child").addClass('active')
@@ -91,5 +95,10 @@ $(document).ready(function() {
 			engin.scale.setMaximum()
 			engin.scale.refresh()
 		}
+
+		//resize class
+		$(".resize").each(function(i,el){
+			$(el).height($(el).parent().innerHeight() - $(el).position().top);
+		});
 	});
 });

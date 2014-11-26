@@ -1,6 +1,6 @@
 loadedData = {}
 function loadData(cb){
-	cb = _.after(3,cb)
+	cb = _.after(4,cb)
 
 	//tilesets.json
 	$.ajax({
@@ -45,6 +45,21 @@ function loadData(cb){
 	})
 	.fail(function() {
 		throw new Error('failed to load playerImages json')
+	})
+
+	//items
+	$.ajax({
+		url: 'data/items.json',
+		type: 'GET',
+		dataType: 'json'
+	})
+	.done(function(data) {
+		items.setItems(data)
+
+		cb()
+	})
+	.fail(function() {
+		throw new Error('failed to load items json')
 	})
 }
 
