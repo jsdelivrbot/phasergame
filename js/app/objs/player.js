@@ -17,10 +17,14 @@ PlayerDataFull = Klass({
 		sprite: {
 			image: 'player/1'
 		},
-		inventory: {
-			items: [],
-			resources: []
-		},
+		inventory: [
+			/*
+			{
+				id: id string,
+				count: number of items
+			}
+			*/
+		],
 		skills: {}
 	},
 
@@ -45,16 +49,16 @@ PlayerDataFull = Klass({
 		}
 	},
 	updateFromJSON: function(_data){
-		fn.combindIn(this.data,_data)
+		fn.combindOver(this.data,_data)
 	},
 	updateFromPlayerData: function(_playerData){
-		fn.combindIn(this.data,_playerData.data);
+		fn.combindOver(this.data,_playerData.data);
 	},
 	updateFromPlayerDataFull: function(_playerDataFull){
 		fn.combindOver(this.data,_playerDataFull.data);
 	},
 	toPlayerData: function(){
-		return fn.combindIn(new PlayerData(),this.data);
+		return fn.combindOver(new PlayerData(),this.data);
 	},
 	toPlayerDataJSON: function(){
 		return new PlayerData(this).data;
@@ -101,13 +105,13 @@ PlayerData = Klass({
 		}
 	},
 	updateFromJSON: function(_data){
-		fn.combindIn(this.data,_data)
+		fn.combindOver(this.data,_data)
 	},
 	updateFromPlayerData: function(_playerData){
 		fn.combindOver(this.data,_playerData.data);
 	},
 	updateFromPlayerDataFull: function(_playerDataFull){
-		fn.combindIn(this.data,_playerDataFull.data);
+		fn.combindOver(this.data,_playerDataFull.data);
 	},
 	toPlayerDataFull: function(){
 		return new PlayerDataFull(this.data)
