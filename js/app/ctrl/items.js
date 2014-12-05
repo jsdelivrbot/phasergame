@@ -18,6 +18,8 @@ items = {
 
 		func('',json);
 		items.json = json;
+		//update the pages items
+		page.items(items.items);
 	},
 	get: function(id){
 		return items.items[id] || null;
