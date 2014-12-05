@@ -25,10 +25,10 @@ ServerIn = Klass({
 ServerInDiff = ServerIn.extend({
 	bind: function(socket){
 		if(this.callback){
-			f = _.partial(function(_this,callback,data){
-				fn.combindOver(_this.data,data)
+			f = _.partial(function(_this,callback,diff){
+				fn.applyDiff(_this.data,diff);
 				callback = _.bind(callback,this);
-				callback(data);
+				callback(diff); 
 			},this,this.callback)
 			socket.on(this.name,f)
 		}
@@ -90,8 +90,8 @@ ServerOutDiff = ServerOut.extend({
 	},
 	data: function(data){
 		if(this.socket){
-			diff = fn.diff(this._data,data)
-			if(!_(diff).isEmpty()){
+			var diff = fn.getDiff(this._data,data)
+			if(!fn.isEmptyDiff(diff)){
 				this.socket.emit(this.name,diff)
 				this._data = fn.duplicate(data);
 			}
@@ -102,7 +102,9 @@ ServerOutDiff = ServerOut.extend({
 server = {
 	//data from the server is stored here
 	in: {
-		player: new ServerInDiff('player', function(data){
+		player: new ServerInDiff('player', function(diff){
+			//build the diff
+			data = fn.buildDiff(diff);
 			//update the interface
 			ko.mapping.fromJS({
 				menu: {
@@ -112,7 +114,7 @@ server = {
 				}
 			},page);
 			//update the server out, but with out pushing it to the server
-			server.out.player._data = fn.duplicate(data)
+			fn.applyDiff(server.out.player._data,diff);
 		}),
 		players: new ServerIn('players',function(data){
 			game.players.update()

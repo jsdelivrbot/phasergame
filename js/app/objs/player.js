@@ -105,13 +105,13 @@ PlayerData = Klass({
 		}
 	},
 	updateFromJSON: function(_data){
-		fn.combindOver(this.data,_data)
+		fn.combindIn(this.data,_data)
 	},
 	updateFromPlayerData: function(_playerData){
-		fn.combindOver(this.data,_playerData.data);
+		fn.combindIn(this.data,_playerData.data);
 	},
 	updateFromPlayerDataFull: function(_playerDataFull){
-		fn.combindOver(this.data,_playerDataFull.data);
+		fn.combindIn(this.data,_playerDataFull.data);
 	},
 	toPlayerDataFull: function(){
 		return new PlayerDataFull(this.data)

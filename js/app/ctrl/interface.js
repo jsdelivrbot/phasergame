@@ -471,12 +471,12 @@ page = {
 			},
 			sound: {
 				volume: observable(0.75, function(val){
-					if(engin){
+					if(engin.isBooted){
 						engin.sound.volume = parseFloat(val);
 					}
 				}),
 				mute: observable(false, function(val){
-					if(engin){
+					if(engin.isBooted){
 						engin.sound.mute = val;
 					}
 				})
