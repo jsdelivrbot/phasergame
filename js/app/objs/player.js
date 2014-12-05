@@ -16,16 +16,7 @@ PlayerDataFull = Klass({
 		},
 		sprite: {
 			image: 'player/1'
-		},
-		inventory: [
-			/*
-			{
-				id: id string,
-				count: number of items
-			}
-			*/
-		],
-		skills: {}
+		}
 	},
 
 	initialize: function(_data){

@@ -140,11 +140,17 @@ server = {
 					page.chat.closed(data)
 					break;
 			}
+		}),
+		inventory: new ServerInDiff('inventory',function(diff){
+			//update the inventory
+			page.menu.inventory.data(server.in.inventory.data);
+			fn.applyDiff(server.out.inventory._data,diff);
 		})
 	},
 	out: {
 		player: new ServerOutDiff('player'),
-		chat: new ServerOut('chat')
+		chat: new ServerOut('chat'),
+		inventory: new ServerOutDiff('inventory')
 	},
 	options: {
 		reconnection: false,

@@ -360,7 +360,7 @@
 		</div>
 
 		<!-- inventory -->
-		<div id="inventory" class="reveal-modal menu" data-reveal data-bind="with: menu.profile.playerData">
+		<div id="inventory" class="reveal-modal menu" data-reveal data-bind="with: menu.inventory">
 			<a class="close-reveal-modal" data-keyboard-enable="game">&#215;</a>
 			<dl class="tabs" data-tab>
 				<dd><a href="#invetory-items">Items</a></dd>
@@ -370,22 +370,22 @@
 			</dl>
 			<div class="tabs-content resize">
 				<div class="content" id="invetory-items" style="height: 100%;">
-					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: inventory">
-						<!-- ko if: $data.id().indexOf('item') !== -1 -->
+					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('item') !== -1 -->
 						<div class="panel">
-							<span class="right" data-bind="text: $data.count()"></span>
-							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</ul>
 				</div>
 				<div class="content" id="invetory-resources" style="height: 100%;">
 					<!-- list of resources -->
-					<div class="small-8 columns scroll-y" style="height: 100%;" data-bind="foreach: inventory">
-						<!-- ko if: $data.id().indexOf('resource') !== -1 -->
+					<div class="small-8 columns scroll-y" style="height: 100%;" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('resource') !== -1 -->
 						<div class="panel">
-							<span class="right" data-bind="text: $data.count()"></span>
-							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</div>
@@ -396,21 +396,21 @@
 					</div>
 				</div>
 				<div class="content" id="invetory-weapons" style="height: 100%;">
-					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: inventory">
-						<!-- ko if: $data.id().indexOf('weapon') !== -1 -->
+					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('weapon') !== -1 -->
 						<div class="panel">
-							<span class="right" data-bind="text: $data.count()"></span>
-							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</ul>
 				</div>
 				<div class="content" id="invetory-tools" style="height: 100%;">
-					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: inventory">
-						<!-- ko if: $data.id().indexOf('tool') !== -1 -->
+					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('tool') !== -1 -->
 						<div class="panel">
-							<span class="right" data-bind="text: $data.count()"></span>
-							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</ul>

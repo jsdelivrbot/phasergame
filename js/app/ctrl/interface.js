@@ -490,14 +490,14 @@ page = {
 			exit: function(){
 				window.close()
 			}
-		}
-	},
-	inventory: {
-		items: {
-			filters: [],
 		},
-		resources: {
-			filters: []
+		inventory: {
+			data: [],
+			update: function(data){
+				page.menu.inventory.data(data);
+				server.out.inventory.data(data);
+				server.in.inventory._data = fn.duplicate(data);
+			}
 		}
 	},
 	chat: {
@@ -715,6 +715,9 @@ $(window).unload(function(){
 
 	//profile
 	delete json.menu.profile;
+
+	//inventory
+	delete json.menu.inventory;
 
 	//graphics
 	delete json.menu.settings.graphics.cameraModes;
