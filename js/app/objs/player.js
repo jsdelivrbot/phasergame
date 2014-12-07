@@ -11,7 +11,6 @@ PlayerDataFull = Klass({
 				x: 0,
 				y: 0
 			},
-			island: 0,
 			map: 0
 		},
 		sprite: {
@@ -67,7 +66,6 @@ PlayerData = Klass({
 				x: 0,
 				y: 0
 			},
-			island: 0,
 			map: 0
 		},
 		sprite: {

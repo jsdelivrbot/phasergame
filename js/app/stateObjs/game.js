@@ -97,7 +97,7 @@ game = {
 	},
 
 	//functions
-	loadMap: function(_island,_map,callback){
+	loadMap: function(_map,callback){
 		//when the map is loaded call this
 		game._createMap = function(){
 			//see if the old map is there
@@ -110,12 +110,12 @@ game = {
 				game.map.destroy()
 			}
 
-			game.map = engin.add.tilemap('island:'+_island+',map:'+_map)
+			game.map = engin.add.tilemap('map/'+_map)
 			game.map.properties.spawnX = parseInt(game.map.properties.spawnX)
 			game.map.properties.spawnY = parseInt(game.map.properties.spawnY)
 			//add the tilesets
-			for (var i = 0; i < engin.cache.getTilemapData('island:'+_island+',map:'+_map).data.tilesets.length; i++) {
-				_t = engin.cache.getTilemapData('island:'+_island+',map:'+_map).data.tilesets[i].name;
+			for (var i = 0; i < engin.cache.getTilemapData('map/'+_map).data.tilesets.length; i++) {
+				_t = engin.cache.getTilemapData('map/'+_map).data.tilesets[i].name;
 				game.map.addTilesetImage(_t,'tileset/'+_t)
 			};
 
@@ -154,7 +154,6 @@ game = {
     			_door.body.height = game.map.objects.doors[i].height + 4
 
     			_door.properties = {}
-				_door.properties.island = parseInt(game.map.objects.doors[i].properties.island)
 				_door.properties.map = parseInt(game.map.objects.doors[i].properties.map)
 				_door.properties.x = parseInt(game.map.objects.doors[i].properties.x)
 				_door.properties.y = parseInt(game.map.objects.doors[i].properties.y)
@@ -174,11 +173,11 @@ game = {
 		}
 
 		//load the tile map
-		if(!engin.cache.checkTilemapKey('island:'+_island+',map:'+_map)){
+		if(!engin.cache.checkTilemapKey('map/'+_map)){
 			// engin.load.onLoadComplete.removeAll()
 			url = server.url.protocol + '//' + server.url.hostname + ':8282';
-			url += '?type=map&island='+_island+'&map='+_map;
-			engin.load.tilemap('island:'+_island+',map:'+_map,url, null, Phaser.Tilemap.TILED_JSON)
+			url += '?type=map&map='+_map;
+			engin.load.tilemap('map/'+_map,url, null, Phaser.Tilemap.TILED_JSON)
 			engin.load.onLoadComplete.add(game._createMap,game)
 			engin.load.start()
 		}

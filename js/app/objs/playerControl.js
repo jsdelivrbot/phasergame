@@ -61,7 +61,7 @@ PlayerControl = Player.extend({
 			game.players.player.data.data.position.map = -1;
 			game.players.sendData(game.players.player.data.data);
 			//load the map
-	    	game.loadMap(_door.properties.island,_door.properties.map,function(){
+	    	game.loadMap(_door.properties.map,function(){
 	    		if(_door.properties.x && _door.properties.y){
 					game.players.player.jumpTo(_door.properties.x*game.map.tileWidth, _door.properties.y*game.map.tileHeight)
 	    		}
@@ -70,7 +70,6 @@ PlayerControl = Player.extend({
 	    		}
     			game.players.player.data.update({
     				position:{
-    					island: _door.properties.island,
     					map: _door.properties.map
     				}
     			})

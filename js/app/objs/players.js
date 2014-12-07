@@ -9,7 +9,7 @@ Players = Klass({
 	createPlayer: function(_playerData){
 		this.player = new PlayerControl(_playerData)
 
-		game.loadMap(_playerData.position.island,_playerData.position.map, function(){
+		game.loadMap(_playerData.position.map, function(){
 			//see if we are off the map or at spawn
 			p = game.players.player.data.data.position.body
 			if(p.x + p.y === 0){
