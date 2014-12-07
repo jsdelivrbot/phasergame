@@ -173,10 +173,6 @@ game = {
 			}
 		}
 
-		//set the players map to -1 so other players do not see him go through the door
-		game.players.player.data.data.position.map = -1;
-		game.players.sendData(game.players.player.data.data);
-
 		//load the tile map
 		if(!engin.cache.checkTilemapKey('island:'+_island+',map:'+_map)){
 			// engin.load.onLoadComplete.removeAll()

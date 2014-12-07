@@ -175,11 +175,11 @@ page = {
 				})
 				.done(_(function(data) {
 
-					if(data.status){
+					if(data.title){
 						this.status(1)
-						this.title(data.serverTitle)
-						this.description(data.serverDescription)
-						this.players(data.numberOfPlayers)
+						this.title(data.title)
+						this.description(data.description)
+						this.players(data.players)
 					}
 
 				}).bind(page.connect.servers()[i]))
