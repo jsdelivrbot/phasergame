@@ -13,7 +13,11 @@ css/style.css
 
 # js
 js/app/app.js
+js/app/ctrl/db.js
 js/app/ctrl/interface.js
+js/app/ctrl/items.js
+js/app/ctrl/maps.js
+js/app/ctrl/mapsWorker.js
 js/app/ctrl/server.js
 js/app/ctrl/sound.js
 js/app/init/functions.js
@@ -29,6 +33,7 @@ js/lib/jspath.min.js
 js/lib/klass.js
 js/lib/knockout-mapping.js
 js/lib/knockout.js
+js/lib/indexed.js
 js/lib/modernizr.min.js
 js/lib/phaser.map
 js/lib/phaser.min.js

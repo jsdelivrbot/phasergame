@@ -4,7 +4,14 @@ var keyboardMap = ["MOUSE LEFT","MOUSE WHEEL","MOUSE RIGHT","CANCEL","","","HELP
 $(document).ready(function() {
 	console.log('-----DOC READY-----')
 
-	ko.applyBindings(page);
+	//create the DB
+	db.init(function(){
+		//load the settigns
+		page.init(function(){
+			ko.applyBindings(page);
+		});
+	})
+
 	$(document).foundation({
 		reveal:{
             animation: 'fade',
