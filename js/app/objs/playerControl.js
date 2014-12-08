@@ -29,8 +29,8 @@ PlayerControl = Player.extend({
 			this.sprite.body.velocity.y = 0
 	    }
 	    
-	    if(game.layers.col){
-	    	engin.physics.arcade.collide(this.sprite, game.layers.col);
+	    if(maps.layers.col){
+	    	engin.physics.arcade.collide(this.sprite, maps.layers.col);
 	    }
 
 	    this.data.update({
@@ -56,17 +56,17 @@ PlayerControl = Player.extend({
 	},
 	checkCol: function(){
 	    // check for collision
-	    engin.physics.arcade.collide(this.sprite,game.layers.doors,function(_player,_door){
+	    engin.physics.arcade.collide(this.sprite,maps.layers.doors,function(_player,_door){
 			//set the players map to -1 so other players do not see him go through the door
 			game.players.player.data.data.position.map = -1;
 			game.players.sendData(game.players.player.data.data);
 			//load the map
 	    	game.loadMap(_door.properties.map,function(){
 	    		if(_door.properties.x && _door.properties.y){
-					game.players.player.jumpTo(_door.properties.x*game.map.tileWidth, _door.properties.y*game.map.tileHeight)
+					game.players.player.jumpTo(_door.properties.x*maps.map.tileWidth, _door.properties.y*maps.map.tileHeight)
 	    		}
 	    		else{
-	    			game.players.player.jumpTo(game.map.properties.spawnX*game.map.tileWidth, game.map.properties.spawnY*game.map.tileHeight)
+	    			game.players.player.jumpTo(maps.map.properties.spawnX*maps.map.tileWidth, maps.map.properties.spawnY*maps.map.tileHeight)
 	    		}
     			game.players.player.data.update({
     				position:{

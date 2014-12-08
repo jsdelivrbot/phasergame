@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# 10/20/14
+# 12/8/14
 
 # html
 index.html
@@ -14,10 +14,10 @@ css/style.css
 # js
 js/app/app.js
 js/app/ctrl/db.js
+js/app/ctrl/db.js
 js/app/ctrl/interface.js
 js/app/ctrl/items.js
 js/app/ctrl/maps.js
-js/app/ctrl/mapsWorker.js
 js/app/ctrl/server.js
 js/app/ctrl/sound.js
 js/app/init/functions.js
@@ -42,7 +42,10 @@ js/lib/underscore-min.js
 js/lib/underscore-min.map
 
 # json
-snd/sound.json
+data/items.json
+data/playerImages.json
+data/sound.json
+data/tilesets.json
 
 # player images
 imgs/player/001-Fighter01.png

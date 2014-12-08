@@ -9,16 +9,16 @@ Players = Klass({
 	createPlayer: function(_playerData){
 		this.player = new PlayerControl(_playerData)
 
-		game.loadMap(_playerData.position.map, function(){
+		maps.load(_playerData.position.map, function(){
 			//see if we are off the map or at spawn
 			p = game.players.player.data.data.position.body
 			if(p.x + p.y === 0){
 				//send us to spawn
-				game.players.player.jumpTo(game.map.properties.spawnX * game.map.tileWidth,game.map.properties.spawnY * game.map.tileHeight)
+				game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
 			}
-			else if(p.x < 0 || p.x > game.map.width * game.map.tileWidth || p.y < 0 || p.y > game.map.height * game.map.tileHeight){
+			else if(p.x < 0 || p.x > maps.map.width * maps.map.tileWidth || p.y < 0 || p.y > maps.map.height * maps.map.tileHeight){
 				//send us to spawn
-				game.players.player.jumpTo(game.map.properties.spawnX * game.map.tileWidth,game.map.properties.spawnY * game.map.tileHeight)
+				game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
 			}
 		})
 	},
@@ -119,8 +119,8 @@ Players = Klass({
 		for (var i in this.players) {
 			this.players[i].sprite.bringToTop()
 		};
-		if(game.layers.layer4){
-			game.layers.layer4.bringToTop()
+		if(maps.layers.layer4){
+			maps.layers.layer4.bringToTop()
 		}
 	}
 })

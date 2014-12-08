@@ -82,11 +82,12 @@ page = {
 					type: 'settings'
 				},{
 					settings: JSON.stringify(json)
-				},function(){
-
+				},function(err){
+					if(err) throw err;
+					console.log('saved settings')
 				})
 
-				if(confirm() == false) return false;
+				return '';
 			})
 
 			//load the data
@@ -94,6 +95,7 @@ page = {
 				json = JSON.parse(data[0].settings);
 
 				if(page.version == json.version){
+					console.log('loaded settings')
 					fn.combindOver(page,json)
 				}
 				else{
