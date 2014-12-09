@@ -11,7 +11,8 @@ PlayerDataFull = Klass({
 				x: 0,
 				y: 0
 			},
-			map: 0
+			map: 0,
+			loading: false
 		},
 		sprite: {
 			image: 'player/1'

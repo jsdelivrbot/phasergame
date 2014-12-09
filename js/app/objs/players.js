@@ -9,16 +9,23 @@ Players = Klass({
 	createPlayer: function(_playerData){
 		this.player = new PlayerControl(_playerData)
 
-		maps.load(_playerData.position.map, function(){
-			//see if we are off the map or at spawn
-			p = game.players.player.data.data.position.body
-			if(p.x + p.y === 0){
-				//send us to spawn
-				game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
+		maps.load(_playerData.position.map, function(loaded){
+			//see if the map was loaded
+			if(loaded){
+				//see if we are off the map or at spawn
+				p = game.players.player.data.data.position.body
+				if(p.x + p.y === 0 || p.x < 0 || p.x > maps.map.width * maps.map.tileWidth || p.y < 0 || p.y > maps.map.height * maps.map.tileHeight){
+					//send us to spawn
+					game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
+				}
 			}
-			else if(p.x < 0 || p.x > maps.map.width * maps.map.tileWidth || p.y < 0 || p.y > maps.map.height * maps.map.tileHeight){
-				//send us to spawn
-				game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
+			else{
+				console.log('failed to load the map the player was on, attempting to load map 0')
+				maps.load(0,function(){
+					//start at spawn since we had to fall back on the default map
+					game.players.player.data.data.position.map = 0;
+					game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
+				})
 			}
 		})
 	},

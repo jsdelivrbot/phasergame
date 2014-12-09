@@ -83,7 +83,7 @@ game = {
 		//tell players to get rid of all players
 		game.players.destroyAll();
 
-		maps.destroy();
+		maps.destroyMap();
 
 		//timers
 		window.clearInterval(game.timers.sendPlayerData);

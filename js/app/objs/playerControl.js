@@ -57,22 +57,25 @@ PlayerControl = Player.extend({
 	checkCol: function(){
 	    // check for collision
 	    engin.physics.arcade.collide(this.sprite,maps.layers.doors,function(_player,_door){
-			//set the players map to -1 so other players do not see him go through the door
-			game.players.player.data.data.position.map = -1;
+			game.players.player.data.data.position.loading = true;
 			game.players.sendData(game.players.player.data.data);
 			//load the map
-	    	game.loadMap(_door.properties.map,function(){
-	    		if(_door.properties.x && _door.properties.y){
-					game.players.player.jumpTo(_door.properties.x*maps.map.tileWidth, _door.properties.y*maps.map.tileHeight)
+	    	maps.load(_door.properties.map,function(loaded){
+	    		//see if its a real map
+	    		if(loaded){
+		    		if(_door.properties.x && _door.properties.y){
+						game.players.player.jumpTo(_door.properties.x*maps.map.tileWidth, _door.properties.y*maps.map.tileHeight)
+		    		}
+		    		else{
+		    			game.players.player.jumpTo(maps.map.properties.spawnX*maps.map.tileWidth, maps.map.properties.spawnY*maps.map.tileHeight)
+		    		}
+					game.players.player.data.data.position.map = _door.properties.map;
 	    		}
 	    		else{
-	    			game.players.player.jumpTo(maps.map.properties.spawnX*maps.map.tileWidth, maps.map.properties.spawnY*maps.map.tileHeight)
+	    			//cant load the room
+	    			console.log('cant load that room')
 	    		}
-    			game.players.player.data.update({
-    				position:{
-    					map: _door.properties.map
-    				}
-    			})
+				game.players.player.data.data.position.loading = false;
 	    	})
 	    },null,this)
 	}
