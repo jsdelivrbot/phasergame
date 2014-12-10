@@ -375,7 +375,8 @@
 				<div class="content" id="invetory-items" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
 						<!-- ko if: $data.id.indexOf('item') !== -1 -->
-						<div class="panel">
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
 							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
@@ -386,7 +387,8 @@
 					<!-- list of resources -->
 					<div class="small-8 columns scroll-y" style="height: 100%;" data-bind="foreach: data">
 						<!-- ko if: $data.id.indexOf('resource') !== -1 -->
-						<div class="panel">
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
 							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
@@ -401,7 +403,8 @@
 				<div class="content" id="invetory-weapons" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
 						<!-- ko if: $data.id.indexOf('weapon') !== -1 -->
-						<div class="panel">
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
 							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>
@@ -411,7 +414,8 @@
 				<div class="content" id="invetory-tools" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
 						<!-- ko if: $data.id.indexOf('tool') !== -1 -->
-						<div class="panel">
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
 							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
 						</div>

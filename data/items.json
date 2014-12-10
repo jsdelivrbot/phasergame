@@ -2,12 +2,12 @@
 	"resource":{
 		"log":{
 			"title": "log",
-			"img": "",
+			"img": "blender/images/items/resources/log.png",
 			"weight": 0
 		},
 		"wood":{
 			"title": "wood",
-			"img": "",
+			"img": "blender/images/items/resources/wood.png",
 			"weight": 0
 		},
 		"stick":{

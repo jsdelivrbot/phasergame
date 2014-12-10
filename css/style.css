@@ -218,3 +218,13 @@ input.error, textarea.error, select.error{
 #inventory{
 	height: 80%;
 }
+#inventory .item{
+	padding: 10px;
+	height: 86px;
+}
+#inventory .item>img{
+	height: 64px;
+	width: auto;
+	float: left;
+	margin-right: 10px;
+}
