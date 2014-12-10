@@ -168,7 +168,19 @@ fn = {
 			changed: {},
 			removed: {}
 		};
-		obj = {};
+
+		//figure out if its an array
+		obj = [];
+		for(var i in diff.added){
+			if(isNaN(i.split('.')[0])){
+				obj = {}
+			}
+		}
+		for(var i in diff.changed){
+			if(isNaN(i.split('.')[0])){
+				obj = {}
+			}
+		}
 
 		//add
 		for(var i in diff.added){

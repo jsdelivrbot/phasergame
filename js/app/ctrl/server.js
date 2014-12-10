@@ -2,10 +2,13 @@ ServerIn = Klass({
 	name: '',
 	callback: null,
 	data: {},
-	initialize: function(name,callback){
+	initialize: function(name,callback,value){
 		this.name = name || ''
 		this.callback = callback
 		this.data = fn.duplicate(this.data);
+		if(value){
+			this.data = fn.duplicate(value);
+		}
 	},
 	bind: function(socket){
 		if(this.callback){
@@ -141,11 +144,11 @@ server = {
 					break;
 			}
 		}),
-		// inventory: new ServerInDiff('inventory',function(diff){
-		// 	//update the inventory
-		// 	page.menu.inventory.data(server.in.inventory.data);
-		// 	fn.applyDiff(server.out.inventory._data,diff);
-		// })
+		inventory: new ServerInDiff('inventory',function(diff){
+			//update the inventory
+			page.menu.inventory.data(server.in.inventory.data);
+			fn.applyDiff(server.out.inventory._data,diff);
+		},[])
 	},
 	out: {
 		player: new ServerOutDiff('player'),
