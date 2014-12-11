@@ -62,6 +62,7 @@ PlayerData = Klass({
 			id: 0,
 			name: ''
 		},
+		health: 1000,
 		position: {
 			body: {
 				x: 0,
@@ -137,6 +138,7 @@ Player = Klass({
 
 	    engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 	    this.sprite.body.setSize(20,18,6,30);
+	    this.sprite.health = 1000;
 
 	    // set up short hands
 	    this.id = this.data.data.id.id

@@ -102,11 +102,18 @@ Players = Klass({
 
 		//update the players based on what the servers data is
 		for (var i in server.in.players.data) {
-			if(this.players[server.in.players.data[i].id.id]){
-				this.players[server.in.players.data[i].id.id].data.update(server.in.players.data[i])
+			data = server.in.players.data[i];
+			if(this.players[data.id.id]){
+				this.players[data.id.id].data.update(data)
+				this.players[data.id.id].sprite.health = data.health;
+				this.players[data.id.id].sprite.damage(0);
 			}
 			else{
-				this.players[server.in.players.data[i].id.id] = new Player(server.in.players.data[i])
+				p = new Player(data)
+				p.sprite.health = data.health;
+				p.sprite.damage(0);
+				this.players[data.id.id] = p
+
 				this.fixPlayersLevels()
 			}
 		};

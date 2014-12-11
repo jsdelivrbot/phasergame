@@ -148,12 +148,36 @@ server = {
 			//update the inventory
 			page.menu.inventory.data(server.in.inventory.data);
 			fn.applyDiff(server.out.inventory._data,diff);
-		},[])
+		},[]),
+		attack: new ServerIn('attack',function(data){
+			switch(data.type){
+				case 'health':
+					//set my health
+					if(game.players.player){
+						game.players.player.sprite.health = data.health
+					}
+					break;
+				case 'damage':
+					//got hit, set health to what was sent
+					if(game.players.player){
+						game.players.player.sprite.health = data.health;
+						game.players.player.sprite.damage(0);
+					}
+					break;
+				case 'respawn':
+					//revive the player and put him at the point sent by the server
+					if(game.players.player){
+						game.players.player.sprite.revive(data.health);
+					}
+					break;
+			}
+		})
 	},
 	out: {
 		player: new ServerOutDiff('player'),
 		chat: new ServerOut('chat'),
-		inventory: new ServerOutDiff('inventory')
+		inventory: new ServerOutDiff('inventory'),
+		attack: new ServerOut('attack')
 	},
 	options: {
 		reconnection: false,

@@ -24,7 +24,10 @@ function update(){
 }
 function render(){
 	if(game.active){
-		engin.debug.text('fps: '+engin.time.fps,32,32)
+		engin.debug.text('fps: '+engin.time.fps,16,16)
+		if(game.players.player){
+			engin.debug.text('health: '+game.players.player.sprite.health,16,32)
+		}
 	}
 }
 
