@@ -194,14 +194,15 @@ fn = {
 		return obj;
 	},
 	setValue: function(obj,a,value){
-		obj[a[0]] = obj[a[0]] || (isNaN(a[1]))? {} : [];
+		if(_.isEmpty(obj[a[0]])){
+			obj[a[0]] = (isNaN(a[1]))? {} : [];
+		}
 		if(a.length == 1){
 			obj[a[0]] = value;
 			return value;
 		}
 		else{
-			i = a.splice(0,1)[0];
-			fn.setValue(obj[i],a,value);
+			fn.setValue(obj[a.splice(0,1)[0]],a,value);
 		}
 	},
 	removeValue: function(obj,a){
@@ -209,8 +210,7 @@ fn = {
 			delete obj[a[0]];
 		}
 		else{
-			i = a.splice(0,1)[0];
-			fn.setValue(obj[i],a);
+			fn.setValue(obj[a.splice(0,1)[0]],a);
 		}
 	}
 }

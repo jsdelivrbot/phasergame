@@ -665,6 +665,15 @@ page = {
 		leave: function(){
 			server.out.chat.data({type: 'leave',chanel: page.chat.activeChanel.id()})
 		},
+		leaveAll: function(){
+			_(page.chat.chanels()).each(function(chanel){
+				server.out.chat.data({
+					type: 'leave',
+					chanel: chanel.id
+				})
+			})
+			page.chat.chanels([])
+		},
 
 		// in-comming events
 		youJoined: function(data){

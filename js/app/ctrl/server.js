@@ -202,6 +202,8 @@ server = {
 
 	disconnect: function(){
 		server.socket.close();
+		//remove all the chat chanels
+		page.chat.leaveAll();
 	},
 
 	connectEvent: function(url){
