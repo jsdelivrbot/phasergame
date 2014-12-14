@@ -66,6 +66,7 @@ page = {
 
 				//keys
 				delete json.menu.settings.keyBindings.currentBinding;
+				delete json.menu.settings.keyBindings.enabled;
 				_(json.menu.settings.keyBindings.bindings).each(function(i){
 					delete i.title;
 					delete i.id;
@@ -107,6 +108,7 @@ page = {
 
 				//create the keyBindings obj
 				keyBindings = {
+					enabled: _(page.menu.settings.keyBindings.enabled).bind(page.menu.settings.keyBindings),
 					enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
 					bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
 				}
@@ -116,6 +118,7 @@ page = {
 						keyBindings[k.id()][i.id()] = i;
 					})
 				})
+				keyBindings.enable('none');
 
 				if(cb) cb();
 			}
@@ -336,13 +339,15 @@ page = {
 			},
 			keyBindings:{
 				currentBinding: null,
+				enabled: '',
 				enable: function(groupID){
 					_(this.bindings()).each(function(group){
 						group.enabled(false);
 						if(group.id() == groupID){
 							group.enabled(true);
+							this.enabled(groupID);
 						}
-					})
+					}.bind(this))
 				},
 				bind: function(event){
 					if(typeof page.menu.settings.keyBindings.currentBinding === 'object'){
