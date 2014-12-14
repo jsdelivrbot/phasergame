@@ -171,13 +171,17 @@ server = {
 					}
 					break;
 			}
+		}),
+		resource: new ServerInDiff('resource',function(data){
+			maps.resource.serverIn(data);
 		})
 	},
 	out: {
 		player: new ServerOutDiff('player'),
 		chat: new ServerOut('chat'),
 		inventory: new ServerOutDiff('inventory'),
-		attack: new ServerOut('attack')
+		attack: new ServerOut('attack'),
+		resource: new ServerOut('resource')
 	},
 	options: {
 		reconnection: false,
@@ -215,8 +219,11 @@ server = {
 
 		server.login(page.connect.login.email(),page.connect.login.password(),function(data){
 			if(data){
-				connect.exit()
-				game.enter()
+				console.log('get json from server')
+				loadShardData(function(){
+					connect.exit()
+					game.enter()
+				})
 			}
 			else{
 				//make the login inputs turn red and dissconnect

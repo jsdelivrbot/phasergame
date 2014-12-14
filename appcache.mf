@@ -273,29 +273,29 @@ imgs/land.png
 imgs/misc.png
 
 # tilesets
-imgs/CastleTown.png
-imgs/CastleTown2.png
-imgs/Cave.png
-imgs/DesertTown.png
-imgs/DesertTown2.png
-imgs/FarmVillage.png
-imgs/FarmVillage2.png
-imgs/Forest.png
-imgs/ForestTown.png
-imgs/ForestTown2.png
-imgs/grassland.png
-imgs/MineTown.png
-imgs/MineTown2.png
-imgs/Mountain.png
-imgs/PortTown.png
-imgs/PortTown2.png
-imgs/PostTown.png
-imgs/PostTown2.png
-imgs/Snowfield.png
-imgs/SnowTown.png
-imgs/SnowTown2.png
-imgs/Swamp.png
-imgs/Woods.png
+imgs/tilesets/CastleTown.png
+imgs/tilesets/CastleTown2.png
+imgs/tilesets/Cave.png
+imgs/tilesets/DesertTown.png
+imgs/tilesets/DesertTown2.png
+imgs/tilesets/FarmVillage.png
+imgs/tilesets/FarmVillage2.png
+imgs/tilesets/Forest.png
+imgs/tilesets/ForestTown.png
+imgs/tilesets/ForestTown2.png
+imgs/tilesets/grassland.png
+imgs/tilesets/MineTown.png
+imgs/tilesets/MineTown2.png
+imgs/tilesets/Mountain.png
+imgs/tilesets/PortTown.png
+imgs/tilesets/PortTown2.png
+imgs/tilesets/PostTown.png
+imgs/tilesets/PostTown2.png
+imgs/tilesets/Snowfield.png
+imgs/tilesets/SnowTown.png
+imgs/tilesets/SnowTown2.png
+imgs/tilesets/Swamp.png
+imgs/tilesets/Woods.png
 
 # sound
 snd/background/ancient-secrets.mp3

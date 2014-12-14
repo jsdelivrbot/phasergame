@@ -619,7 +619,7 @@ page = {
 
 					// see if i own it
 					if(game){
-						page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
+						page.chat.activeChanel.own(page.chat.activeChanel.owner() == server.in.player.data.id.id)
 					}
 					break;
 				}
@@ -637,7 +637,7 @@ page = {
 			ko.mapping.fromJS({chat:{activeChanel:this.activeChanel.chanel()}},page)
 
 			// see if i own it
-			page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
+			page.chat.activeChanel.own(page.chat.activeChanel.owner() == server.in.player.data.data.id.id)
 		},
 		sendMessage: function(event){
 			if(page.chat.sendMessageVal().length){

@@ -212,5 +212,21 @@ fn = {
 		else{
 			fn.setValue(obj[a.splice(0,1)[0]],a);
 		}
+	},
+	idArray: function(obj, key, str, base){
+		str = str || '';
+		base = base || {};
+		if(key === undefined || key === ''){
+			throw new Error('no key')
+		}
+		for(var i in obj){
+			if(obj[i][key] !== undefined || !_.isObject(obj[i])){
+				base[str+i] = obj[i];
+			}
+			else{
+				fn.idArray(obj[i],key,str+i+'.',base)
+			}
+		}
+		return base;
 	}
 }

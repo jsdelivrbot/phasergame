@@ -29,10 +29,10 @@
 		<script src="js/app/objs/playerControl.js" type="text/javascript" defer></script>
 		<script src="js/app/ctrl/db.js" type="text/javascript" defer></script>
 		<script src="js/app/ctrl/maps.js" type="text/javascript" defer></script>
+		<!-- <script src="js/app/ctrl/resources.js" type="text/javascript" defer></script> -->
 		<script src="js/app/ctrl/interface.js" type="text/javascript" defer></script>
 		<script src="js/app/ctrl/server.js" type="text/javascript" defer></script>
 		<script src="js/app/ctrl/sound.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/items.js" type="text/javascript" defer></script>
 		<script src="js/app/stateObjs/game.js" type="text/javascript" defer></script>
 		<script src="js/app/stateObjs/connect.js" type="text/javascript" defer></script>
 	</head>
@@ -367,14 +367,14 @@
 			<a class="close-reveal-modal" data-keyboard-enable="game">&#215;</a>
 			<dl class="tabs" data-tab>
 				<dd><a href="#invetory-items">Items</a></dd>
-				<dd><a href="#invetory-resources">Resources</a></dd>
+				<dd><a href="#invetory-resources" class="trigger-resize">Resources</a></dd>
 				<dd><a href="#invetory-weapons">Weapons</a></dd>
 				<dd><a href="#invetory-tools">Tools</a></dd>
 			</dl>
 			<div class="tabs-content resize">
 				<div class="content" id="invetory-items" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('item') !== -1 -->
+						<!-- ko if: $data.id.indexOf('item') !== -1 && $root.items()[$data.id] !== undefined -->
 						<div class="panel item">
 							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
@@ -386,7 +386,7 @@
 				<div class="content" id="invetory-resources" style="height: 100%;">
 					<!-- list of resources -->
 					<div class="small-8 columns scroll-y" style="height: 100%;" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('resource') !== -1 -->
+						<!-- ko if: $data.id.indexOf('resource') !== -1 && $root.items()[$data.id] !== undefined -->
 						<div class="panel item">
 							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
@@ -402,7 +402,7 @@
 				</div>
 				<div class="content" id="invetory-weapons" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('weapon') !== -1 -->
+						<!-- ko if: $data.id.indexOf('weapon') !== -1 && $root.items()[$data.id] !== undefined -->
 						<div class="panel item">
 							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>
@@ -413,7 +413,7 @@
 				</div>
 				<div class="content" id="invetory-tools" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('tool') !== -1 -->
+						<!-- ko if: $data.id.indexOf('tool') !== -1 && $root.items()[$data.id] !== undefined -->
 						<div class="panel item">
 							<img data-bind="attr:{src: $root.items()[$data.id].img}">
 							<span class="right" data-bind="text: $data.count"></span>

@@ -1,6 +1,6 @@
 loadedData = {}
 function loadData(cb){
-	cb = _.after(4,cb)
+	cb = _.after(3,cb)
 
 	//tilesets.json
 	$.ajax({
@@ -46,20 +46,67 @@ function loadData(cb){
 	.fail(function() {
 		throw new Error('failed to load playerImages json')
 	})
+}
+function loadShardData(cb){
+	cb = _.after(4,cb)
+	url = server.url.protocol + '//' + server.url.hostname + ':8282'
 
-	//items
 	$.ajax({
-		url: 'data/items.json',
+		url: url,
 		type: 'GET',
-		dataType: 'json'
+		dataType: 'json',
+		data: {type: 'dataFile', file: 'items'},
 	})
 	.done(function(data) {
-		items.setItems(data)
+		//update the pages items
+		page.items(fn.idArray(data,'title'));
 
-		cb()
+		cb();
 	})
 	.fail(function() {
 		throw new Error('failed to load items json')
+	})
+
+	$.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'json',
+		data: {type: 'dataFile', file: 'damageProfiles'},
+	})
+	.done(function(data) {
+		//nothing to do with it yet
+		cb();
+	})
+	.fail(function() {
+		throw new Error('failed to load damageProfiles json')
+	})
+
+	$.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'json',
+		data: {type: 'dataFile', file: 'resourceProfiles'},
+	})
+	.done(function(data) {
+		//nothing to do with it yet
+		cb();
+	})
+	.fail(function() {
+		throw new Error('failed to load resourceProfiles json')
+	})
+
+	$.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'json',
+		data: {type: 'dataFile', file: 'miningProfiles'},
+	})
+	.done(function(data) {
+		//nothing to do with it yet
+		cb();
+	})
+	.fail(function() {
+		throw new Error('failed to load miningProfiles json')
 	})
 }
 

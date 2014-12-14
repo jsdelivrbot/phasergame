@@ -95,6 +95,10 @@ $(document).ready(function() {
 		keyBindings.enable('game')
 	});
 
+	$('html, body').on('click', '.trigger-resize', function(event) {
+		$(window).trigger('resize');
+	});
+
 	//resize
 	$(window).resize(function(event) {
 		if(engin.isBooted){
