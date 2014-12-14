@@ -123,14 +123,23 @@ maps = {
 	},
 	load: function(id,cb){
 		cb = cb || function(){};
-		//destory the map
+
+		//load the map
 		maps.getMap(id,function(cacheID){
 			if(cacheID){
+				//set keyBindings to none so player cant move when map is loading
+				k = keyBindings.enabled();
+				keyBindings.enable('none');
+
+				//destory the map
 				maps.destroyMap();
 				if(maps.createMap(cacheID)){
 					cb(true);
+					keyBindings.enable(k);
 					return;
 				}
+
+				keyBindings.enable(k);
 			}
 			else{
 				cb(false);
