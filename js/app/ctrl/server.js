@@ -2,9 +2,13 @@ ServerIn = Klass({
 	name: '',
 	callback: null,
 	data: {},
-	initialize: function(name,callback){
+	initialize: function(name,callback,value){
 		this.name = name || ''
 		this.callback = callback
+		this.data = fn.duplicate(this.data);
+		if(value){
+			this.data = fn.duplicate(value);
+		}
 	},
 	bind: function(socket){
 		if(this.callback){
@@ -24,10 +28,10 @@ ServerIn = Klass({
 ServerInDiff = ServerIn.extend({
 	bind: function(socket){
 		if(this.callback){
-			f = _.partial(function(_this,callback,data){
-				fn.combindOver(_this.data,data)
+			f = _.partial(function(_this,callback,diff){
+				fn.applyDiff(_this.data,diff);
 				callback = _.bind(callback,this);
-				callback(_this.data);
+				callback(diff); 
 			},this,this.callback)
 			socket.on(this.name,f)
 		}
@@ -58,6 +62,7 @@ ServerOutCache = ServerOut.extend({
 	changed: false,
 	initialize: function(name,timing){
 		this.supr(name)
+		this._data = fn.duplicate(this._data);
 
 		window.setInterval(this.test,timing,this)
 	},
@@ -82,10 +87,14 @@ ServerOutCache = ServerOut.extend({
 
 ServerOutDiff = ServerOut.extend({
 	_data: {},
+	initialize: function(name){
+		this.supr(name)
+		this._data = fn.duplicate(this._data);
+	},
 	data: function(data){
 		if(this.socket){
-			diff = fn.diff(this._data,data)
-			if(!_(diff).isEmpty()){
+			var diff = fn.getDiff(this._data,data)
+			if(!fn.isEmptyDiff(diff)){
 				this.socket.emit(this.name,diff)
 				this._data = fn.duplicate(data);
 			}
@@ -96,8 +105,19 @@ ServerOutDiff = ServerOut.extend({
 server = {
 	//data from the server is stored here
 	in: {
-		player: new ServerInDiff('player', function(data){
-			game.players.updateData(data);
+		player: new ServerInDiff('player', function(diff){
+			//build the diff
+			data = fn.buildDiff(diff);
+			//update the interface
+			ko.mapping.fromJS({
+				menu: {
+					profile: {
+						playerData: data
+					}
+				}
+			},page);
+			//update the server out, but with out pushing it to the server
+			fn.applyDiff(server.out.player._data,diff);
 		}),
 		players: new ServerIn('players',function(data){
 			game.players.update()
@@ -123,11 +143,45 @@ server = {
 					page.chat.closed(data)
 					break;
 			}
+		}),
+		inventory: new ServerInDiff('inventory',function(diff){
+			//update the inventory
+			page.menu.inventory.data(server.in.inventory.data);
+			fn.applyDiff(server.out.inventory._data,diff);
+		},[]),
+		attack: new ServerIn('attack',function(data){
+			switch(data.type){
+				case 'health':
+					//set my health
+					if(game.players.player){
+						game.players.player.sprite.health = data.health
+					}
+					break;
+				case 'damage':
+					//got hit, set health to what was sent
+					if(game.players.player){
+						game.players.player.sprite.health = data.health;
+						game.players.player.sprite.damage(0);
+					}
+					break;
+				case 'respawn':
+					//revive the player and put him at the point sent by the server
+					if(game.players.player){
+						game.players.player.sprite.revive(data.health);
+					}
+					break;
+			}
+		}),
+		resource: new ServerInDiff('resource',function(data){
+			maps.resource.serverIn(data);
 		})
 	},
 	out: {
 		player: new ServerOutDiff('player'),
-		chat: new ServerOut('chat')
+		chat: new ServerOut('chat'),
+		inventory: new ServerOutDiff('inventory'),
+		attack: new ServerOut('attack'),
+		resource: new ServerOut('resource')
 	},
 	options: {
 		reconnection: false,
@@ -152,6 +206,8 @@ server = {
 
 	disconnect: function(){
 		server.socket.close();
+		//remove all the chat chanels
+		page.chat.leaveAll();
 	},
 
 	connectEvent: function(url){
@@ -163,8 +219,11 @@ server = {
 
 		server.login(page.connect.login.email(),page.connect.login.password(),function(data){
 			if(data){
-				connect.exit()
-				game.enter()
+				console.log('get json from server')
+				loadShardData(function(){
+					connect.exit()
+					game.enter()
+				})
 			}
 			else{
 				//make the login inputs turn red and dissconnect

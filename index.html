@@ -17,6 +17,7 @@
 		<script src="js/lib/klass.js" type="text/javascript" defer></script>
 		<script src="js/lib/jspath.min.js" type="text/javascript" defer></script>
 		<script src="js/lib/underscore-min.js" type="text/javascript" defer></script>
+		<script src="js/lib/indexed.js" type="text/javascript" defer></script>
 		
 		<!-- main -->
 		<script src="js/app/app.js" type="text/javascript" defer></script>
@@ -26,6 +27,9 @@
 		<script src="js/app/objs/players.js" type="text/javascript" defer></script>
 		<script src="js/app/objs/player.js" type="text/javascript" defer></script>
 		<script src="js/app/objs/playerControl.js" type="text/javascript" defer></script>
+		<script src="js/app/ctrl/db.js" type="text/javascript" defer></script>
+		<script src="js/app/ctrl/maps.js" type="text/javascript" defer></script>
+		<!-- <script src="js/app/ctrl/resources.js" type="text/javascript" defer></script> -->
 		<script src="js/app/ctrl/interface.js" type="text/javascript" defer></script>
 		<script src="js/app/ctrl/server.js" type="text/javascript" defer></script>
 		<script src="js/app/ctrl/sound.js" type="text/javascript" defer></script>
@@ -255,9 +259,9 @@
 				  		<dd><a href="#profile-players">Players</a></dd>
 					  	<dd><a href="#profile-friends">Friends</a></dd>
 					</dl>
-					<div class="tabs-content vertical">
-					  	<div class="content" id="profile-stats">
-					    	<h5>profile 1.</h5>
+					<div class="tabs-content vertical" data-bind="with: profile">
+					  	<div class="content" id="profile-stats" data-bind="with: playerData">
+					    	<h5 data-bind="text: id.name"></h5>
 					  	</div>
 					  	<div class="content" id="profile-players">
 					    	<h5>profile 2.</h5>
@@ -356,6 +360,69 @@
 			</div>
 
 		  	<a class="close-reveal-modal"><i class="fi-x"></i></a>
+		</div>
+
+		<!-- inventory -->
+		<div id="inventory" class="reveal-modal menu" data-reveal data-bind="with: menu.inventory">
+			<a class="close-reveal-modal" data-keyboard-enable="game">&#215;</a>
+			<dl class="tabs" data-tab>
+				<dd><a href="#invetory-items">Items</a></dd>
+				<dd><a href="#invetory-resources" class="trigger-resize">Resources</a></dd>
+				<dd><a href="#invetory-weapons">Weapons</a></dd>
+				<dd><a href="#invetory-tools">Tools</a></dd>
+			</dl>
+			<div class="tabs-content resize">
+				<div class="content" id="invetory-items" style="height: 100%;">
+					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('item') !== -1 && $root.items()[$data.id] !== undefined -->
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+						</div>
+						<!-- /ko -->
+					</ul>
+				</div>
+				<div class="content" id="invetory-resources" style="height: 100%;">
+					<!-- list of resources -->
+					<div class="small-8 columns scroll-y" style="height: 100%;" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('resource') !== -1 && $root.items()[$data.id] !== undefined -->
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+						</div>
+						<!-- /ko -->
+					</div>
+					<div class="small-4 columns" style="height: 100%;">
+						<div class="panel full">
+							<h2>Resources</h2>
+						</div>
+					</div>
+				</div>
+				<div class="content" id="invetory-weapons" style="height: 100%;">
+					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('weapon') !== -1 && $root.items()[$data.id] !== undefined -->
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+						</div>
+						<!-- /ko -->
+					</ul>
+				</div>
+				<div class="content" id="invetory-tools" style="height: 100%;">
+					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
+						<!-- ko if: $data.id.indexOf('tool') !== -1 && $root.items()[$data.id] !== undefined -->
+						<div class="panel item">
+							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<span class="right" data-bind="text: $data.count"></span>
+							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+						</div>
+						<!-- /ko -->
+					</ul>
+				</div>
+			</div>
 		</div>
 
 		<!-- keybinding -->

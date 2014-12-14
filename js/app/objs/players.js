@@ -1,6 +1,6 @@
 Players = Klass({
 	player: null,
-	players: [],
+	players: {},
 
 	initialize:function(){
 		
@@ -9,16 +9,23 @@ Players = Klass({
 	createPlayer: function(_playerData){
 		this.player = new PlayerControl(_playerData)
 
-		game.loadMap(_playerData.position.island,_playerData.position.map, function(){
-			//see if we are off the map or at spawn
-			p = game.players.player.data.data.position.body
-			if(p.x + p.y === 0){
-				//send us to spawn
-				game.players.player.jumpTo(game.map.properties.spawnX * game.map.tileWidth,game.map.properties.spawnY * game.map.tileHeight)
+		maps.load(_playerData.position.map, function(loaded){
+			//see if the map was loaded
+			if(loaded){
+				//see if we are off the map or at spawn
+				p = game.players.player.data.data.position.body
+				if(p.x + p.y === 0 || p.x < 0 || p.x > maps.map.width * maps.map.tileWidth || p.y < 0 || p.y > maps.map.height * maps.map.tileHeight){
+					//send us to spawn
+					game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
+				}
 			}
-			else if(p.x < 0 || p.x > game.map.width * game.map.tileWidth || p.y < 0 || p.y > game.map.height * game.map.tileHeight){
-				//send us to spawn
-				game.players.player.jumpTo(game.map.properties.spawnX * game.map.tileWidth,game.map.properties.spawnY * game.map.tileHeight)
+			else{
+				console.log('failed to load the map the player was on, attempting to load map 0')
+				maps.load(0,function(){
+					//start at spawn since we had to fall back on the default map
+					game.players.player.data.data.position.map = 0;
+					game.players.player.jumpTo(maps.map.properties.spawnX * maps.map.tileWidth,maps.map.properties.spawnY * maps.map.tileHeight)
+				})
 			}
 		})
 	},
@@ -70,42 +77,43 @@ Players = Klass({
 		}
 	},
 
-	sendData: function(){
+	sendData: function(data){
 		if(this.player){
-			server.out.player.data(this.player.data.data)
-			this.updateData(this.player.data.data)
+			server.out.player.data(data)
+			ko.mapping.fromJS({
+				menu: {
+					profile: {
+						playerData: data
+					}
+				}
+			},page);
+			server.in.player.data = fn.duplicate(data)
 		}
-	},
-
-	updateData: function(data){
-		ko.mapping.fromJS({player:data},page);
-		// server.out.player.data(data);
-		server.in.player.data = fn.duplicate(data)
 	},
 
 	update: function(){
 		// remove the players that are not there
 		for (var i in this.players) {
-			found = false
-			for (var j = 0; j < server.in.players.data.length; j++) {
-				if(this.players[i].data.data.id.id == server.in.players.data[j].id.id){
-					found = true
-					break;
-				}
-			};
-
-			if(!found){
+			if(!server.in.players.data[this.players[i].data.data.id.id]){
 				this.players[i].remove()
+				delete this.players[i];
 			}
 		};
 
 		//update the players based on what the servers data is
-		for (var i = 0; i < server.in.players.data.length; i++) {
-			if(server.in.players.data[i].id.id in this.players){
-				this.players[server.in.players.data[i].id.id].data.update(server.in.players.data[i])
+		for (var i in server.in.players.data) {
+			data = server.in.players.data[i];
+			if(this.players[data.id.id]){
+				this.players[data.id.id].data.update(data)
+				this.players[data.id.id].sprite.health = data.health;
+				this.players[data.id.id].sprite.damage(0);
 			}
 			else{
-				this.players[server.in.players.data[i].id.id] = new Player(server.in.players.data[i])
+				p = new Player(data)
+				p.sprite.health = data.health;
+				p.sprite.damage(0);
+				this.players[data.id.id] = p
+
 				this.fixPlayersLevels()
 			}
 		};
@@ -125,8 +133,8 @@ Players = Klass({
 		for (var i in this.players) {
 			this.players[i].sprite.bringToTop()
 		};
-		if(game.layers.layer4){
-			game.layers.layer4.bringToTop()
+		if(maps.layers.layer4){
+			maps.layers.layer4.bringToTop()
 		}
 	}
 })

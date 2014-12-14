@@ -31,7 +31,96 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.2,
+	version: 1.21,
+	items: [],
+	init: function(cb){
+		//get the json
+		db.db.find({
+			type: 'settings'
+		},function(err,data){
+			if(err) throw err;
+
+			//bind the save event
+			$(window).on('beforeunload',function(){
+				json = ko.mapping.toJS(page)
+
+				delete json.chat;
+				delete json.player;
+				delete json.loading;
+				if(!json.connect.login.remember){
+					delete json.connect.login;
+				}
+				delete json.connect.newServer;
+				delete json.connect.selectedServer;
+
+				//profile
+				delete json.menu.profile;
+
+				//inventory
+				delete json.menu.inventory;
+
+				//graphics
+				delete json.menu.settings.graphics.cameraModes;
+				delete json.menu.settings.graphics.cameraSmoothSpeeds;
+				delete json.menu.settings.graphics.renderModes;
+
+				//keys
+				delete json.menu.settings.keyBindings.currentBinding;
+				_(json.menu.settings.keyBindings.bindings).each(function(i){
+					delete i.title;
+					delete i.id;
+					delete i.display;
+					delete i.enabled;
+					_(i.keys).each(function(i){
+						delete i.title;
+						delete i.id;
+						delete i.group;
+					})
+				})
+
+				db.db.update({
+					type: 'settings'
+				},{
+					settings: JSON.stringify(json)
+				},function(err){
+					if(err) throw err;
+					console.log('saved settings')
+				})
+
+				return '';
+			})
+
+			//load the data
+			if(data.length){
+				json = JSON.parse(data[0].settings);
+
+				if(page.version == json.version){
+					console.log('loaded settings')
+					fn.combindOver(page,json)
+				}
+				else{
+					console.log('localStorage out of date')
+				}
+
+				//create ko obj
+				page = ko.mapping.fromJS(page)
+
+				//create the keyBindings obj
+				keyBindings = {
+					enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
+					bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
+				}
+				_(page.menu.settings.keyBindings.bindings()).each(function(k){
+					keyBindings[k.id()] = {}
+					_(k.keys()).each(function(i){
+						keyBindings[k.id()][i.id()] = i;
+					})
+				})
+
+				if(cb) cb();
+			}
+		})
+	},
 	loading: {
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
@@ -91,7 +180,8 @@ page = {
 		play: function(){
 			if(!$("#loading-play").hasClass('disabled')){
 				$("#loading-play").text('Playing').addClass('disabled')
-				loadData(function(){
+				//start the game
+				cb = _.after(1,function(){
 					engin = new Phaser.Game(800,600,page.menu.settings.graphics.renderMode(),'game', { 
 						preload: preload, 
 						create: function(){
@@ -103,6 +193,8 @@ page = {
 						render: render
 					},false,false)
 				})
+
+				loadData(cb)
 			}
 		}
 	},
@@ -174,11 +266,11 @@ page = {
 				})
 				.done(_(function(data) {
 
-					if(data.status){
+					if(data.title){
 						this.status(1)
-						this.title(data.serverTitle)
-						this.description(data.serverDescription)
-						this.players(data.numberOfPlayers)
+						this.title(data.title)
+						this.description(data.description)
+						this.players(data.players)
 					}
 
 				}).bind(page.connect.servers()[i]))
@@ -197,6 +289,9 @@ page = {
 		}
 	},
 	menu:{
+		profile: {
+			playerData: new PlayerDataFull().data
+		},
 		settings: {
 			graphics: {
 				renderMode: Phaser.AUTO,
@@ -367,13 +462,31 @@ page = {
 						id: 'menu',
 						enabled: false,
 						keys: [
-							keyBinding('Close Menu',Phaser.Keyboard.ESC,{
+							keyBinding('Close',Phaser.Keyboard.ESC,{
 								down: function(){
 									//see if there are menus open
 									if($(".menu.open").length){
 										$(".menu.open:not(.cant-close)").foundation('reveal','close')
 										keyBindings.enable('game')
 									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							})
+						]
+					},
+					{
+						title: 'Inventory',
+						display: true,
+						id: 'inventory',
+						enabled: false,
+						keys: [
+							keyBinding('Close',Phaser.Keyboard.E,{
+								down: function(){
+									//see if there are menus open
+									$("#inventory").foundation('reveal','close')
+									keyBindings.enable('game')
 								},
 								rebind: function(key){
 									return (key > 2)
@@ -414,6 +527,20 @@ page = {
 									return (key > 2)
 								}
 							}),
+							keyBinding('Open Inventory',Phaser.Keyboard.E,{
+								down: function(){
+									$("#chat").removeClass('out')
+									$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('blur')
+									$inventory = $("#inventory")
+									if(!$inventory.hasClass('open')){
+										$inventory.foundation('reveal','open')
+										keyBindings.enable('inventory')
+									}
+								},
+								rebind: function(key){
+									return (key > 2)
+								}
+							}),
 							keyBinding('Open Menu',Phaser.Keyboard.ESC,{
 								down: function(){
 									if($("#chat").hasClass('out')){
@@ -435,12 +562,12 @@ page = {
 			},
 			sound: {
 				volume: observable(0.75, function(val){
-					if(engin){
+					if(engin.isBooted){
 						engin.sound.volume = parseFloat(val);
 					}
 				}),
 				mute: observable(false, function(val){
-					if(engin){
+					if(engin.isBooted){
 						engin.sound.mute = val;
 					}
 				})
@@ -449,9 +576,18 @@ page = {
 		menu: {
 			disconnect: function(){
 				server.disconnect()
+				page.connect.login.failed(false);
 			},
 			exit: function(){
 				window.close()
+			}
+		},
+		inventory: {
+			data: [],
+			update: function(data){
+				page.menu.inventory.data(data);
+				server.out.inventory.data(data);
+				server.in.inventory._data = fn.duplicate(data);
 			}
 		}
 	},
@@ -483,7 +619,7 @@ page = {
 
 					// see if i own it
 					if(game){
-						page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
+						page.chat.activeChanel.own(page.chat.activeChanel.owner() == server.in.player.data.id.id)
 					}
 					break;
 				}
@@ -501,7 +637,7 @@ page = {
 			ko.mapping.fromJS({chat:{activeChanel:this.activeChanel.chanel()}},page)
 
 			// see if i own it
-			page.chat.activeChanel.own(page.chat.activeChanel.owner() == game.players.player.data.data.id.id)
+			page.chat.activeChanel.own(page.chat.activeChanel.owner() == server.in.player.data.data.id.id)
 		},
 		sendMessage: function(event){
 			if(page.chat.sendMessageVal().length){
@@ -528,6 +664,15 @@ page = {
 		},
 		leave: function(){
 			server.out.chat.data({type: 'leave',chanel: page.chat.activeChanel.id()})
+		},
+		leaveAll: function(){
+			_(page.chat.chanels()).each(function(chanel){
+				server.out.chat.data({
+					type: 'leave',
+					chanel: chanel.id
+				})
+			})
+			page.chat.chanels([])
 		},
 
 		// in-comming events
@@ -624,8 +769,7 @@ page = {
 				}
 			};
 		},
-	},
-	player: new PlayerDataFull().data
+	}
 }
 
 //load
@@ -633,60 +777,4 @@ if(localStorage.settings){
 	json = JSON.parse(localStorage.settings);
 
 	// see if its the same version
-	if(page.version == json.version){
-		fn.combindOver(page,json)
-	}
-	else{
-		console.log('localStorage out of date')
-	}
 }
-
-//create ko obj
-page = ko.mapping.fromJS(page)
-
-//create the keyBindings obj
-keyBindings = {
-	enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
-	bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
-}
-_(page.menu.settings.keyBindings.bindings()).each(function(k){
-	keyBindings[k.id()] = {}
-	_(k.keys()).each(function(i){
-		keyBindings[k.id()][i.id()] = i;
-	})
-})
-
-//save event
-$(window).unload(function(){
-	json = ko.mapping.toJS(page)
-
-	delete json.chat;
-	delete json.player;
-	delete json.loading;
-	if(!json.connect.login.remember){
-		delete json.connect.login;
-	}
-	delete json.connect.newServer;
-	delete json.connect.selectedServer;
-
-	//graphics
-	delete json.menu.settings.graphics.cameraModes;
-	delete json.menu.settings.graphics.cameraSmoothSpeeds;
-	delete json.menu.settings.graphics.renderModes;
-
-	//keys
-	delete json.menu.settings.keyBindings.currentBinding;
-	_(json.menu.settings.keyBindings.bindings).each(function(i){
-		delete i.title;
-		delete i.id;
-		delete i.display;
-		delete i.enabled;
-		_(i.keys).each(function(i){
-			delete i.title;
-			delete i.id;
-			delete i.group;
-		})
-	})
-
-	localStorage.settings = JSON.stringify(json)
-})

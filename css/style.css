@@ -32,6 +32,15 @@ input.error, textarea.error, select.error{
 .tooltip{
 	z-index: 9999;
 }
+.panel.full{
+	height: 100%;
+}
+
+/*tools*/
+.scroll-y{
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
 
 /*loading*/
 #loading-modal{
@@ -203,4 +212,19 @@ input.error, textarea.error, select.error{
 }
 #chat.out #chat-send{
 	display: block;
+}
+
+/*inventory*/
+#inventory{
+	height: 80%;
+}
+#inventory .item{
+	padding: 10px;
+	height: 86px;
+}
+#inventory .item>img{
+	height: 64px;
+	width: auto;
+	float: left;
+	margin-right: 10px;
 }
