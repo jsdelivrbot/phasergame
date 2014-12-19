@@ -31,7 +31,7 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.21,
+	version: 1.3,
 	items: [],
 	init: function(cb){
 		//get the json
@@ -185,6 +185,7 @@ page = {
 				$("#loading-play").text('Playing').addClass('disabled')
 				//start the game
 				cb = _.after(1,function(){
+					$('#loading-modal').foundation('reveal', 'close')
 					engin = new Phaser.Game(800,600,page.menu.settings.graphics.renderMode(),'game', { 
 						preload: preload, 
 						create: function(){
@@ -351,7 +352,7 @@ page = {
 				},
 				bind: function(event){
 					if(typeof page.menu.settings.keyBindings.currentBinding === 'object'){
-						keybinding = page.menu.settings.keyBindings.currentBinding
+						_keybinding = page.menu.settings.keyBindings.currentBinding
 
 						// see if its a mouse event or keyboard
 						switch(event.type){
@@ -364,9 +365,9 @@ page = {
 						}
 
 						//tell the key its being rebound
-						if(keybinding.rebind){
+						if(_keybinding.rebind){
 							// if its dose not like the key then return
-							if(!keybinding.rebind(keyCode)){
+							if(!_keybinding.rebind(keyCode)){
 								$("#keybinding").hide()
 								engin.input.disabled = false
 								return;
@@ -374,41 +375,41 @@ page = {
 						}
 
 						// if there are up/down events on the key the unbind them
-						if(keybinding.up){
-							a = engin.input.keyboard._keys[keybinding.keyCode()]
+						if(_keybinding.up){
+							a = engin.input.keyboard._keys[_keybinding.keyCode()]
 							if(a){
-								a.onUp.remove(keybinding.up)
+								a.onUp.remove(_keybinding.up)
 							}
 						}
-						if(keybinding.up){
-							a = engin.input.keyboard._keys[keybinding.keyCode()]
+						if(_keybinding.up){
+							a = engin.input.keyboard._keys[_keybinding.keyCode()]
 							if(a){
-								a.onDown.remove(keybinding.down)
+								a.onDown.remove(_keybinding.down)
 							}
 						}
 
 						// see if its a mouse event or keyboard
 						switch(event.type){
 							case 'keydown':
-								keybinding.keyCode(keyCode)
+								_keybinding.keyCode(keyCode)
 								break;
 							case 'mousedown':
-								keybinding.keyCode(keyCode)
+								_keybinding.keyCode(keyCode)
 								break;
 						}
 
 						// bind
-						engin.input.keyboard.addKey(keybinding.keyCode());
+						engin.input.keyboard.addKey(_keybinding.keyCode());
 
 						//remove the capture
-						engin.input.keyboard.removeKeyCapture(keybinding.keyCode());
+						engin.input.keyboard.removeKeyCapture(_keybinding.keyCode());
 
 						// find events
-						if(keybinding.up){
-							engin.input.keyboard._keys[keybinding.keyCode()].onUp.add(keybinding.up)
+						if(_keybinding.up){
+							engin.input.keyboard._keys[_keybinding.keyCode()].onUp.add(_keybinding.up)
 						}
-						if(keybinding.down){
-							engin.input.keyboard._keys[keybinding.keyCode()].onDown.add(keybinding.down)
+						if(_keybinding.down){
+							engin.input.keyboard._keys[_keybinding.keyCode()].onDown.add(_keybinding.down)
 						}
 
 						$("#keybinding").hide()
@@ -487,7 +488,7 @@ page = {
 						id: 'inventory',
 						enabled: false,
 						keys: [
-							keyBinding('Close',Phaser.Keyboard.E,{
+							keyBinding('Close',Phaser.Keyboard.I,{
 								down: function(){
 									//see if there are menus open
 									$("#inventory").foundation('reveal','close')
@@ -509,6 +510,10 @@ page = {
 							keyBinding('Down',Phaser.Keyboard.S),
 							keyBinding('Right',Phaser.Keyboard.D),
 							keyBinding('Left',Phaser.Keyboard.A),
+							keyBinding('Interact',Phaser.Keyboard.E,{
+								up: maps.resources.key.up.bind(maps.resources),
+								down: maps.resources.key.down.bind(maps.resources)
+							}),
 							keyBinding('Open Chat',Phaser.Keyboard.ENTER,{
 								up: function(){
 									//open chat if there are no menus showing
@@ -532,7 +537,7 @@ page = {
 									return (key > 2)
 								}
 							}),
-							keyBinding('Open Inventory',Phaser.Keyboard.E,{
+							keyBinding('Open Inventory',Phaser.Keyboard.I,{
 								down: function(){
 									$("#chat").removeClass('out')
 									$('#chat > div.off-canvas-wrap > div > div > form > input[type="text"]').trigger('blur')
@@ -588,12 +593,7 @@ page = {
 			}
 		},
 		inventory: {
-			data: [],
-			update: function(data){
-				page.menu.inventory.data(data);
-				server.out.inventory.data(data);
-				server.in.inventory._data = fn.duplicate(data);
-			}
+			data: []
 		}
 	},
 	chat: {
@@ -642,7 +642,7 @@ page = {
 			ko.mapping.fromJS({chat:{activeChanel:this.activeChanel.chanel()}},page)
 
 			// see if i own it
-			page.chat.activeChanel.own(page.chat.activeChanel.owner() == server.in.player.data.data.id.id)
+			page.chat.activeChanel.own(page.chat.activeChanel.owner() == server.in.player.data.id.id)
 		},
 		sendMessage: function(event){
 			if(page.chat.sendMessageVal().length){

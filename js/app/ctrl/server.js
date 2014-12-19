@@ -44,9 +44,9 @@ ServerOut = Klass({
 	initialize: function(name){
 		this.name = name
 	},
-	data: function(data){
+	data: function(data,callback){
 		if(this.socket){
-			this.socket.emit(this.name,data)
+			this.socket.emit(this.name,data,callback)
 		}
 	},
 	bind: function(socket){
@@ -91,11 +91,11 @@ ServerOutDiff = ServerOut.extend({
 		this.supr(name)
 		this._data = fn.duplicate(this._data);
 	},
-	data: function(data){
+	data: function(data,callback){
 		if(this.socket){
 			var diff = fn.getDiff(this._data,data)
 			if(!fn.isEmptyDiff(diff)){
-				this.socket.emit(this.name,diff)
+				this.socket.emit(this.name,diff,callback)
 				this._data = fn.duplicate(data);
 			}
 		}
@@ -146,7 +146,14 @@ server = {
 		}),
 		inventory: new ServerInDiff('inventory',function(diff){
 			//update the inventory
-			page.menu.inventory.data(server.in.inventory.data);
+			ko.mapping.fromJS({
+				menu: {
+					inventory: {
+						data: server.in.inventory.data
+					}
+				}
+			},page);
+			// page.menu.inventory.data(server.in.inventory.data);
 			fn.applyDiff(server.out.inventory._data,diff);
 		},[]),
 		attack: new ServerIn('attack',function(data){
@@ -172,8 +179,8 @@ server = {
 					break;
 			}
 		}),
-		resource: new ServerInDiff('resource',function(data){
-			maps.resource.serverIn(data);
+		resources: new ServerIn('resources',function(data){
+			maps.resources.serverIn(data);
 		})
 	},
 	out: {
@@ -181,7 +188,10 @@ server = {
 		chat: new ServerOut('chat'),
 		inventory: new ServerOutDiff('inventory'),
 		attack: new ServerOut('attack'),
-		resource: new ServerOut('resource')
+		resources: new ServerOut('resources')
+	},
+	data: { //where all the shared files go when parsed
+
 	},
 	options: {
 		reconnection: false,
@@ -258,6 +268,6 @@ server = {
 	},
 
 	error: function(error){
-		throw error.description
+		throw error.description.stack;
 	}
 }

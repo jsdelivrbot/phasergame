@@ -225,7 +225,8 @@ blender/images/items/resources/stone.png
 blender/images/items/resources/wood.png
 
 # misc images
-imgs/other/door.png
+imgs/other/blank.png
+imgs/other/progress.png
 imgs/tilesets/col.png
 imgs/tilesets/land.png
 imgs/tilesets/misc.png

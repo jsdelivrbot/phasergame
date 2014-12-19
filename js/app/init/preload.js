@@ -48,7 +48,7 @@ function loadData(cb){
 	})
 }
 function loadShardData(cb){
-	cb = _.after(4,cb)
+	cb = _.after(4,_.partial(loadServerImages,cb))
 	url = server.url.protocol + '//' + server.url.hostname + ':8282'
 
 	$.ajax({
@@ -59,7 +59,9 @@ function loadShardData(cb){
 	})
 	.done(function(data) {
 		//update the pages items
-		page.items(fn.idArray(data,'title'));
+		json = fn.idArray(data,'title')
+		page.items(json);
+		server.data.items = json;
 
 		cb();
 	})
@@ -88,7 +90,7 @@ function loadShardData(cb){
 		data: {type: 'dataFile', file: 'resourceProfiles'},
 	})
 	.done(function(data) {
-		//nothing to do with it yet
+		server.data.resources = fn.idArray(data,'time');
 		cb();
 	})
 	.fail(function() {
@@ -116,7 +118,8 @@ function preload(){
 
 
 	//image
-	engin.load.image('door','imgs/other/door.png')
+	engin.load.image('blank','imgs/other/blank.png')
+	engin.load.image('progress','imgs/other/progress.png')
 
 
 	//player
@@ -139,15 +142,38 @@ function preload(){
 		engin.load.image(loadedData.tilesets[i].name,loadedData.tilesets[i].url);
 	};
 
-
-	//loading bar
+	engin.load.onLoadStart.addOnce(function(){
+		$('#loading').fadeIn();
+	})
 	engin.load.onFileComplete.add(function(){
-		// $('#loading-bar>span').css('width',engin.load.progressFloat + '%')
+		$('#loading .progress>span').css('width',engin.load.progressFloat + '%')
+	})
+	engin.load.onLoadComplete.addOnce(function(){
+		engin.load.onFileComplete.removeAll()
+		$('#loading').fadeOut();
+	})
+}
+
+function loadServerImages(cb){
+
+	a = server.data.items;
+	for(var i in a){
+		if(a[i].img.length){
+			engin.load.image('imgs/item/'+i,a[i].img);
+		}
+	}
+
+	engin.load.onLoadStart.addOnce(function(){
+		// $('#loading').fadeIn();
+	})
+	engin.load.onFileComplete.add(function(){
+		$('#loading .progress>span').css('width',engin.load.progressFloat + '%')
+	})
+	engin.load.onLoadComplete.addOnce(function(){
+		engin.load.onFileComplete.removeAll()
+		// $('#loading').fadeOut();
+		if(cb) cb();
 	})
 
-	engin.load.onLoadComplete.add(function(){
-		engin.load.onLoadStart.removeAll()
-		engin.load.onFileComplete.removeAll()
-		engin.load.onLoadComplete.removeAll()
-	})
+	engin.load.start();
 }

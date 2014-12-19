@@ -55,7 +55,8 @@ game = {
 		//see if im active
 		if(game.active){
 			//send updates to controlers/objs that need it
-			game.players.step()
+			game.players.step();
+			maps.resources.update();
 		}
 	},
 

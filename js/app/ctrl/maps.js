@@ -75,7 +75,7 @@ maps = {
 		    maps.layers.doors.physicsBodyType = Phaser.Physics.ARCADE;
 			for (var i = 0; i < map.objects.doors.length; i++) {
 				d = map.objects.doors[i];
-				_door = maps.layers.doors.create(d.x,d.y,'door')
+				_door = maps.layers.doors.create(d.x,d.y,'blank')
 
 				_door.body.immovable = true;
 				_door.body.offset.x = -2
@@ -134,8 +134,11 @@ maps = {
 				//destory the map
 				maps.destroyMap();
 				if(maps.createMap(cacheID)){
-					cb(true);
-					keyBindings.enable(k);
+					//load the resources for this map
+					maps.resources.loadMap(id,function(){
+						cb(true);
+						keyBindings.enable(k);
+					})
 					return;
 				}
 
