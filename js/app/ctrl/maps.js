@@ -128,7 +128,7 @@ maps = {
 		maps.getMap(id,function(cacheID){
 			if(cacheID){
 				//set keyBindings to none so player cant move when map is loading
-				k = keyBindings.enabled();
+				_keyBinding = keyBindings.enabled();
 				keyBindings.enable('none');
 
 				//destory the map
@@ -137,12 +137,12 @@ maps = {
 					//load the resources for this map
 					maps.resources.loadMap(id,function(){
 						cb(true);
-						keyBindings.enable(k);
+						keyBindings.enable(_keyBinding);
 					})
 					return;
 				}
 
-				keyBindings.enable(k);
+				keyBindings.enable(_keyBinding);
 			}
 			else{
 				cb(false);
