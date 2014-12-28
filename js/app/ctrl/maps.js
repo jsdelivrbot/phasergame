@@ -1,5 +1,6 @@
 maps = {
 	map: null, 
+	loading: false,
 	layers: {
 		ground: null,
 		col: null,
@@ -123,8 +124,10 @@ maps = {
 	},
 	load: function(id,cb){
 		cb = cb || function(){};
+		if(maps.loading) return;
 
 		//load the map
+		maps.loading = true;
 		maps.getMap(id,function(cacheID){
 			if(cacheID){
 				//set keyBindings to none so player cant move when map is loading
@@ -136,15 +139,18 @@ maps = {
 				if(maps.createMap(cacheID)){
 					//load the resources for this map
 					maps.resources.loadMap(id,function(){
-						cb(true);
+						maps.loading = false;
 						keyBindings.enable(_keyBinding);
+						cb(true);
 					})
 					return;
 				}
 
+				maps.loading = false;
 				keyBindings.enable(_keyBinding);
 			}
 			else{
+				maps.loading = false;
 				cb(false);
 				return;
 			}
