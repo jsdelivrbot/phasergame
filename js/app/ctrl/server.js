@@ -211,7 +211,11 @@ server = {
 		//set up events
 		this.socket.on('connect',_(this.connectEvent).bind(this,url))
 		this.socket.on('disconnect',this.disconnectEvent)
+		this.socket.on('connect_error',this.connectionError)
 		this.socket.on('error',this.error)
+
+		$('#connect-loading-modal span').text('Connecting...')
+		$('#connect-loading-modal').foundation('reveal','open');
 	},
 
 	disconnect: function(){
@@ -221,30 +225,24 @@ server = {
 	},
 
 	connectEvent: function(url){
-		console.log('server connected')
+		$('#connect-loading-modal span').text('connected');
+		setTimeout(function(){
+			$('#login-modal').foundation('reveal','open')
+		},500)
 		server.url = fn.parseURL(url);
 		
 		_(server.in).invoke('bind', server.socket)
 		_(server.out).invoke('bind', server.socket)
+	},
 
-		server.login(page.connect.login.email(),page.connect.login.password(),function(loginCode){
-			if(loginCode == 0){
-				console.log('get json from server')
-				loadShardData(function(){
-					connect.exit()
-					game.enter()
-				})
-			}
-			else{
-				//make the login inputs turn red and dissconnect
-				page.connect.login.loginCode(loginCode)
-			}
- 		})
+	connectionError: function(){
+		$('#connect-loading-modal span').text('Failed')
+		setTimeout(function(){
+			$('#connect-modal').foundation('reveal','open')
+		},1000)
 	},
 
 	disconnectEvent: function(){
-		console.log('server disconnected')
-
 		//unbind the ports
 		_(server.in).invoke('unbind', server.socket)
 		_(server.out).invoke('unbind', server.socket)
@@ -253,12 +251,10 @@ server = {
 		connect.enter()
 	},
 
-	login: function(email,password,callback){
+	login: function(email,password,cb){
 		if(this.socket){
 			this.socket.emit('login',{email:email,password:password},function(loginCode){
-				if(callback){
-					callback(loginCode)
-				}
+				if(cb) cb(loginCode);
 			})
 		}
 	},

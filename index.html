@@ -4,7 +4,7 @@
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
-		<link rel="stylesheet" type="text/css" href="css/foundation-icons.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		
 		<script src="js/lib/jquery.js" type="text/javascript" defer></script>
@@ -129,7 +129,7 @@
 		
 		<!-- loading modal -->
 		<div id="loading-modal" class="reveal-modal menu large open" data-reveal style="opacity: 1; visibility: visible; top: 100px;" data-bind="with: loading">
-			<i class="fi-widget modal-button" data-reveal-id="loading-settings"></i>
+		  	<i class="fa fa-cogs modal-button" data-reveal-id="loading-settings"></i>
 
 			<div class="top">
 				<h2>PhaserGame</h2>
@@ -148,7 +148,7 @@
 
 		<!-- launcher settings -->
 		<div id="loading-settings" class="reveal-modal menu large" data-reveal>
-		  	<i class="fi-x modal-button" data-reveal-id="loading-modal"></i>
+		  	<i class="fa fa-times modal-button" data-reveal-id="loading-modal"></i>
 		  	
 			<div class="small-6 columns">
 				<fieldset data-bind="with: menu.settings.graphics">
@@ -181,10 +181,17 @@
 		</div>
 		
 		<!-- connect -->
-		<div id="connect-modal" class="reveal-modal menu cant-close xlarge" data-reveal data-bind="with: connect">
-			<div class="top">
-				<h4>Servers</h4>
-			</div>
+		<div id="connect-modal" class="reveal-modal menu cant-close xlarge" data-reveal data-bind="with: connect.servers">
+			<dl class="sub-nav">
+				<dt><b>Servers:</b></dt>
+				<!-- filters -->
+				<!-- ko foreach: filters -->
+				<dd data-bind="css: {'active': $parent.activeFilter() == $index()}"><a href="#" data-bind="text: title, click: $root.set($parent.activeFilter,$index)"></a></dd>
+				<!-- /ko -->
+				<a href="#" class="button tiny radius right secondary" data-bind="click: refresh"><i class="fa fa-refresh"></i></a>
+				<a href="#" class="button tiny radius alert right" data-bind="click: remove, css: {'disabled': servers()[selected()] == undefined}">Remove</a>
+				<a href="#" class="button tiny radius success right" data-reveal-id="add-server-modal">Add</a>
+			</dl>
 			<div class="middle">
 				<table>
 					<thead>
@@ -193,42 +200,64 @@
 							<th>Description</th>
 							<th>Server Ip</th>
 							<th>Players</th>
+							<th width="100">Status</th>
+							<th width="100"></th>
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: servers">
-						<tr class="server" data-bind="css:{'selected': $index() === $root.connect.selectedServer(), 'pinging': status() == 0, 'failed': status() == 2}, click: $parent.select">
+						<!-- ko if: $parent.filters()[$parent.activeFilter()].filter.indexOf(status()) !== -1 -->
+						<tr class="server" data-bind="css:{'selected': $index() === $parent.selected(), 'pinging': status() == 0, 'failed': status() == 2}, click: $root.set($parent.selected,$index)">
 							<td data-bind="text: title"></td>
 							<td data-bind="text: description"></td>
 							<td data-bind="text: ip"></td>
 							<td data-bind="text: players"></td>
+							<td><span class="label" data-bind="text: $parent.serverStatuses()[status()].text, attr: {'class': $parent.serverStatuses()[status()].class}"></span></td>
+							<td><a href="#" class="button tiny radius" data-bind="click: $parent.connect, css: {'success': status() !== 2, 'secondary': status() == 2}">connect</a></td>
 						</tr>
+						<!-- /ko -->
 					</tbody>
 				</table>
 			</div>
-			<div class="bottom panel radius">
-				<a href="#" class="button radius tiny" data-reveal-id="add-server-modal" style="flex-shrink: 0;">Add Server</a>
-				<a href="#" class="button radius tiny disabled" data-bind="css:{'disabled': selectedServer() == -1}, click: removeServer" style="flex-shrink: 0;">Remove Server</a>
-				<a href="#" class="button radius tiny" data-bind="click: refresh" style="flex-shrink: 0;margin-right: 20px;">Refresh</a>
-				<input type="email" placeholder="Email" data-bind="css:{'error': login.loginCode() !== 0}, value: login.email, valueUpdate: 'keyup'" style="margin-right: 20px;">
-				<input type="password" placeholder="Password" data-bind="css:{'error': login.loginCode() !== 0}, value: login.password, valueUpdate: 'keyup'" style="margin-right: 20px;">
-				
-				<div class="switch" style="flex-shrink: 0;margin-right: 20px;">
-					<input id="exampleCheckboxSwitch" type="checkbox" data-bind="checked: login.remember">
-					<label for="exampleCheckboxSwitch"></label>
-				</div>
-				
-				<a type="submit" href="#" class="button tiny radius disabled" data-bind="css:{'disabled': (selectedServer() !== -1)? servers()[selectedServer()].status() !== 1 : true }, click: connect" style="flex-shrink: 0;">Connect</a>
+		</div>
+
+		<div id="connect-loading-modal" class="reveal-modal menu cant-close tiny" data-reveal data-bind="with: connect.login">
+			<h4><i class="fa fa-circle-o-notch fa-spin"></i> <span>Connecting</span></h4>
+		</div>
+
+		<!-- login -->
+		<div id="login-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect.login">
+			<fieldset>
+			    <legend>Login</legend>
+			    <label>Email
+			      	<input type="text" data-bind="value: email">
+			    </label>
+
+			    <label>Password
+			      	<input type="password" data-bind="value: password">
+			    </label>
+		  	</fieldset>
+          	<label>Remember Login</label>
+          	<div class="switch">
+				<input id="switch-1985738362957" type="checkbox" data-bind="checked: remember">
+				<label for="switch-1985738362957"></label>
+			</div>
+			<div class="row">
+				<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Cancel</a>
+				<input class="button tiny right" type="submit" value="Ok" data-bind="click: login"/>
+			</div>
+			<div data-alert class="alert-box radius" style="display:none;">
+				<span>message</span>
 			</div>
 		</div>
 		
 		<!-- add server -->
-		<div id="add-server-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect">
+		<div id="add-server-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect.servers">
 			<div class="row">
 				<h4>Add Servers</h4>
 			</div>
 			<form data-bind="event: {'submit': add}">
 				<div class="row">
-					<input type="text" placeholder="Server Ip" data-bind="value: newServer.ip"/>
+					<input type="text" placeholder="Server Ip" data-bind="value: addServer.ip"/>
 				</div>
 				<div class="row">
 					<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Cancel</a>

@@ -14,6 +14,10 @@ var loginCodes = [
 		class: 'info'
 	},
 	{
+		message: 'User Banned',
+		class: 'alert'
+	},
+	{
 		message: 'Cant connect to server',
 		class: 'alert'
 	},

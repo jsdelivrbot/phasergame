@@ -2,7 +2,7 @@ connect = {
 	enter: function(){
 		$("#connect-modal").foundation('reveal', 'open')
 
-		page.connect.refresh();
+		page.connect.servers.refresh();
 
 		//tell the server to disconnect, just in case it has not
 	},

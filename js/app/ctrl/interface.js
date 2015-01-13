@@ -31,7 +31,7 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.3,
+	version: 1.4,
 	items: [],
 	init: function(cb){
 		//get the json
@@ -52,6 +52,10 @@ page = {
 				}
 				delete json.connect.newServer;
 				delete json.connect.selectedServer;
+
+				//servers
+				delete json.connect.servers.selected;
+				delete json.connect.servers.activeFilter;
 
 				//profile
 				delete json.menu.profile;
@@ -203,92 +207,122 @@ page = {
 		}
 	},
 	connect: {
-		newServer: {
-			ip: ''
+		servers: {
+			filters: [
+				{
+					title: 'all',
+					filter: [0,1,2]
+				},
+				{
+					title: 'Online',
+					filter: [1]
+				},
+				{
+					title: 'Offline',
+					filter: [2]
+				}
+			],
+			activeFilter: 0,
+			servers: [],
+			serverStatuses: [
+				{
+					text: 'connecting',
+					class: 'label'
+				},
+				{
+					text: 'Online',
+					class: 'label success'
+				},
+				{
+					text: 'Offline',
+					class: 'label alert'
+				}
+			],
+			addServer: {
+				ip: ''
+			},
+			selected: -1,
+			add: function(){
+				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace('http://',''));
+				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace('https://',''));
+				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace('www.',''));
+				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace('/',''));
+
+				page.connect.servers.servers.push(ko.mapping.fromJS({
+					status: 0, // 0: connecting, 1: connected, 2: failed
+					title: '',
+					description: '',
+					ip: page.connect.servers.addServer.ip(),
+					players: 0,
+				}))
+				page.connect.servers.addServer.ip('')
+
+				page.connect.servers.refresh();
+
+				$('#connect-modal').foundation('reveal', 'open')
+			},
+			remove: function(){
+				if(page.connect.servers.servers()[page.connect.servers.selected()]){
+					page.connect.servers.servers.splice(page.connect.servers.selected(),1)
+
+					page.connect.servers.selected(-1);
+				}
+			},
+			connect: function(){
+				server.connect(this.ip())
+			},
+			refresh: function(){
+				//call all the servers
+				for (var i = 0; i < page.connect.servers.servers().length; i++) {
+					page.connect.servers.servers()[i].status(0)
+					$.ajax({
+						url: 'http://' + page.connect.servers.servers()[i].ip() + ':8282',
+						type: 'GET',
+						dataType: 'json',
+						data: {type: 'info'},
+					})
+					.done(_(function(data) {
+
+						if(data.title){
+							this.status(1)
+							this.title(data.title)
+							this.description(data.description)
+							this.players(data.players)
+						}
+
+					}).bind(page.connect.servers.servers()[i]))
+					.fail(_(function() {
+
+						this.status(2)
+						this.players(0)
+
+					}).bind(page.connect.servers.servers()[i]))
+				};
+			}
 		},
-		servers: [],
 		login: {
 			email: '',
 			password: '',
 			remember: false,
-			loginCode: 0
-		},
-		selectedServer: -1,
-		connect: function(){
-			if(page.connect.selectedServer() !== -1){
-				if(page.connect.servers()[page.connect.selectedServer()].status() === 1){
-					server.connect(page.connect.servers()[page.connect.selectedServer()].ip())
-				}
-			}
-		},
-		select: function(){
-			//find the index
-			for (var i = 0; i < page.connect.servers().length; i++) {
-				if(page.connect.servers()[i].ip() == this.ip()){
-					if(page.connect.selectedServer() !== i){
-						page.connect.selectedServer(i)
-					}
-					else{
-						page.connect.selectedServer(-1)
-					}
-					page.connect.login.loginCode(0)
-					break;
-				}
-			};
-		},
-		add: function(){
-			page.connect.newServer.ip(page.connect.newServer.ip().replace('http://',''))
-			page.connect.newServer.ip(page.connect.newServer.ip().replace('https://',''))
-			page.connect.newServer.ip(page.connect.newServer.ip().replace('www.',''))
-			page.connect.newServer.ip(page.connect.newServer.ip().replace('/',''))
-
-			page.connect.servers.push(ko.mapping.fromJS({
-				status: 0, // 0: connecting, 1: connected, 2: failed
-				title: '',
-				description: '',
-				ip: page.connect.newServer.ip(),
-				players: 0,
-			}))
-			page.connect.newServer.ip('')
-
-			page.connect.refresh();
-
-			$('#connect-modal').foundation('reveal', 'open')
-
-			page.connect.refresh()
-		},
-		refresh: function(){
-			//call all the servers
-			for (var i = 0; i < page.connect.servers().length; i++) {
-				page.connect.servers()[i].status(0)
-				$.ajax({
-					url: 'http://' + page.connect.servers()[i].ip() + ':8282',
-					type: 'GET',
-					dataType: 'json',
-					data: {type: 'info'},
+			loginCode: 0,
+			login: function(){
+				server.login(page.connect.login.email(),page.connect.login.password(),function(loginCode){
+					$("#login-modal .alert-box>span").text(loginCodes[loginCode].message);
+					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginCodes[loginCode].class);
+					$("#login-modal .alert-box").finish().hide().show(250).delay(3000).hide(250)
+					setTimeout(function(){
+						if(loginCode == 0){
+							loadShardData(function(){
+								$("#login-modal").foundation('reveal','close');
+								game.enter()
+							})
+						}
+						else{
+							page.connect.login.loginCode(loginCode)
+						}
+					},1250);
 				})
-				.done(_(function(data) {
-
-					if(data.title){
-						this.status(1)
-						this.title(data.title)
-						this.description(data.description)
-						this.players(data.players)
-					}
-
-				}).bind(page.connect.servers()[i]))
-				.fail(_(function() {
-
-					this.status(2)
-					this.players(0)
-
-				}).bind(page.connect.servers()[i]))
-			};
-		},
-		removeServer: function(){
-			page.connect.servers.splice(page.connect.selectedServer(),1)
-
-			page.connect.selectedServer(-1);
+			}
 		}
 	},
 	menu:{
@@ -773,6 +807,35 @@ page = {
 				}
 			};
 		},
+	},
+	//functions for the knockout in the html
+	toggle: function(observable){
+		return function(){
+			this(!this());
+		}.bind(observable);
+	},
+	increase: function(ob,amount){
+		return _.partial(function(ob,amount){
+			amount = amount || 1;
+			ob(ob()+amount);
+		},ob,amount);
+	},
+	decrease: function(ob,amount){
+		return _.partial(function(ob,amount){
+			amount = amount || 1;
+			ob(ob()-amount);
+		},ob,amount);
+	},
+	combind: _.compose,
+	set: function(ob,amount){
+		return _.partial(function(ob,amount){
+			if(typeof amount == "function"){
+				ob(amount());
+			}
+			else{
+				ob(amount);
+			}
+		},ob,amount);
 	}
 }
 
