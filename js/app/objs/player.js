@@ -165,6 +165,9 @@ Player = Klass({
 
 		    engin.physics.enable(this.sprite, Phaser.Physics.ARCADE);
 		    this.sprite.body.setSize(20,18,6,30);
+
+		    //add the name tag
+		    this.sprite.addChild(new Phaser.Text(engin,0,-16,this.name,this.textStyle))
 		}
 	},
 	move: function(){

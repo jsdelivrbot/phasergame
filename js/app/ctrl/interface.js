@@ -211,7 +211,7 @@ page = {
 			email: '',
 			password: '',
 			remember: false,
-			failed: false
+			loginCode: 0
 		},
 		selectedServer: -1,
 		connect: function(){
@@ -227,12 +227,11 @@ page = {
 				if(page.connect.servers()[i].ip() == this.ip()){
 					if(page.connect.selectedServer() !== i){
 						page.connect.selectedServer(i)
-						page.connect.login.failed(false)
 					}
 					else{
 						page.connect.selectedServer(-1)
-						page.connect.login.failed(false)
 					}
+					page.connect.login.loginCode(0)
 					break;
 				}
 			};
@@ -586,7 +585,7 @@ page = {
 		menu: {
 			disconnect: function(){
 				server.disconnect()
-				page.connect.login.failed(false);
+				page.connect.login.loginCode(0);
 			},
 			exit: function(){
 				window.close()

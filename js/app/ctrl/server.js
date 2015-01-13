@@ -227,8 +227,8 @@ server = {
 		_(server.in).invoke('bind', server.socket)
 		_(server.out).invoke('bind', server.socket)
 
-		server.login(page.connect.login.email(),page.connect.login.password(),function(data){
-			if(data){
+		server.login(page.connect.login.email(),page.connect.login.password(),function(loginCode){
+			if(loginCode == 0){
 				console.log('get json from server')
 				loadShardData(function(){
 					connect.exit()
@@ -237,7 +237,7 @@ server = {
 			}
 			else{
 				//make the login inputs turn red and dissconnect
-				page.connect.login.failed(true)
+				page.connect.login.loginCode(loginCode)
 			}
  		})
 	},
@@ -255,15 +255,11 @@ server = {
 
 	login: function(email,password,callback){
 		if(this.socket){
-			this.socket.emit('login',{email:email,password:password},function(data){
+			this.socket.emit('login',{email:email,password:password},function(loginCode){
 				if(callback){
-					callback(data)
+					callback(loginCode)
 				}
 			})
-			return true
-		}
-		else{
-			return false
 		}
 	},
 

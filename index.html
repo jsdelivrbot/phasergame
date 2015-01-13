@@ -209,8 +209,8 @@
 				<a href="#" class="button radius tiny" data-reveal-id="add-server-modal" style="flex-shrink: 0;">Add Server</a>
 				<a href="#" class="button radius tiny disabled" data-bind="css:{'disabled': selectedServer() == -1}, click: removeServer" style="flex-shrink: 0;">Remove Server</a>
 				<a href="#" class="button radius tiny" data-bind="click: refresh" style="flex-shrink: 0;margin-right: 20px;">Refresh</a>
-				<input type="email" placeholder="Email" data-bind="css:{'error': login.failed}, value: login.email, valueUpdate: 'keyup'" style="margin-right: 20px;">
-				<input type="password" placeholder="Password" data-bind="css:{'error': login.failed}, value: login.password, valueUpdate: 'keyup'" style="margin-right: 20px;">
+				<input type="email" placeholder="Email" data-bind="css:{'error': login.loginCode() !== 0}, value: login.email, valueUpdate: 'keyup'" style="margin-right: 20px;">
+				<input type="password" placeholder="Password" data-bind="css:{'error': login.loginCode() !== 0}, value: login.password, valueUpdate: 'keyup'" style="margin-right: 20px;">
 				
 				<div class="switch" style="flex-shrink: 0;margin-right: 20px;">
 					<input id="exampleCheckboxSwitch" type="checkbox" data-bind="checked: login.remember">
