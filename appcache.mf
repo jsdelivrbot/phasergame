@@ -5,9 +5,7 @@ CACHE MANIFEST
 index.html
 
 # css
-css/foundation-icons.css
-css/foundation-icons.ttf
-css/foundation-icons.woff
+css/font-awesome.min.css
 css/foundation.min.css
 css/style.css
 
@@ -44,6 +42,13 @@ js/lib/underscore-min.map
 data/playerImages.json
 data/sound.json
 data/tilesets.json
+
+#fonts
+fonts/FontAwesome.otf
+fonts/fontawesome-webfont.eot
+fonts/fontawesome-webfont.svg
+fonts/fontawesome-webfont.ttf
+fonts/fontawesome-webfont.woff
 
 # player images
 imgs/player/001-Fighter01.png

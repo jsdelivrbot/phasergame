@@ -195,7 +195,8 @@ server = {
 	},
 	options: {
 		reconnection: false,
-		forceNew: true
+		forceNew: true,
+		timeout: 5000
 	},
 	socket: null,
 	url: fn.parseURL(''),

@@ -31,7 +31,7 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 1.4,
+	version: 0.12,
 	items: [],
 	init: function(cb){
 		//get the json
@@ -42,55 +42,7 @@ page = {
 
 			//bind the save event
 			$(window).on('beforeunload',function(){
-				json = ko.mapping.toJS(page)
-
-				delete json.chat;
-				delete json.player;
-				delete json.loading;
-				if(!json.connect.login.remember){
-					delete json.connect.login;
-				}
-				delete json.connect.newServer;
-				delete json.connect.selectedServer;
-
-				//servers
-				delete json.connect.servers.selected;
-				delete json.connect.servers.activeFilter;
-
-				//profile
-				delete json.menu.profile;
-
-				//inventory
-				delete json.menu.inventory;
-
-				//graphics
-				delete json.menu.settings.graphics.cameraModes;
-				delete json.menu.settings.graphics.cameraSmoothSpeeds;
-				delete json.menu.settings.graphics.renderModes;
-
-				//keys
-				delete json.menu.settings.keyBindings.currentBinding;
-				delete json.menu.settings.keyBindings.enabled;
-				_(json.menu.settings.keyBindings.bindings).each(function(i){
-					delete i.title;
-					delete i.id;
-					delete i.display;
-					delete i.enabled;
-					_(i.keys).each(function(i){
-						delete i.title;
-						delete i.id;
-						delete i.group;
-					})
-				})
-
-				db.db.update({
-					type: 'settings'
-				},{
-					settings: JSON.stringify(json)
-				},function(err){
-					if(err) throw err;
-					console.log('saved settings')
-				})
+				page.save();
 
 				return '';
 			})
@@ -100,7 +52,7 @@ page = {
 				json = JSON.parse(data[0].settings);
 
 				if(page.version == json.version){
-					console.log('loaded settings')
+					console.log('settings loaded')
 					fn.combindOver(page,json)
 				}
 				else{
@@ -126,7 +78,76 @@ page = {
 
 				if(cb) cb();
 			}
+
+			//start saveLoop
+			page.saveLoop(true);
 		})
+	},
+	save: function(cb){
+		json = ko.mapping.toJS(page)
+
+		delete json.chat;
+		delete json.player;
+		delete json.loading;
+		delete json.connect.newServer;
+		delete json.connect.selectedServer;
+
+		//servers
+		delete json.connect.servers.selected;
+		delete json.connect.servers.activeFilter;
+		for(var i = 0; i < json.connect.servers.servers.length; i++){
+			if(!json.connect.servers.servers[i].login.remember){
+				json.connect.servers.servers[i].login.email = '';
+				json.connect.servers.servers[i].login.password = '';
+			}
+		}
+
+		//profile
+		delete json.menu.profile;
+
+		//inventory
+		delete json.menu.inventory;
+
+		//graphics
+		delete json.menu.settings.graphics.cameraModes;
+		delete json.menu.settings.graphics.cameraSmoothSpeeds;
+		delete json.menu.settings.graphics.renderModes;
+
+		//keys
+		delete json.menu.settings.keyBindings.currentBinding;
+		delete json.menu.settings.keyBindings.enabled;
+		_(json.menu.settings.keyBindings.bindings).each(function(i){
+			delete i.title;
+			delete i.id;
+			delete i.display;
+			delete i.enabled;
+			_(i.keys).each(function(i){
+				delete i.title;
+				delete i.id;
+				delete i.group;
+			})
+		})
+
+		db.db.update({
+			type: 'settings'
+		},{
+			settings: JSON.stringify(json)
+		},function(err){
+			if(err) throw err;
+			console.log('settings saved')
+			if(cb) cb();
+		})
+	},
+	saveLoop: function(dontSave){
+		f = function(){
+			setTimeout(page.saveLoop,30*1000)
+		}
+		if(dontSave){
+			f();
+		}
+		else{
+			page.save(f);
+		}
 	},
 	loading: {
 		setUpAppCache: function(){
@@ -254,6 +275,11 @@ page = {
 					description: '',
 					ip: page.connect.servers.addServer.ip(),
 					players: 0,
+					login: {
+						email: '',
+						password: '',
+						remember: false
+					}
 				}))
 				page.connect.servers.addServer.ip('')
 
@@ -278,6 +304,7 @@ page = {
 					$.ajax({
 						url: 'http://' + page.connect.servers.servers()[i].ip() + ':8282',
 						type: 'GET',
+						timeout: 8000,
 						dataType: 'json',
 						data: {type: 'info'},
 					})
@@ -301,12 +328,9 @@ page = {
 			}
 		},
 		login: {
-			email: '',
-			password: '',
-			remember: false,
 			loginCode: 0,
 			login: function(){
-				server.login(page.connect.login.email(),page.connect.login.password(),function(loginCode){
+				server.login(page.connect.servers.servers()[page.connect.servers.selected()].login.email(),page.connect.servers.servers()[page.connect.servers.selected()].login.password(),function(loginCode){
 					$("#login-modal .alert-box>span").text(loginCodes[loginCode].message);
 					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginCodes[loginCode].class);
 					$("#login-modal .alert-box").finish().hide().show(250).delay(3000).hide(250)

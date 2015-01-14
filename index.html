@@ -226,23 +226,25 @@
 
 		<!-- login -->
 		<div id="login-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect.login">
+			<!-- ko if: $root.connect.servers.servers()[$root.connect.servers.selected()] !== undefined -->
 			<fieldset>
 			    <legend>Login</legend>
 			    <label>Email
-			      	<input type="text" data-bind="value: email">
+			      	<input type="text" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.email">
 			    </label>
 
 			    <label>Password
-			      	<input type="password" data-bind="value: password">
+			      	<input type="password" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.password">
 			    </label>
 		  	</fieldset>
           	<label>Remember Login</label>
           	<div class="switch">
-				<input id="switch-1985738362957" type="checkbox" data-bind="checked: remember">
+				<input id="switch-1985738362957" type="checkbox" data-bind="checked: $root.connect.servers.servers()[$root.connect.servers.selected()].login.remember">
 				<label for="switch-1985738362957"></label>
 			</div>
+			<!-- /ko -->
 			<div class="row">
-				<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Cancel</a>
+				<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Back</a>
 				<input class="button tiny right" type="submit" value="Ok" data-bind="click: login"/>
 			</div>
 			<div data-alert class="alert-box radius" style="display:none;">
@@ -251,7 +253,7 @@
 		</div>
 		
 		<!-- add server -->
-		<div id="add-server-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect.servers">
+		<div id="add-server-modal" class="reveal-modal menu cant-close tiny" data-reveal data-bind="with: connect.servers">
 			<div class="row">
 				<h4>Add Servers</h4>
 			</div>
