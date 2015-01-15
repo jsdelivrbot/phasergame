@@ -150,11 +150,24 @@ page = {
 		}
 	},
 	loading: {
+		logShowing: ko.observable(false),
+		log: function(message, small){
+			if(small){
+				$el = $('<h6><b>[update]: </b><i></i></h6>');
+			}
+			else{
+				$el = $('<h5><b>[update]: </b><i></i></h5>');
+			}
+			$el.children('i').text(message);
+			$el.appendTo('#loading-log');
+			$("#loading-log").scrollTop($("#loading-log")[0].scrollHeight);
+		},
 		setUpAppCache: function(){
 			appCache = window.applicationCache;
 
 			appCache.addEventListener('checking',function(event){
 				$("#loading-text").text('Checking for updates')
+				page.loading.log('Checking for updates');
 				$("#loading-play").addClass('disabled')
 			})
 
@@ -164,21 +177,67 @@ page = {
 
 			appCache.addEventListener('noupdate',function(event){
 				$("#loading-text").text('Up to Date')
+				page.loading.log('Up to Date');
 				$("#loading-play").removeClass('disabled')
 			})
 
 			appCache.addEventListener('downloading',function(event){
 				$("#loading-text").text('Starting Download')
+				page.loading.log('Starting Download');
+
+				//get the list of files
+				$.ajax({
+	                type: "get",
+	                url: "appcache.mf",
+	                dataType: "text",
+	                cache: false,
+	                async: false,
+	                success: function( content ){
+	                    // Strip out the non-cache sections.
+	                    // NOTE: The line break here is only to prevent
+	                    // wrapping in the BLOG.
+	                    content = content.replace(
+	                        new RegExp(
+	                            "(NETWORK|FALLBACK):" +
+	                            "((?!(NETWORK|FALLBACK|CACHE):)[\\w\\W]*)",
+	                            "gi"
+	                        ),
+	                        ""
+	                    );
+
+	                    // Strip out all comments.
+	                    content = content.replace(
+	                        new RegExp( "#[^\\r\\n]*(\\r\\n?|\\n)", "g" ),
+	                        ""
+	                    );
+
+	                    // Strip out the cache manifest header and
+	                    // trailing slashes.
+	                    content = content.replace(
+	                        new RegExp( "CACHE MANIFEST\\s*|\\s*$", "g" ),
+	                        ""
+	                    );
+
+	                    // Strip out extra line breaks and replace with
+	                    // a hash sign that we can break on.
+	                    content = content.replace(
+	                        new RegExp( "[\\r\\n]+", "g" ),
+	                        "#"
+	                    );
+	                    appCacheFileList = content.split( "#" );
+	                }
+	            });
 			})
 
 			appCache.addEventListener('progress',function(event){
 				$("#loading-bar>span").css('width',((event.loaded / event.total) * 100)+'%')
 
-				if(event.loaded >= event.total -2){
+				if(event.loaded >= event.total -1){
 					$("#loading-text").text('Preparing Update...')
 				}
 				else{
 					$("#loading-text").text('Downloading...')
+					page.loading.log('Updating: '+appCacheFileList[event.loaded], true);
 				}
 			})
 
@@ -186,9 +245,11 @@ page = {
 				if(event.reason !== "manifest"){
 					$("#loading-text").text('Failed')
 					$("#loading-bar").addClass('alert')
+					page.loading.log('Failed to Update: '+event.reason);
 				}
 				else{
 					$("#loading-text").text('Up to Date')
+					page.loading.log('Cant Find Update');
 				}
 				$("#loading-play").removeClass('disabled')
 			})
@@ -196,6 +257,7 @@ page = {
 			appCache.addEventListener('updateready',function(event){
 				$("#loading-text").text('Reloading!')
 				$("#loading-play").removeClass('disabled')
+				page.loading.log('Reloading Page');
 
 				location.reload();
 			})
@@ -203,6 +265,7 @@ page = {
 			appCache.addEventListener('cached',function(event){
 				$("#loading-text").text('Updated!')
 				$("#loading-play").removeClass('disabled')
+				page.loading.log('Update Successfull');
 			})
 		},
 		play: function(){
@@ -211,6 +274,7 @@ page = {
 				//start the game
 				cb = _.after(1,function(){
 					$('#loading-modal').foundation('reveal', 'close')
+					$('#loading-log').hide();
 					engin = new Phaser.Game(800,600,page.menu.settings.graphics.renderMode(),'game', { 
 						preload: preload, 
 						create: function(){

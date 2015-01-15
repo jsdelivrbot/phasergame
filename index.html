@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<!-- <html manifest="appcache.mf"> -->
-<html>
+<html manifest="appcache.mf">
+<!-- <html> -->
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
@@ -144,6 +144,10 @@
 				</div>
 				<a id="loading-play" href="#" class="button success radius tiny" data-bind="click: play" style="flex-shrink: 0;">Play</a>
 			</div>
+		</div>
+
+		<div id="loading-log" class="scroll-y" data-bind="css:{'showing': loading.logShowing}">
+			<button id="loading-show-log" class="button secondary tiny radius" data-bind="click: toggle(loading.logShowing)"><i class="fa fa-angle-double-up" data-bind="css: {'fa-angle-double-up': !loading.logShowing(), 'fa-angle-double-down': loading.logShowing}"></i></button>
 		</div>
 
 		<!-- launcher settings -->

@@ -75,6 +75,40 @@ input.error, textarea.error, select.error{
 	border-color: grey;
 }
 
+#loading-show-log {
+    position: fixed;
+	bottom: 0px;
+	right: 0px;
+	margin: 0px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
+	padding: 5px;
+	font-size: 22px;
+	padding-right: 15px;
+	padding-left: 15px;
+    transition: all 0.25s;
+}
+#loading-log {
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    height: 0px;
+    background: rgba(255, 255, 255, 0.54);
+    z-index: 1500;
+    border-top: white 2px solid;
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    padding-left: 10px;
+    transition: all 0.25s;
+}
+#loading-log.showing {
+    /* border-top: white 2px solid; */
+    height: 50%;
+}
+#loading-log.showing #loading-show-log {
+    bottom: 50%;
+}
+
 /*loading-settings*/
 #loading-settings{
 	height: 70%;
