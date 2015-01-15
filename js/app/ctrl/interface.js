@@ -224,21 +224,22 @@ page = {
 	                        new RegExp( "[\\r\\n]+", "g" ),
 	                        "#"
 	                    );
-	                    appCacheFileList = content.split( "#" );
+	                    appCacheFiles = content.split( "#" );
 	                }
 	            });
 			})
 
 			appCache.addEventListener('progress',function(event){
-				$("#loading-bar>span").css('width',((event.loaded / event.total) * 100)+'%')
+				$("#loading-bar>span").css('width',((appCacheCurrentFile / appCacheFiles.length) * 100)+'%')
 
-				if(event.loaded >= event.total -1){
+				if(appCacheCurrentFile >= appCacheFiles.length -1){
 					$("#loading-text").text('Preparing Update...')
 				}
 				else{
 					$("#loading-text").text('Downloading...')
-					page.loading.log('Updating: '+appCacheFileList[event.loaded], true);
+					page.loading.log('Updating: '+appCacheFiles[appCacheCurrentFile], true);
 				}
+				appCacheCurrentFile++;
 			})
 
 			appCache.addEventListener('error',function(event){

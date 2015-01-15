@@ -17,6 +17,7 @@ js/app/ctrl/interface.js
 js/app/ctrl/maps.js
 js/app/ctrl/server.js
 js/app/ctrl/sound.js
+js/app/ctrl/resources.js
 js/app/init/functions.js
 js/app/init/preload.js
 js/app/objs/player.js
@@ -45,10 +46,10 @@ data/tilesets.json
 
 #fonts
 fonts/FontAwesome.otf
-fonts/fontawesome-webfont.eot
-fonts/fontawesome-webfont.svg
-fonts/fontawesome-webfont.ttf
-fonts/fontawesome-webfont.woff
+fonts/fontawesome-webfont.eot?v=4.2.0
+fonts/fontawesome-webfont.svg?v=4.2.0
+fonts/fontawesome-webfont.ttf?v=4.2.0
+fonts/fontawesome-webfont.woff?v=4.2.0
 
 # player images
 imgs/player/001-Fighter01.png
