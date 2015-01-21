@@ -37,6 +37,13 @@ $(document).ready(function() {
 		//load the settigns
 		page.init(function(){
 			ko.applyBindings(page);
+			
+			//load all the settings
+			page.settings.loadAll(function(){
+				$(window).on('beforeunload',page.settings.unload.bind(page.settings));
+				//start the save loop since we have loaded every thing
+				page.settings.saveLoop(0);
+			});
 		});
 	})
 
@@ -53,9 +60,9 @@ $(document).ready(function() {
 
 	//---------------------background----------------------
 
-	// $('html,body').on('contextmenu',function(){
-	// 	return false;
-	// })
+	$('html,body').on('contextmenu',function(){
+		return false;
+	})
 
 	$(".no-action").submit(function(event) {
 		/* Act on the event */

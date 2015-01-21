@@ -6,26 +6,47 @@ db = {
 			console.log('opened DB')
 			db.db = indexed('db')
 
-			if(cb) cb = _.after(1,cb);
-
-			//set the the stores
-			db.db.find({
-				type: 'settings'
-			},function(err,data){
-				if(err) throw err;
-
-				if(data.length == 0){
-					db.db.insert({
-						type: 'settings',
-						settings: '{}'
-					},function(){
-						if(cb) cb();
-					})
-				}
-				else{
-					if(cb) cb();
-				}
-			})
+			if(cb) cb();
 		})
+	},
+	save: function(id,saveData,cb){
+		this.db.find({
+			id: id
+		},function(err,data){
+			if(err) throw err;
+
+			if(data.length){
+				this.db.update({
+					id: id
+				},{
+					data: JSON.stringify(saveData)
+				},function(){
+					if(cb) cb();
+				}.bind(this))
+			}
+			else{
+				this.db.insert({
+					id: id,
+					data: JSON.stringify(saveData)
+				},function(){
+					if(cb) cb();
+				}.bind(this))
+			}
+		}.bind(this))
+	},
+	load: function(id,cb){
+		this.db.find({
+			id: id
+		},function(err,data){
+			if(err) throw err;
+
+			if(data.length){
+				data[0].data = JSON.parse(data[0].data)
+				if(cb) cb(data[0]);
+			}
+			else{
+				if(cb) cb();
+			}
+		}.bind(this))
 	}
 }

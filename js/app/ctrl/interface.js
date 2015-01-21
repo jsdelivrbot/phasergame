@@ -34,129 +34,81 @@ page = {
 	version: 0.12,
 	items: [],
 	init: function(cb){
-		//get the json
-		db.db.find({
-			type: 'settings'
-		},function(err,data){
-			if(err) throw err;
+		//create ko obj
+		page = ko.mapping.fromJS(page)
 
-			//bind the save event
-			$(window).on('beforeunload',function(){
-				page.save();
-
-				return '';
-			})
-
-			//load the data
-			if(data.length){
-				json = JSON.parse(data[0].settings);
-
-				if(page.version == json.version){
-					console.log('settings loaded')
-					fn.combindOver(page,json)
-				}
-				else{
-					console.log('localStorage out of date')
-				}
-
-				//create ko obj
-				page = ko.mapping.fromJS(page)
-
-				//create the keyBindings obj
-				keyBindings = {
-					enabled: _(page.menu.settings.keyBindings.enabled).bind(page.menu.settings.keyBindings),
-					enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
-					bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
-				}
-				_(page.menu.settings.keyBindings.bindings()).each(function(k){
-					keyBindings[k.id()] = {}
-					_(k.keys()).each(function(i){
-						keyBindings[k.id()][i.id()] = i;
-					})
-				})
-				keyBindings.enable('none');
-
-				if(cb) cb();
-			}
-
-			//start saveLoop
-			page.saveLoop(true);
-		})
-	},
-	save: function(cb){
-		json = ko.mapping.toJS(page)
-
-		delete json.chat;
-		delete json.player;
-		delete json.loading;
-		delete json.connect.newServer;
-		delete json.connect.selectedServer;
-
-		//servers
-		delete json.connect.servers.selected;
-		delete json.connect.servers.activeFilter;
-		for(var i = 0; i < json.connect.servers.servers.length; i++){
-			if(!json.connect.servers.servers[i].login.remember){
-				json.connect.servers.servers[i].login.email = '';
-				json.connect.servers.servers[i].login.password = '';
-			}
+		//create the keyBindings obj
+		keyBindings = {
+			enabled: _(page.menu.settings.keyBindings.enabled).bind(page.menu.settings.keyBindings),
+			enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
+			bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
 		}
-
-		//profile
-		delete json.menu.profile;
-
-		//inventory
-		delete json.menu.inventory;
-
-		//graphics
-		delete json.menu.settings.graphics.cameraModes;
-		delete json.menu.settings.graphics.cameraSmoothSpeeds;
-		delete json.menu.settings.graphics.renderModes;
-
-		//keys
-		delete json.menu.settings.keyBindings.currentBinding;
-		delete json.menu.settings.keyBindings.enabled;
-		_(json.menu.settings.keyBindings.bindings).each(function(i){
-			delete i.title;
-			delete i.id;
-			delete i.display;
-			delete i.enabled;
-			_(i.keys).each(function(i){
-				delete i.title;
-				delete i.id;
-				delete i.group;
+		_(page.menu.settings.keyBindings.bindings()).each(function(k){
+			keyBindings[k.id()] = {}
+			_(k.keys()).each(function(i){
+				keyBindings[k.id()][i.id()] = i;
 			})
 		})
+		keyBindings.enable('none');
 
-		db.db.update({
-			type: 'settings'
-		},{
-			settings: JSON.stringify(json)
-		},function(err){
-			if(err) throw err;
-			console.log('settings saved')
-			if(cb) cb();
-		})
-	},
-	saveLoop: function(dontSave){
-		f = function(){
-			setTimeout(page.saveLoop,30*1000)
-		}
-		if(dontSave){
-			f();
-		}
-		else{
-			page.save(f);
-		}
+		//add the settings
+		page.settings.add('servers',page.connect.servers,[
+			{
+				prop: 'servers',
+				save: function(servers){
+					for (var i = 0; i < servers.length; i++) {
+						if(!servers[i].login.remember){
+							servers[i].login.email = '';
+							servers[i].login.password = '';
+						}
+					};
+					return servers;
+				},
+				load: function(servers){
+					for (var i = 0; i < servers.length; i++) {
+						servers[i] = ko.mapping.fromJS(servers[i]);
+						servers[i].login.remember.subscribe(page.settings.change.bind(this,this))
+					};
+					return servers;
+				}
+			}
+		],1)
+		page.settings.add('keyBindings',page.menu.settings.keyBindings,[
+			{
+				prop: 'bindings',
+				save: function(bindings){
+					for (var i = 0; i < bindings.length; i++) {
+						for (var k = 0; k < bindings[i].keys.length; k++) {
+							bindings[i].keys[k] = bindings[i].keys[k].keyCode
+						};
+					};
+					return bindings;
+				},
+				load: function(bindings){
+					for (var i = 0; i < bindings.length; i++) {
+						for (var k = 0; k < bindings[i].keys.length; k++) {
+							page.menu.settings.keyBindings.bindings()[i].keys()[k].keyCode(bindings[i].keys[k]);
+							//subscribe to the change event on the keys
+							page.menu.settings.keyBindings.bindings()[i].keys()[k].keyCode.subscribe(page.settings.change.bind(this,this));
+						};
+					};
+					return page.menu.settings.keyBindings.bindings();
+				}
+			}
+		],1)
+		page.settings.add('sound',page.menu.settings.sound,['volume','mute'],1)
+		page.settings.add('graphics',page.menu.settings.graphics,['renderMode','cameraMode','cameraSmoothSpeed'],1.1)
+		
+		if(cb) cb();
 	},
 	loading: {
 		logShowing: ko.observable(false),
-		log: function(message, small){
+		log: function(title,message, small){
 			if(small){
-				$el = $('<h6><b>[update]: </b><i></i></h6>');
+				$el = $('<h6><b>['+title+']: </b><i></i></h6>');
 			}
 			else{
-				$el = $('<h5><b>[update]: </b><i></i></h5>');
+				$el = $('<h5><b>['+title+']: </b><i></i></h5>');
 			}
 			$el.children('i').text(message);
 			$el.appendTo('#loading-log');
@@ -167,7 +119,7 @@ page = {
 
 			appCache.addEventListener('checking',function(event){
 				$("#loading-text").text('Checking for updates')
-				page.loading.log('Checking for updates');
+				page.loading.log('Update','Checking for updates');
 				$("#loading-play").addClass('disabled')
 			})
 
@@ -177,13 +129,13 @@ page = {
 
 			appCache.addEventListener('noupdate',function(event){
 				$("#loading-text").text('Up to Date')
-				page.loading.log('Up to Date');
+				page.loading.log('Update','Up to Date');
 				$("#loading-play").removeClass('disabled')
 			})
 
 			appCache.addEventListener('downloading',function(event){
 				$("#loading-text").text('Starting Download')
-				page.loading.log('Starting Download');
+				page.loading.log('Update','Starting Download');
 
 				//get the list of files
 				$.ajax({
@@ -237,7 +189,7 @@ page = {
 				}
 				else{
 					$("#loading-text").text('Downloading...')
-					page.loading.log('Updating: '+appCacheFiles[appCacheCurrentFile], true);
+					page.loading.log('Update','Updating: '+appCacheFiles[appCacheCurrentFile], true);
 				}
 				appCacheCurrentFile++;
 			})
@@ -246,11 +198,11 @@ page = {
 				if(event.reason !== "manifest"){
 					$("#loading-text").text('Failed')
 					$("#loading-bar").addClass('alert')
-					page.loading.log('Failed to Update: '+event.reason);
+					page.loading.log('Update','Failed to Update: '+event.reason);
 				}
 				else{
 					$("#loading-text").text('Up to Date')
-					page.loading.log('Cant Find Update');
+					page.loading.log('Update','Cant Find Update');
 				}
 				$("#loading-play").removeClass('disabled')
 			})
@@ -258,7 +210,7 @@ page = {
 			appCache.addEventListener('updateready',function(event){
 				$("#loading-text").text('Reloading!')
 				$("#loading-play").removeClass('disabled')
-				page.loading.log('Reloading Page');
+				page.loading.log('Update','Reloading Page');
 
 				location.reload();
 			})
@@ -266,7 +218,7 @@ page = {
 			appCache.addEventListener('cached',function(event){
 				$("#loading-text").text('Updated!')
 				$("#loading-play").removeClass('disabled')
-				page.loading.log('Update Successfull');
+				page.loading.log('Update','Update Successfull');
 			})
 		},
 		play: function(){
@@ -503,7 +455,7 @@ page = {
 								a.onUp.remove(_keybinding.up)
 							}
 						}
-						if(_keybinding.up){
+						if(_keybinding.down){
 							a = engin.input.keyboard._keys[_keybinding.keyCode()]
 							if(a){
 								a.onDown.remove(_keybinding.down)
@@ -538,7 +490,7 @@ page = {
 						engin.input.disabled = false
 					}
 				},
-				changeBinding: function(){
+				changeBinding: function(){ //html event
 					page.menu.settings.keyBindings.currentBinding = this;
 
 					$("#keybinding").show()
@@ -897,6 +849,161 @@ page = {
 			};
 		},
 	},
+	//handles saving and loading settings
+	settings: {
+		settings: [],
+		add: function(id,obj,properties,version){
+			//parse the properties array
+			for (var i = 0; i < properties.length; i++) {
+				if(typeof properties[i] == 'string'){
+					properties[i] = {
+						prop: properties[i],
+						save: undefined,
+						load: undefined
+					};
+				}
+			};
+			var setting = {
+				id: id,
+				obj: obj,
+				version: version,
+				properties: properties,
+				saved: false
+			};
+			this.settings.push(setting);
+
+			//loop through the properties and bind events to observables
+			for (var i = 0; i < setting.properties.length; i++) {
+				if(obj[setting.properties[i].prop]){
+					if(obj[setting.properties[i].prop].subscribe){
+						obj[setting.properties[i].prop].subscribe(this.change.bind(this,setting));
+					}
+				}
+			};
+		},
+		load: function(id,cb){
+			console.log(id+' settings loaded')
+			db.load(id,function(data){
+				if(data){
+					for (var i = 0; i < this.settings().length; i++) {
+						if(this.settings()[i].id === id){
+							//see if its the same version
+							if(this.settings()[i].version == data.data._version){
+
+								var setting = this.settings()[i];
+
+								//loop through the properties and set them
+								for (var k = 0; k < setting.properties.length; k++) {
+									if(setting.obj[setting.properties[k].prop] !== undefined){
+
+										//see if it has a load function
+										var val = data.data[setting.properties[k].prop];
+										if(setting.properties[k].load){
+											val = setting.properties[k].load.bind(setting)(val);
+										}
+
+										//set it
+										if(typeof setting.obj[setting.properties[k].prop] == 'function'){
+											setting.obj[setting.properties[k].prop](val);
+										}
+										else{
+											setting.obj[setting.properties[k].prop] = val;
+										}
+									}
+								};
+
+								setting.saved = true;
+								break;
+							}
+							else{
+								page.loading.log('Settings',id+' settings out of date')
+							}
+						}
+					}
+				}
+				if(cb) cb();
+				return;
+			}.bind(this))
+		},
+		save: function(id,cb){
+			console.log(id+' settings saved')
+			//find the setting
+			for (var i = 0; i < this.settings().length; i++) {
+				if(this.settings()[i].id === id){
+
+					var setting = this.settings()[i];
+					var json = {};
+					json._version = this.settings()[i].version;
+
+					//set the properties
+					for (var k = 0; k < setting.properties.length; k++) {
+						if(setting.obj[setting.properties[k].prop] !== undefined){
+
+							if(typeof setting.obj[setting.properties[k].prop] == 'function'){
+								val = ko.mapping.toJS(setting.obj[setting.properties[k].prop]);
+							}
+							else{
+								val = setting.obj[setting.properties[k].prop];
+							}
+
+							//see if theres a save function
+							if(setting.properties[k].save){
+								val = setting.properties[k].save.bind(setting)(val);
+							}
+
+							json[setting.properties[k].prop] = val;
+						}
+					};
+					db.save(this.settings()[i].id,json,cb);
+					setting.saved = true;
+					return;
+				}
+			};
+		},
+		change: function(setting){
+			setting.saved = false;
+		},
+		loadAll: function(cb){
+			cb = (cb)? _.after(this.settings().length-1,cb) : function(){};
+			for (var i = 0; i < this.settings().length; i++) {
+				this.load(this.settings()[i].id,cb);
+			};
+		},
+		saveAll: function(cb){
+			cb = _.after(this.settings().length-1,cb);
+			for (var i = 0; i < this.settings().length; i++) {
+				this.save(this.settings()[i].id,cb);
+			};
+		},
+		saveLoop: function(i){
+			if(this.settings()[i]){
+				if(!this.settings()[i].saved){
+					this.save(this.settings()[i].id,function(){
+						setTimeout(this.saveLoop.bind(this,++i),1000)
+					}.bind(this))
+				}
+				else{
+					setTimeout(this.saveLoop.bind(this,++i),1000)
+				}
+			}
+			else{
+				setTimeout(this.saveLoop.bind(this,0),1000)
+			}
+		},
+		unload: function(){
+			var saved = true;
+			//loop through the settings and see if they are all saved
+			for (var i = 0; i < this.settings().length; i++) {
+				if(!this.settings()[i].saved){
+					saved = false;
+					this.save(this.settings()[i].id);
+				}
+			};
+			if(!saved){
+				return 'there are settings that are not saved yet';
+			}
+		}
+	},
 	//functions for the knockout in the html
 	toggle: function(observable){
 		return function(){
@@ -931,6 +1038,4 @@ page = {
 //load
 if(localStorage.settings){
 	json = JSON.parse(localStorage.settings);
-
-	// see if its the same version
 }

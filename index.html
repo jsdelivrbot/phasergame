@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html manifest="appcache.mf">
-<!-- <html> -->
+<!-- <html manifest="appcache.mf"> -->
+<html>
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
@@ -149,6 +149,7 @@
 		<div id="loading-log" class="scroll-y" data-bind="css:{'showing': loading.logShowing}">
 			<button id="loading-show-log" class="button secondary tiny radius" data-bind="click: toggle(loading.logShowing)"><i class="fa fa-angle-double-up" data-bind="css: {'fa-angle-double-up': !loading.logShowing(), 'fa-angle-double-down': loading.logShowing}"></i></button>
 		</div>
+		<div id="loading-log-close" data-bind="visible: loading.logShowing, click: set(loading.logShowing,false)" style="display:none;"></div>
 
 		<!-- launcher settings -->
 		<div id="loading-settings" class="reveal-modal menu large" data-reveal>
