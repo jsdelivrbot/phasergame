@@ -1,5 +1,7 @@
 //engin events
 function create(){
+	engin.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+	
 	//set up
 	engin.time.advancedTiming = true
 	engin.physics.startSystem(Phaser.Physics.ARCADE);
@@ -13,6 +15,8 @@ function create(){
 
 	// bind the keys
 	keyBindings.bindKeys()
+
+	engin.plugins.add(Phaser.Plugin.Debug);
 
 	//resize the engin to fit the screen
 	$(window).trigger('resize')

@@ -254,8 +254,8 @@ server = {
 
 	login: function(email,password,cb){
 		if(this.socket){
-			this.socket.emit('login',{email:email,password:password},function(loginCode){
-				if(cb) cb(loginCode);
+			this.socket.emit('login',{email:email,password:password},function(loginMessage){
+				if(cb) cb(loginMessage);
 			})
 		}
 	},

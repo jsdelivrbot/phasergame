@@ -345,21 +345,17 @@ page = {
 			}
 		},
 		login: {
-			loginCode: 0,
 			login: function(){
-				server.login(page.connect.servers.servers()[page.connect.servers.selected()].login.email(),page.connect.servers.servers()[page.connect.servers.selected()].login.password(),function(loginCode){
-					$("#login-modal .alert-box>span").text(loginCodes[loginCode].message);
-					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginCodes[loginCode].class);
+				server.login(page.connect.servers.servers()[page.connect.servers.selected()].login.email(),page.connect.servers.servers()[page.connect.servers.selected()].login.password(),function(loginMessage){
+					$("#login-modal .alert-box>span").text(loginMessage.message);
+					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginMessage.class);
 					$("#login-modal .alert-box").finish().hide().show(250).delay(3000).hide(250)
 					setTimeout(function(){
-						if(loginCode == 0){
+						if(loginMessage.success){
 							loadShardData(function(){
 								$("#login-modal").foundation('reveal','close');
 								game.enter()
 							})
-						}
-						else{
-							page.connect.login.loginCode(loginCode)
 						}
 					},1250);
 				})
@@ -660,7 +656,6 @@ page = {
 		menu: {
 			disconnect: function(){
 				server.disconnect()
-				page.connect.login.loginCode(0);
 			},
 			exit: function(){
 				window.close()
