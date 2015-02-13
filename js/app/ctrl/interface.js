@@ -67,6 +67,8 @@ page = {
 				load: function(servers){
 					for (var i = 0; i < servers.length; i++) {
 						servers[i] = ko.mapping.fromJS(servers[i]);
+						servers[i].login.email.subscribe(page.settings.change.bind(this,this))
+						servers[i].login.password.subscribe(page.settings.change.bind(this,this))
 						servers[i].login.remember.subscribe(page.settings.change.bind(this,this))
 					};
 					return servers;
@@ -407,6 +409,14 @@ page = {
 						value: 30
 					}
 				],
+				debug: observable(false,function(val){
+					if(val){
+						$('.pdebug').show();
+					}
+					else{
+						$('.pdebug').hide();
+					}
+				})
 			},
 			keyBindings:{
 				currentBinding: null,

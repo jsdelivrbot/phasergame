@@ -185,7 +185,7 @@ maps.resource = function(data){
 	this.obj.addChild(this.resrImage);
 
 
-	this.resrAmount = engin.make.text(0,-16,this.amount,{font: "16px"})
+	this.resrAmount = engin.make.text(0,-16,this.amount,fontSettings)
 
 	this.obj.addChild(this.resrAmount);
 

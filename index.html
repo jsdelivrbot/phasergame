@@ -16,14 +16,14 @@
 		<script src="js/lib/phaser-debug.js" type="text/javascript" defer></script>
 		<script src="js/lib/socket.io.js" type="text/javascript" defer></script>
 		<script src="js/lib/klass.js" type="text/javascript" defer></script>
-		<script src="js/lib/jspath.min.js" type="text/javascript" defer></script>
 		<script src="js/lib/underscore-min.js" type="text/javascript" defer></script>
 		<script src="js/lib/indexed.js" type="text/javascript" defer></script>
+		<script src="js/lib/functions.js" type="text/javascript" defer></script>
+		<script src="js/lib/sortedArray.js" type="text/javascript" defer></script>
 		
 		<!-- main -->
 		<script src="js/app/app.js" type="text/javascript" defer></script>
 
-		<script src="js/app/init/functions.js" type="text/javascript" defer></script>
 		<script src="js/app/init/preload.js" type="text/javascript" defer></script>
 		<script src="js/app/objs/players.js" type="text/javascript" defer></script>
 		<script src="js/app/objs/player.js" type="text/javascript" defer></script>
@@ -337,6 +337,11 @@
 						    		<option data-bind="text: title, value: value"></option>
 						    	</select>
 						    	<!-- /ko -->
+					    		<label>Debugger</label>
+						    	<div class="switch">
+								  	<input id="swich-228462954218362" type="checkbox" data-bind="checked: debug">
+								  	<label for="swich-228462954218362"></label>
+								</div> 
 					    	</div>
 					  	</div>
 					  	<div class="content" id="settings-controls" data-bind="with: keyBindings">

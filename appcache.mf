@@ -12,13 +12,11 @@ css/style.css
 # js
 js/app/app.js
 js/app/ctrl/db.js
-js/app/ctrl/db.js
 js/app/ctrl/interface.js
 js/app/ctrl/maps.js
 js/app/ctrl/server.js
 js/app/ctrl/sound.js
 js/app/ctrl/resources.js
-js/app/init/functions.js
 js/app/init/preload.js
 js/app/objs/player.js
 js/app/objs/playerControl.js
@@ -26,16 +24,19 @@ js/app/objs/players.js
 js/app/stateObjs/connect.js
 js/app/stateObjs/game.js
 js/lib/foundation.min.js
+js/lib/functions.js
+js/lib/indexed.js
 js/lib/jquery.js
 js/lib/jspath.min.js
 js/lib/klass.js
 js/lib/knockout-mapping.js
 js/lib/knockout.js
-js/lib/indexed.js
 js/lib/modernizr.min.js
+js/lib/phaser-debug.js
 js/lib/phaser.map
 js/lib/phaser.min.js
 js/lib/socket.io.js
+js/lib/sortedArray.js
 js/lib/underscore-min.js
 js/lib/underscore-min.map
 
@@ -50,6 +51,8 @@ fonts/fontawesome-webfont.eot?v=4.2.0
 fonts/fontawesome-webfont.svg?v=4.2.0
 fonts/fontawesome-webfont.ttf?v=4.2.0
 fonts/fontawesome-webfont.woff?v=4.2.0
+http://fonts.gstatic.com/s/russoone/v4/RO6e96EC9m6OLO0tr7J3z1tXRa8TVwTICgirnJhmVJw.woff2
+http://fonts.googleapis.com/css?family=Russo+One
 
 # player images
 imgs/player/001-Fighter01.png

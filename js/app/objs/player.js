@@ -115,11 +115,9 @@ PlayerData = Klass({
 Player = Klass({
 	sprite: null,
 	data: null,
-	textStyle: {
-		font: "10px Arial", 
-		fill: "#000000",
+	textStyle: fn.combindOver(fn.duplicate(fontSettings),{
 		align: "center"
-	},
+	}),
 
 	// short hands
 	id: 0,
