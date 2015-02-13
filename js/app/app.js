@@ -124,3 +124,14 @@ $(document).ready(function() {
 		});
 	});
 });
+
+_errors = 0;
+window.onerror = function (errorMsg, url, lineNumber, column, stack) {
+	_errors++;
+	if(server && _errors < 20){
+		if(server.connected){
+			server.emit('logError',{message: errorMsg, file: url, line: lineNumber, stack: stack.stack});
+		}
+	}
+	return false;
+}
