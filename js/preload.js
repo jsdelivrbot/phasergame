@@ -10,6 +10,7 @@ function loadData(cb){
 	})
 	.done(function(data) {
 		loadedData.tilesets = data
+		map.tilesets = data
 
 		cb()
 	})

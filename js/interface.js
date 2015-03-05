@@ -230,16 +230,10 @@ page = {
 				cb = _.after(1,function(){
 					$('#loading-modal').foundation('reveal', 'close')
 					$('#loading-log').hide();
-					engin = new Phaser.Game(800,600,page.menu.settings.graphics.renderMode(),'game', { 
-						preload: preload, 
-						create: function(){
-							connect.enter()
 
-							create()
-						}, 
-						update: update, 
-						render: render
-					},false,false)
+					startEngin(function(){
+						$("#connect-modal").foundation('reveal', 'open');
+					});
 				})
 
 				loadData(cb)
@@ -314,7 +308,23 @@ page = {
 				}
 			},
 			connect: function(){
-				server.connect(this.ip())
+				$('#connect-loading-modal span').text('Connecting...')
+				$('#connect-loading-modal').foundation('reveal','open');
+				
+				server.connect(this.ip(),function(connected){
+					if(connected){
+						$('#connect-loading-modal span').text('connected');
+						setTimeout(function(){
+							$('#login-modal').foundation('reveal','open')
+						},500)
+					}
+					else{
+						$('#connect-loading-modal span').text('Failed')
+						setTimeout(function(){
+							$('#connect-modal').foundation('reveal','open')
+						},1000)
+					}
+				})
 			},
 			refresh: function(){
 				//call all the servers
@@ -353,20 +363,19 @@ page = {
 					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginMessage.class);
 					$("#login-modal .alert-box").finish().hide().show(250).delay(3000).hide(250)
 					setTimeout(function(){
-						if(loginMessage.success){
-							loadShardData(function(){
-								$("#login-modal").foundation('reveal','close');
-								game.enter()
-							})
-						}
+						$("#login-modal").foundation('reveal','close');
 					},1250);
+
+					if(loginMessage.success){
+						login();
+					}
 				})
 			}
 		}
 	},
 	menu:{
 		profile: {
-			playerData: new PlayerDataFull().data
+			// playerData: new PlayerDataFull().data
 		},
 		settings: {
 			graphics: {
@@ -591,8 +600,8 @@ page = {
 							keyBinding('Right',Phaser.Keyboard.D),
 							keyBinding('Left',Phaser.Keyboard.A),
 							keyBinding('Interact',Phaser.Keyboard.E,{
-								up: maps.resources.key.up.bind(maps.resources),
-								down: maps.resources.key.down.bind(maps.resources)
+								// up: maps.resources.key.up.bind(maps.resources),
+								// down: maps.resources.key.down.bind(maps.resources)
 							}),
 							keyBinding('Open Chat',Phaser.Keyboard.ENTER,{
 								up: function(){
@@ -857,6 +866,15 @@ page = {
 	//handles saving and loading settings
 	settings: {
 		settings: [],
+		init: function(cb){ //bind event and load all
+			$(window).on('beforeunload',this.unload.bind(this));
+
+			this.loadAll(function(){
+				this.saveLoop(0);
+
+				if(cb) cb();
+			}.bind(this))
+		},
 		add: function(id,obj,properties,version){
 			//parse the properties array
 			for (var i = 0; i < properties.length; i++) {

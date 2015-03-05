@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- <html manifest="appcache.mf"> -->
-<html>
+<html manifest="appcache.mf">
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
@@ -15,27 +14,27 @@
 		<script src="js/lib/phaser.min.js" type="text/javascript" defer></script>
 		<script src="js/lib/phaser-debug.js" type="text/javascript" defer></script>
 		<script src="js/lib/socket.io.js" type="text/javascript" defer></script>
-		<script src="js/lib/klass.js" type="text/javascript" defer></script>
 		<script src="js/lib/underscore-min.js" type="text/javascript" defer></script>
 		<script src="js/lib/indexed.js" type="text/javascript" defer></script>
 		<script src="js/lib/functions.js" type="text/javascript" defer></script>
 		<script src="js/lib/sortedArray.js" type="text/javascript" defer></script>
+		<script src="js/lib/events.js" type="text/javascript" defer></script>
 		
 		<!-- main -->
-		<script src="js/app/app.js" type="text/javascript" defer></script>
+		<script src="js/main.js" type="text/javascript" defer></script>
 
-		<script src="js/app/init/preload.js" type="text/javascript" defer></script>
-		<script src="js/app/objs/players.js" type="text/javascript" defer></script>
-		<script src="js/app/objs/player.js" type="text/javascript" defer></script>
-		<script src="js/app/objs/playerControl.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/db.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/maps.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/resources.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/interface.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/server.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/sound.js" type="text/javascript" defer></script>
-		<script src="js/app/stateObjs/game.js" type="text/javascript" defer></script>
-		<script src="js/app/stateObjs/connect.js" type="text/javascript" defer></script>
+		<script src="js/preload.js" type="text/javascript" defer></script>
+		<script src="js/db.js" type="text/javascript" defer></script>
+		<script src="js/interface.js" type="text/javascript" defer></script>
+		<script src="js/sound.js" type="text/javascript" defer></script>
+		<script src="js/server.js" type="text/javascript" defer></script>
+		<script src="js/map.js" type="text/javascript" defer></script>
+		<!-- players -->
+		<script src="js/players/players.js" type="text/javascript" defer></script>
+		<script src="js/players/otherPlayer.js" type="text/javascript" defer></script>
+		<script src="js/players/player.js" type="text/javascript" defer></script>
+		<!-- map -->
+		<script src="js/map.js" type="text/javascript" defer></script>
 	</head>
 	<body>
 		<div id="game"></div>
@@ -297,9 +296,9 @@
 					  	<dd><a href="#profile-friends">Friends</a></dd>
 					</dl>
 					<div class="tabs-content vertical" data-bind="with: profile">
-					  	<div class="content" id="profile-stats" data-bind="with: playerData">
+					  	<!-- <div class="content" id="profile-stats" data-bind="with: playerData">
 					    	<h5 data-bind="text: id.name"></h5>
-					  	</div>
+					  	</div> -->
 					  	<div class="content" id="profile-players">
 					    	<h5>profile 2.</h5>
 					  	</div>
