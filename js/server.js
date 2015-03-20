@@ -5,9 +5,17 @@ server = {
 		timeout: 5000
 	},
 	socket: {},
+	events: {
+		connect: new Phaser.Signal(),
+		disconnect: new Phaser.Signal(),
+		login: new Phaser.Signal()
+	},
+	loggedIn: false,
 	url: fn.parseURL(''),
 	data: {}, //data object for the shared data
 	init: function(cb){
+		this.events.login.add(login);
+		this.events.disconnect.add(logout);
 		if(cb) cb();
 	},
 	connect: function(ip,cb){
@@ -39,19 +47,23 @@ server = {
 		}
 	},
 	login: function(email,password,cb){
-		if(this.connected){
-			this.socket.emit('login',{
-				email: email,
-				password: password
-			},cb);
-		}
+		this.emit('login',{
+			email: email,
+			password: password
+		},function(loginMessage){
+			this.loggedIn = loginMessage.success;
+			if(this.loggedIn) this.events.login.dispatch();
+			if(cb) cb(loginMessage);
+		}.bind(this));
 	},
 	_connect: function(cb){
+		this.events.connect.dispatch();
 		this._setUpSocket(this.socket);
 		if(cb) cb(true);
 	},
 	_disconnect: function(){
-
+		this.events.disconnect.dispatch();
+		this.loggedIn = false;
 	},
 	_connectionError: function(cb){
 		if(cb) cb(false);
@@ -66,6 +78,15 @@ server = {
 		socket.on('mapsChange',function(data){
 			map.maps = data;
 		})
+		socket.on('tilesChange',function(data){
+			if(data.map === map.loadedMapID){
+				map.setTiles(data);
+			}
+		})
+
+		socket.on('objectChange',objects.objectChange.bind(objects));
+		socket.on('objectDelete',objects.objectDelete.bind(objects));
+		socket.on('objectCreate',objects.objectCreate.bind(objects));
 	},
 
 	error: function(error){

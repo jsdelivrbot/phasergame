@@ -31,6 +31,9 @@ input.error, textarea.error, select.error{
 .modal-button:hover{
 	color: #777;
 }
+.reveal-modal{
+	overflow-y: auto;
+}
 .reveal-modal-bg{
 	display: none;
 }

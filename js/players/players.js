@@ -1,3 +1,4 @@
+lastPosition = {};
 players = {
 	players: new SortedArray([],function(a,b){
 		if(a.id === b.id) return 0;
@@ -80,11 +81,18 @@ players = {
 	},
 	sendPlayerPositionLoop: function(){
 		if(this.player){
-			server.emit('updatePosition',{
-				x: this.player.x,
-				y: this.player.y,
-				map: this.player.map
-			})
+			//see if the position has changed
+			if(lastPosition.x !== this.player.x || lastPosition.y !== this.player.y || lastPosition.map !== this.player.map){
+				lastPosition.x = this.player.x;
+				lastPosition.y = this.player.y;
+				lastPosition.map = this.player.map;
+
+				server.emit('updatePosition',{
+					x: this.player.x,
+					y: this.player.y,
+					map: this.player.map
+				})
+			}
 		}
 
 		setTimeout(this.sendPlayerPositionLoop.bind(this),100);

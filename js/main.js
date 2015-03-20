@@ -11,12 +11,12 @@ var fontSettings = {
 
 //engin events
 function startEngin(cb){
-	engin = new Phaser.Game(800,600,page.menu.settings.graphics.renderMode(),'game', { 
+	engin = new Phaser.Game(700,700,page.menu.settings.graphics.renderMode(),'game', { 
 		preload: preload, 
 		create: _.compose(create,cb || function(){}),
 		update: update, 
 		render: render
-	},false,false)
+	})
 }
 function create(){
 	engin.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -44,24 +44,44 @@ function create(){
 	//start modals
 	players.init();
 	map.init();
+	objects.init();
 
 	//resize the engin to fit the screen
 	$(window).trigger('resize')
 }
 function update(){
 	players.step();
+	objects.step();
 }
 function render(){
-	engin.debug.text('fps: '+engin.time.fps,16,16)
+
+	if(page.menu.settings.graphics.debug()){
+		for (var i = players.players.length - 1; i >= 0; i--) {
+			engin.debug.body(players.players[i].sprite);
+		};
+		if(players.player){
+			engin.debug.body(players.player.sprite);
+		}
+
+		var fpsColor = 'rgb('+Math.round((engin.time.fps > 30)? (255-(engin.time.fps/60)*255) : 255)+','+Math.round(engin.time.fps/30)*255+',0)';
+		engin.debug.text('fps: ( '+engin.time.fpsMax+' < '+engin.time.fps+' > '+engin.time.fpsMin+' )',16,16,fpsColor,fontSettings);
+	}
 }
 function login(){ //fires when we login to a server
 	map.loadLayers();
+	map.loadedMapID = -1; //reset the loaded map id so when the user data loads it will know to load the map
 	loadShardData(function(){
 		$("#login-modal").foundation('reveal','close');
 
 		//turn the keyboard on
 		keyBindings.enable('game')
 	})
+}
+function logout(){ //fires when server disconnects
+	keyBindings.enabled('none');
+	map.removeAllChunks();
+	objects.removeAllObjects();
+	$('#connect-modal').foundation('reveal','open');
 }
 
 $(document).ready(function() {
@@ -171,6 +191,7 @@ $(document).ready(function() {
 	$(window).resize(function(event) {
 		if(engin.isBooted){
 			engin.scale.setGameSize(engin.height*window.innerWidth/window.innerHeight,engin.height);
+			map.scaleWorld();
 		}
 
 		//resize class

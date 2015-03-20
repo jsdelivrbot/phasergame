@@ -31,7 +31,88 @@ function keyBinding(title,key,events){
 }
 
 page = {
-	version: 0.12,
+	versions: {
+		currentVersion: 'v0.1.2',
+		baseURL: 'https://cdn.rawgit.com/rdfriedl/phasergame/RELEASETAG/index.html',
+		versions: [],
+		selectedVersion: 0,
+		enableDevVersions: false,
+		init: function(cb){
+			var func = function(data){
+				for (var i = 0; i < data.length; i++) {
+					data[i].url = page.versions.baseURL().replace('RELEASETAG',data[i].tag);
+				};
+				page.versions.versions(data);
+
+				if(cb) cb();
+			}
+			$.ajax({
+				url: 'https://api.github.com/repos/rdfriedl/phasergame/releases',
+				type: 'GET',
+				dataType: 'json'
+			})
+			.done(function(data) {
+				page.versions.versions(data);
+
+				for (var i = 0; i < data.length; i++) {
+					if(data[i].tag_name == page.versions.currentVersion()){
+						page.versions.selectedVersion(i);
+					}
+				};
+				//see if we found the version
+				if(page.versions.selectedVersion() == undefined){ //for some reason selectedVersion is undefined when it did not find the version
+					page.versions.versions.splice(0,0,{
+						url: "",
+						assets_url: "",
+						upload_url: "",
+						html_url: "",
+						id: 0,
+						tag_name: page.versions.currentVersion(),
+						target_commitish: "",
+						name: "unknown Version",
+						draft: false,
+						author: {
+							login: "unknown",
+							id: 0,
+							avatar_url: "",
+							gravatar_id: "",
+							url: "",
+							html_url: "",
+							followers_url: "",
+							following_url: "",
+							gists_url: "",
+							starred_url: "",
+							subscriptions_url: "",
+							organizations_url: "",
+							repos_url: "",
+							events_url: "",
+							received_events_url: "",
+							type: "User",
+							site_admin: false
+						},
+						prerelease: false,
+						created_at: Date(),
+						published_at: Date(),
+						assets: [],
+						tarball_url: "",
+						zipball_url: "",
+						body: ""
+					})
+					page.versions.selectedVersion(0)
+				}
+			})
+			.fail(function(){
+				console.error('failed to load versions')
+			})
+		},
+		launch: function(){
+			//load the selected version
+			var version = page.versions.versions()[page.versions.selectedVersion()];
+			if(version){
+				window.open(page.versions.baseURL().replace('RELEASETAG',version.tag_name),'_self');
+			}
+		}
+	},
 	items: [],
 	init: function(cb){
 		//create ko obj
@@ -100,6 +181,8 @@ page = {
 		],1)
 		page.settings.add('sound',page.menu.settings.sound,['volume','mute'],1)
 		page.settings.add('graphics',page.menu.settings.graphics,['renderMode','cameraMode','cameraSmoothSpeed'],1.1)
+
+		this.versions.init();
 		
 		if(cb) cb();
 	},
@@ -233,6 +316,7 @@ page = {
 
 					startEngin(function(){
 						$("#connect-modal").foundation('reveal', 'open');
+						page.connect.servers.refresh();
 					});
 				})
 
@@ -362,12 +446,11 @@ page = {
 					$("#login-modal .alert-box>span").text(loginMessage.message);
 					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginMessage.class);
 					$("#login-modal .alert-box").finish().hide().show(250).delay(3000).hide(250)
-					setTimeout(function(){
-						$("#login-modal").foundation('reveal','close');
-					},1250);
 
 					if(loginMessage.success){
-						login();
+						setTimeout(function(){
+							$("#login-modal").foundation('reveal','close');
+						},1250);
 					}
 				})
 			}
@@ -419,11 +502,21 @@ page = {
 					}
 				],
 				debug: observable(false,function(val){
+					if(map.collisionLayer){
+						map.collisionLayer.visible = val;
+					}
+					if(objects.group){
+						objects.group.visible = val;
+					}
+
 					if(val){
 						$('.pdebug').show();
 					}
 					else{
 						$('.pdebug').hide();
+
+						//reset the debug
+						engin.debug.reset()
 					}
 				})
 			},
@@ -891,7 +984,7 @@ page = {
 				obj: obj,
 				version: version,
 				properties: properties,
-				saved: false
+				saved: true
 			};
 			this.settings.push(setting);
 
@@ -1020,6 +1113,10 @@ page = {
 				if(!this.settings()[i].saved){
 					saved = false;
 					this.save(this.settings()[i].id);
+
+					//log it
+					page.loading.log('Settings',this.settings()[i].id+' have not saved yet!')
+					console.log('Settings: '+this.settings()[i].id+' have not saved yet!')
 				}
 			};
 			if(!saved){

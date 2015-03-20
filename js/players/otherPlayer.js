@@ -129,6 +129,10 @@ OtherPlayer.prototype = {
 	},
 	inportData: function(data){
 		fn.combindOver(this.userData,data);
+
+		if(this.nameTag){
+			this.nameTag.text = this.name;
+		}
 	},
 	exportData: function(){
 		return this.userData;
@@ -136,6 +140,9 @@ OtherPlayer.prototype = {
 	remove: function(dontRemove){
 		if(this.sprite){
 			this.sprite.destroy();
+		}
+		if(this.nameTag){
+			this.nameTag.destroy();
 		}
 
 		if(!dontRemove){

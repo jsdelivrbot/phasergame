@@ -1,0 +1,25 @@
+{
+	"versionJSON": "https://cdn.rawgit.com/rdfriedl/phasergame/master/data/versions.json",
+	"versions": [
+		{
+			"title": "v0.2",
+			"tag": "v0.2",
+			"type": "release"
+		},
+		{
+			"title": "v0.1.1",
+			"tag": "v0.1.1",
+			"type": "dev"
+		},
+		{
+			"title": "v0.1",
+			"tag": "alpha",
+			"type": "release"
+		},
+		{
+			"title": "prototype",
+			"tag": "9646d82c20caa8876caf0a98eb1e226254bb4560",
+			"type": "dev"
+		}
+	]
+}

@@ -34,9 +34,9 @@ Player.prototype.move = function(){
 		this.sprite.body.velocity.y = 0
     }
     
-    // if(maps.layers.col){
-    	// engin.physics.arcade.collide(this.sprite, maps.layers.col);
-    // }
+    if(map.collisionLayer){
+    	engin.physics.arcade.collide(this.sprite, map.collisionLayer);
+    }
 
 	//update userData
 	this.userData.x = this.sprite.position.x;
@@ -78,6 +78,16 @@ Player.prototype.move = function(){
 	}
 
 	engin.camera.setPosition(x,y)
+
+	//map
+	if(this.userData.map !== map.loadedMapID){
+		//load new map
+		if(this.sprite) this.sprite.alpha = 0;
+
+		map.loadMap(this.userData.map,function(){
+			if(this.sprite) engin.add.tween(this.sprite).to( { alpha: 1 }, 500, "Linear", true);
+		}.bind(this));
+	}
 }
 
 Player.prototype.inportData = function(data){
@@ -87,10 +97,6 @@ Player.prototype.inportData = function(data){
 	if(this.sprite){
 		this.sprite.position.x = this.userData.x;
 		this.sprite.position.y = this.userData.y;
-	}
-	if(this.userData.map !== map.loadedMap){
-		//load new map
-		map.loadMap(this.userData.map);
 	}
 }
 

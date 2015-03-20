@@ -18,7 +18,6 @@
 		<script src="js/lib/indexed.js" type="text/javascript" defer></script>
 		<script src="js/lib/functions.js" type="text/javascript" defer></script>
 		<script src="js/lib/sortedArray.js" type="text/javascript" defer></script>
-		<script src="js/lib/events.js" type="text/javascript" defer></script>
 		
 		<!-- main -->
 		<script src="js/main.js" type="text/javascript" defer></script>
@@ -33,6 +32,9 @@
 		<script src="js/players/players.js" type="text/javascript" defer></script>
 		<script src="js/players/otherPlayer.js" type="text/javascript" defer></script>
 		<script src="js/players/player.js" type="text/javascript" defer></script>
+		<!-- objects -->
+		<script src="js/objects.js" type="text/javascript" defer></script>
+		<script src="js/objectTypes.js" type="text/javascript" defer></script>
 		<!-- map -->
 		<script src="js/map.js" type="text/javascript" defer></script>
 	</head>
@@ -132,7 +134,7 @@
 		  	<i class="fa fa-cogs modal-button" data-reveal-id="loading-settings"></i>
 
 			<div class="top">
-				<h2>PhaserGame</h2>
+				<h2>PhaserGame <small data-bind="text: $root.versions.currentVersion"></small></h2>
 			</div>
 			<div class="middle">
 				
@@ -166,6 +168,33 @@
 			    	<div class="panel">
 			    	  <p data-bind="text: renderModes()[renderMode()].desc()"></p>
 			    	</div>
+			  	</fieldset>
+
+			  	<!-- versions -->
+				<fieldset data-bind="with: versions, visible: versions.versions().length">
+			    	<legend>Version</legend>
+
+	    	  		<div class="small-6 columns">
+			    		<label>Current Version: <p><b data-bind="text: currentVersion"></b></p></label>
+	    	  		</div>
+		    	  	<div class="small-6 columns">
+				    	<label>Pre Releases</label>
+				    	<div class="switch">
+						  	<input id="switch-149628165165" type="checkbox" data-bind="checked: enableDevVersions">
+						  	<label for="switch-149628165165"></label>
+						</div> 
+		    	  	</div>
+
+			    	<label>Versions</label>
+			    	<select data-bind="value: selectedVersion, foreach: versions">
+			    		<!-- ko if: !draft -->
+			    		<option data-bind="text: ((id !== 0)? ((prerelease)? 'Pre ' : 'Release ') : '')+name, value: $index, visible: (prerelease)? $parent.enableDevVersions() : true"></option>
+			    		<!-- /ko -->
+			    	</select>
+
+			    	<!-- ko if: versions()[selectedVersion()] -->
+			    	<button class="button tiny radius right" data-bind="click: launch, attr:{'disabled': versions()[selectedVersion()].tag_name === currentVersion()}">Launch</button>
+			  		<!-- /ko -->
 			  	</fieldset>
 			</div>
 
@@ -217,7 +246,7 @@
 							<td data-bind="text: ip"></td>
 							<td data-bind="text: players"></td>
 							<td><span class="label" data-bind="text: $parent.serverStatuses()[status()].text, attr: {'class': $parent.serverStatuses()[status()].class}"></span></td>
-							<td><a href="#" class="button tiny radius" data-bind="click: $parent.connect, css: {'success': status() !== 2, 'secondary': status() == 2}">connect</a></td>
+							<td><a href="#" class="button tiny radius" data-bind="click: $parent.connect, css: {'success': status() == 21, 'secondary': status() !== 1}">connect</a></td>
 						</tr>
 						<!-- /ko -->
 					</tbody>
@@ -249,8 +278,8 @@
 			</div>
 			<!-- /ko -->
 			<div class="row">
-				<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Back</a>
-				<input class="button tiny right" type="submit" value="Ok" data-bind="click: login"/>
+				<a href="#" class="button tiny left secondary radius" data-reveal-id="connect-modal">Back</a>
+				<a href="#" class="button tiny right radius" data-bind="click: login">Login</a>
 			</div>
 			<div data-alert class="alert-box radius" style="display:none;">
 				<span>message</span>

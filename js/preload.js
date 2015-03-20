@@ -117,17 +117,17 @@ function preload(){
 	//engin settings
 	engin.stage.disableVisibilityChange = true;
 
-
 	//image
 	engin.load.image('blank','imgs/other/blank.png')
 	engin.load.image('progress','imgs/other/progress.png')
 
+	//objects
+	engin.load.image('object-door','imgs/other/object-door.png')
 
 	//player
 	for (var i = 0; i < loadedData.playerImages.length; i++) {
 		engin.load.spritesheet('player/'+(i+1),loadedData.playerImages[i],32,48)
 	};
-
 
 	//load the sound
 	for (var k in sound.json.background) {
@@ -136,7 +136,6 @@ function preload(){
 			engin.load.audio(s.url,'snd/background/'+s.url,true)
 		};
 	};
-
 
 	// tilesets
 	for (var i = 0; i < loadedData.tilesets.length; i++) {

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# last updated on 3/5/15
+# last updated on 3/19/15
 
 # html
 index.html
@@ -32,6 +32,8 @@ js/map.js
 js/players/otherPlayer.js
 js/players/player.js
 js/players/players.js
+js/objectTypes.js
+js/objects.js
 js/preload.js
 js/server.js
 js/sound.js
@@ -232,11 +234,15 @@ blender/images/items/resources/wood.png
 # misc images
 imgs/other/blank.png
 imgs/other/progress.png
+
+# object images
+imgs/other/object-door.png
+
+# tilesets
 imgs/tilesets/col.png
 imgs/tilesets/land.png
 imgs/tilesets/misc.png
 
-# tilesets
 imgs/tilesets/CastleTown.png
 imgs/tilesets/CastleTown2.png
 imgs/tilesets/Cave.png
