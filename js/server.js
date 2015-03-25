@@ -84,6 +84,10 @@ server = {
 			}
 		})
 
+		socket.on('tilePropertiesChange',function(data){
+			map.tilePropertiesChange(data);
+		})
+
 		socket.on('objectChange',objects.objectChange.bind(objects));
 		socket.on('objectDelete',objects.objectDelete.bind(objects));
 		socket.on('objectCreate',objects.objectCreate.bind(objects));

@@ -234,6 +234,7 @@ blender/images/items/resources/wood.png
 # misc images
 imgs/other/blank.png
 imgs/other/progress.png
+imgs/other/map-collision.png
 
 # object images
 imgs/other/object-door.png

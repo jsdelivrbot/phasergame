@@ -32,7 +32,7 @@ function keyBinding(title,key,events){
 
 page = {
 	versions: {
-		currentVersion: 'v0.1.2',
+		currentVersion: 'v0.1.3',
 		baseURL: 'https://cdn.rawgit.com/rdfriedl/phasergame/RELEASETAG/index.html',
 		versions: [],
 		selectedVersion: 0,
@@ -441,7 +441,9 @@ page = {
 			}
 		},
 		login: {
+			loggingIn: false,
 			login: function(){
+				page.connect.login.loggingIn(true);
 				server.login(page.connect.servers.servers()[page.connect.servers.selected()].login.email(),page.connect.servers.servers()[page.connect.servers.selected()].login.password(),function(loginMessage){
 					$("#login-modal .alert-box>span").text(loginMessage.message);
 					$("#login-modal .alert-box").removeClass('info alert warning success secondary').addClass(loginMessage.class);
@@ -450,6 +452,7 @@ page = {
 					if(loginMessage.success){
 						setTimeout(function(){
 							$("#login-modal").foundation('reveal','close');
+							page.connect.login.loggingIn(false);
 						},1250);
 					}
 				})
@@ -502,12 +505,14 @@ page = {
 					}
 				],
 				debug: observable(false,function(val){
-					if(map.collisionLayer){
-						map.collisionLayer.visible = val;
-					}
 					if(objects.group){
 						objects.group.visible = val;
 					}
+
+					//loop through the layers and hide/show debug layers
+					for (var i = 0; i < map.layers.length; i++) {
+						map.layers[i].group.visible = (val)? true : map.layers[i].visibleInGame;
+					};
 
 					if(val){
 						$('.pdebug').show();

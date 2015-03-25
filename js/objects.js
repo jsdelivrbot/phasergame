@@ -159,7 +159,7 @@ objects = {
 	},
 	objectCreate: function(data){ //event for when a obj is created
 		//see if its on my map
-		if(data.map == svg.map.loadedMap){
+		if(data.map == map.loadedMapID){
 			//create a obj and add it to the array
 			var obj = new this.objectTypes[data.type](data.id,data,this);
 			this.objects.push(obj);

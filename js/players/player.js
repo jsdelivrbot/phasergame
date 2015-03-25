@@ -34,9 +34,7 @@ Player.prototype.move = function(){
 		this.sprite.body.velocity.y = 0
     }
     
-    if(map.collisionLayer){
-    	engin.physics.arcade.collide(this.sprite, map.collisionLayer);
-    }
+    map.collide(this.sprite);
 
 	//update userData
 	this.userData.x = this.sprite.position.x;

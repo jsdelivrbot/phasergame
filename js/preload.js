@@ -118,11 +118,12 @@ function preload(){
 	engin.stage.disableVisibilityChange = true;
 
 	//image
-	engin.load.image('blank','imgs/other/blank.png')
-	engin.load.image('progress','imgs/other/progress.png')
+	engin.load.image('blank','imgs/other/blank.png');
+	engin.load.image('progress','imgs/other/progress.png');
+	engin.load.image('map-collision','imgs/other/map-collision.png');
 
 	//objects
-	engin.load.image('object-door','imgs/other/object-door.png')
+	engin.load.image('object-door','imgs/other/object-door.png');
 
 	//player
 	for (var i = 0; i < loadedData.playerImages.length; i++) {
