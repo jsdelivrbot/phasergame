@@ -49,8 +49,11 @@ fonts/fontawesome-webfont.eot?v=4.2.0
 fonts/fontawesome-webfont.svg?v=4.2.0
 fonts/fontawesome-webfont.ttf?v=4.2.0
 fonts/fontawesome-webfont.woff?v=4.2.0
-http://fonts.gstatic.com/s/russoone/v4/RO6e96EC9m6OLO0tr7J3z1tXRa8TVwTICgirnJhmVJw.woff2
 http://fonts.googleapis.com/css?family=Russo+One
+http://fonts.gstatic.com/s/russoone/v4/4ofjFbAC3dpxPypNpg86K4X0hVgzZQUfRDuZrPvH3D8.woff2
+http://fonts.gstatic.com/s/russoone/v4/BUtWDi-16QNsA8yggnRs5YX0hVgzZQUfRDuZrPvH3D8.woff2
+http://fonts.gstatic.com/s/russoone/v4/RO6e96EC9m6OLO0tr7J3z5Bw1xU1rKptJj_0jans920.woff2
+http://fonts.gstatic.com/s/russoone/v4/RO6e96EC9m6OLO0tr7J3z1tXRa8TVwTICgirnJhmVJw.woff2
 
 # player images
 imgs/player/001-Fighter01.png
