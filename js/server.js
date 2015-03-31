@@ -91,6 +91,14 @@ server = {
 		socket.on('objectChange',objects.objectChange.bind(objects));
 		socket.on('objectDelete',objects.objectDelete.bind(objects));
 		socket.on('objectCreate',objects.objectCreate.bind(objects));
+
+		socket.on('chatChanelMessage',page.chat.message.bind(page.chat))
+
+		socket.on('chatChanelJoin',page.chat.join.bind(page.chat))
+		socket.on('chatChanelPlayerJoin',page.chat.playerJoin.bind(page.chat))
+
+		socket.on('chatChanelLeave',page.chat.leave.bind(page.chat))
+		socket.on('chatChanelPlayerLeave',page.chat.playerLeave.bind(page.chat))
 	},
 
 	error: function(error){

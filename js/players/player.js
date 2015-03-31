@@ -96,6 +96,12 @@ Player.prototype.inportData = function(data){
 		this.sprite.position.x = this.userData.x;
 		this.sprite.position.y = this.userData.y;
 	}
+
+	if(this.nameTag){
+		if(this.nameTag.text !== this.userData.name){
+			this.nameTag.text = this.userData.name;
+		}
+	}
 }
 
 for (var i in Player.prototype.userData) {

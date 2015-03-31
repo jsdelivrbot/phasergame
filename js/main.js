@@ -68,16 +68,17 @@ function render(){
 	}
 }
 function login(){ //fires when we login to a server
+	page.connect.login.loggedIn(true);
 	map.loadLayers();
 	map.loadedMapID = -1; //reset the loaded map id so when the user data loads it will know to load the map
 	loadShardData(function(){
-		$("#login-modal").foundation('reveal','close');
-
 		//turn the keyboard on
 		keyBindings.enable('game')
 	})
 }
 function logout(){ //fires when server disconnects
+	page.chat.removeAllChanels();
+	page.connect.login.loggedIn(false);
 	keyBindings.enabled('none');
 	map.removeAllChunks();
 	objects.removeAllObjects();
@@ -165,17 +166,11 @@ $(document).ready(function() {
 		}
 	});
 
-	$("#chat, #chat *").click(function(event) {
-		/* Act on the event */
-		$("#chat").addClass('out')
+	$("#chat, #chat *, #show-chat, #show-chat *").click(function(event) {
+		page.chat.open(true);
 	})
-	$(':not(#chat, #chat *)').click(function(event) {
-		/* Act on the event */
-		if(!$("#chat").is(":hover")){
-			$("#chat").removeClass('out')
-			$("#chat .off-canvas-wrap").removeClass('move-right')
-			$("#chat .off-canvas-wrap").removeClass('move-left')
-		}
+	$('*:not(html, body, #chat, #chat *, #show-chat, #show-chat *)').click(function(event) {
+		page.chat.open(false);
 	});
 
 	// menu
