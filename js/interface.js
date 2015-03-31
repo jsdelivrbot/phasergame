@@ -32,7 +32,7 @@ function keyBinding(title,key,events){
 
 page = {
 	versions: {
-		currentVersion: 'v0.1.3',
+		currentVersion: 'v0.1.4',
 		baseURL: 'https://cdn.rawgit.com/rdfriedl/phasergame/RELEASETAG/index.html',
 		versions: [],
 		selectedVersion: 0,
