@@ -14,9 +14,9 @@ js/lib/events.js
 js/lib/foundation.min.js
 js/lib/functions.js
 js/lib/indexed.js
-js/lib/jquery.js
+js/lib/jquery.min.js
 js/lib/knockout-mapping.js
-js/lib/knockout.js
+js/lib/knockout.min.js
 js/lib/modernizr.min.js
 js/lib/phaser-debug.js
 js/lib/phaser.map

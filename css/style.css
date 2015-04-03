@@ -273,17 +273,43 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 	-o-transition: all .2s;
 	transition: all .2s;
 }
-#chat .message{
-	width: 78%;
+#chat form>*{
+	height: 32px;
+}
+#chat .users{
 	margin: 0px;
 	display: inline-block;
-	height: 32px;
+	padding: 10px;
+}
+#chat .message{
+	width: 68%;
+	margin: 0px;
+	display: inline-block;
 }
 #chat .sendMessage{
 	width: 20%;
 	margin: 0px;
 	display: inline-block;
-	height: 32px;
+}
+
+/*users*/
+#chat #users{
+	position: absolute;
+	top: 36px;
+	left: 0px;
+	width: 100%;
+	bottom: 0px;
+}
+#chat #users .close{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 22px;
+    cursor: pointer;
+    color: lightgray;
+}
+#chat #users .close:hover{
+	color: black;
 }
 
 /*colors*/

@@ -33,11 +33,15 @@ function keyBinding(title,key,events){
 page = {
 	versions: {
 		currentVersion: 'v0.1.4',
+		phaserVersion: '',
+		pixiVersion: '',
 		baseURL: 'https://cdn.rawgit.com/rdfriedl/phasergame/RELEASETAG/index.html',
 		versions: [],
 		selectedVersion: 0,
 		enableDevVersions: false,
 		init: function(cb){
+			page.versions.phaserVersion(Phaser.VERSION);
+			page.versions.pixiVersion(PIXI.VERSION);
 			var func = function(data){
 				for (var i = 0; i < data.length; i++) {
 					data[i].url = page.versions.baseURL().replace('RELEASETAG',data[i].tag);
@@ -804,12 +808,15 @@ page = {
 	chat: {
 		open: observable(false,function(val){
 			if(val){
+				page.chat.showingUsers(false);
 				keyBindings.enable('chat');
 			}
 			else{
+				page.chat.showingUsers(false);
 				keyBindings.enable('game');
 			}
 		}),
+		showingUsers: false,
 		chanels: [],
 		activeChanel: 0,
 		getChanel: function(id){
@@ -822,17 +829,18 @@ page = {
 		sendMessage: function(){ //"this" is the change
 			var chanel = this.chanels()[this.activeChanel()];
 			if(chanel){
+				if(chanel.message() == '') return;
+
 				server.emit('chatChanelMessage',{
 					chanel: chanel.id(),
 					message: {
 						from: players.player.name,
+						to: '',
 						message: chanel.message()
 					}
 				})
 				chanel.message('');
 			}
-
-			return false;
 		},
 		leaveChanel: function(id){
 			server.emit('chatChanelLeave',id)
@@ -850,6 +858,9 @@ page = {
 			if($('#chat .messages>*:last').get(0)){
 				$('#chat .messages>*:last').get(0).scrollIntoView();
 			}
+		},
+		formatToFrom: function(message){
+			return (message.from.length)? '[ '+message.from+((message.to)? ' -> '+message.to : '')+' ]:' : '';
 		},
 
 		// server events
@@ -926,6 +937,7 @@ page = {
 			},
 			message: {
 				from: '',
+				to: '',
 				message: message
 			}
 		})
