@@ -1,49 +1,59 @@
 CACHE MANIFEST
-# 12/8/14
+# last updated on 3/19/15
 
 # html
 index.html
 
 # css
-css/foundation-icons.css
-css/foundation-icons.ttf
-css/foundation-icons.woff
+css/font-awesome.min.css
 css/foundation.min.css
 css/style.css
 
 # js
-js/app/app.js
-js/app/ctrl/db.js
-js/app/ctrl/db.js
-js/app/ctrl/interface.js
-js/app/ctrl/maps.js
-js/app/ctrl/server.js
-js/app/ctrl/sound.js
-js/app/init/functions.js
-js/app/init/preload.js
-js/app/objs/player.js
-js/app/objs/playerControl.js
-js/app/objs/players.js
-js/app/stateObjs/connect.js
-js/app/stateObjs/game.js
+js/lib/events.js
 js/lib/foundation.min.js
-js/lib/jquery.js
-js/lib/jspath.min.js
-js/lib/klass.js
-js/lib/knockout-mapping.js
-js/lib/knockout.js
+js/lib/functions.js
 js/lib/indexed.js
+js/lib/jquery.min.js
+js/lib/knockout-mapping.js
+js/lib/knockout.min.js
 js/lib/modernizr.min.js
+js/lib/phaser-debug.js
 js/lib/phaser.map
 js/lib/phaser.min.js
 js/lib/socket.io.js
+js/lib/sortedArray.js
 js/lib/underscore-min.js
 js/lib/underscore-min.map
+js/db.js
+js/interface.js
+js/main.js
+js/map.js
+js/players/otherPlayer.js
+js/players/player.js
+js/players/players.js
+js/objectTypes.js
+js/objects.js
+js/preload.js
+js/server.js
+js/sound.js
 
 # json
 data/playerImages.json
 data/sound.json
 data/tilesets.json
+
+#fonts
+fonts/FontAwesome.otf
+fonts/fontawesome-webfont.eot?v=4.2.0
+fonts/fontawesome-webfont.svg?v=4.2.0
+fonts/fontawesome-webfont.ttf?v=4.2.0
+fonts/fontawesome-webfont.woff?v=4.2.0
+http://fonts.googleapis.com/css?family=Russo+One
+http://fonts.gstatic.com/s/russoone/v4/4ofjFbAC3dpxPypNpg86K4X0hVgzZQUfRDuZrPvH3D8.woff2
+http://fonts.gstatic.com/s/russoone/v4/BUtWDi-16QNsA8yggnRs5YX0hVgzZQUfRDuZrPvH3D8.woff2
+http://fonts.gstatic.com/s/russoone/v4/RO6e96EC9m6OLO0tr7J3z5Bw1xU1rKptJj_0jans920.woff2
+http://fonts.gstatic.com/s/russoone/v4/RO6e96EC9m6OLO0tr7J3z1tXRa8TVwTICgirnJhmVJw.woff2
 
 # player images
 imgs/player/001-Fighter01.png
@@ -225,12 +235,18 @@ blender/images/items/resources/stone.png
 blender/images/items/resources/wood.png
 
 # misc images
-imgs/other/door.png
+imgs/other/blank.png
+imgs/other/progress.png
+imgs/other/map-collision.png
+
+# object images
+imgs/other/object-door.png
+
+# tilesets
 imgs/tilesets/col.png
 imgs/tilesets/land.png
 imgs/tilesets/misc.png
 
-# tilesets
 imgs/tilesets/CastleTown.png
 imgs/tilesets/CastleTown2.png
 imgs/tilesets/Cave.png

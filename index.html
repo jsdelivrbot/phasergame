@@ -1,138 +1,85 @@
 <!DOCTYPE html>
 <html manifest="appcache.mf">
-<!-- <html> -->
 	<head>
 		<title>phaser game</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
-		<link rel="stylesheet" type="text/css" href="css/foundation-icons.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 		
-		<script src="js/lib/jquery.js" type="text/javascript" defer></script>
-		<script src="js/lib/modernizr.min.js" type="text/javascript" defer></script>
-		<script src="js/lib/foundation.min.js" type="text/javascript" defer></script>
-		<script src="js/lib/knockout.js" type="text/javascript" defer></script>
-		<script src="js/lib/knockout-mapping.js" type="text/javascript" defer></script>
-		<script src="js/lib/phaser.min.js" type="text/javascript" defer></script>
-		<script src="js/lib/socket.io.js" type="text/javascript" defer></script>
-		<script src="js/lib/klass.js" type="text/javascript" defer></script>
-		<script src="js/lib/jspath.min.js" type="text/javascript" defer></script>
-		<script src="js/lib/underscore-min.js" type="text/javascript" defer></script>
-		<script src="js/lib/indexed.js" type="text/javascript" defer></script>
+		<script src="js/lib/jquery.min.js" type="text/javascript"></script>
+		<script src="js/lib/modernizr.min.js" type="text/javascript"></script>
+		<script src="js/lib/foundation.min.js" type="text/javascript"></script>
+		<script src="js/lib/knockout.min.js" type="text/javascript"></script>
+		<script src="js/lib/knockout-mapping.js" type="text/javascript"></script>
+		<script src="js/lib/phaser.min.js" type="text/javascript"></script>
+		<script src="js/lib/phaser-debug.js" type="text/javascript"></script>
+		<script src="js/lib/socket.io.js" type="text/javascript"></script>
+		<script src="js/lib/underscore-min.js" type="text/javascript"></script>
+		<script src="js/lib/indexed.js" type="text/javascript"></script>
+		<script src="js/lib/functions.js" type="text/javascript"></script>
+		<script src="js/lib/sortedArray.js" type="text/javascript"></script>
 		
 		<!-- main -->
-		<script src="js/app/app.js" type="text/javascript" defer></script>
+		<script src="js/main.js" type="text/javascript" defer></script>
 
-		<script src="js/app/init/functions.js" type="text/javascript" defer></script>
-		<script src="js/app/init/preload.js" type="text/javascript" defer></script>
-		<script src="js/app/objs/players.js" type="text/javascript" defer></script>
-		<script src="js/app/objs/player.js" type="text/javascript" defer></script>
-		<script src="js/app/objs/playerControl.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/db.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/maps.js" type="text/javascript" defer></script>
-		<!-- <script src="js/app/ctrl/resources.js" type="text/javascript" defer></script> -->
-		<script src="js/app/ctrl/interface.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/server.js" type="text/javascript" defer></script>
-		<script src="js/app/ctrl/sound.js" type="text/javascript" defer></script>
-		<script src="js/app/stateObjs/game.js" type="text/javascript" defer></script>
-		<script src="js/app/stateObjs/connect.js" type="text/javascript" defer></script>
+		<script src="js/preload.js" type="text/javascript" defer></script>
+		<script src="js/db.js" type="text/javascript" defer></script>
+		<script src="js/interface.js" type="text/javascript" defer></script>
+		<script src="js/sound.js" type="text/javascript" defer></script>
+		<script src="js/server.js" type="text/javascript" defer></script>
+		<script src="js/map.js" type="text/javascript" defer></script>
+		<!-- players -->
+		<script src="js/players/players.js" type="text/javascript" defer></script>
+		<script src="js/players/otherPlayer.js" type="text/javascript" defer></script>
+		<script src="js/players/player.js" type="text/javascript" defer></script>
+		<!-- objects -->
+		<script src="js/objects.js" type="text/javascript" defer></script>
+		<script src="js/objectTypes.js" type="text/javascript" defer></script>
+		<!-- map -->
+		<script src="js/map.js" type="text/javascript" defer></script>
 	</head>
 	<body>
 		<div id="game"></div>
 		
 		<!-- chat -->
-		<div id="chat" class="panel large-4" style="display: none;" data-bind="visible: chat.activeChanel.id() !== -1">
-			<div id="chat-in-messages" data-bind="foreach: chat.activeChanel.messages">
-				<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
+		<div id="chat" class="panel radius" style="display: none;" data-bind="css:{'open': page.chat.open}, with: chat, visible: connect.login.loggedIn">
+			<ul class="tabs" data-bind="foreach: chanels">
+			  	<li class="tab-title" data-bind="css:{'active': $index() == $parent.activeChanel()}, click: $root.combind($root.set($parent.activeChanel,$index()),$root.set($parent.showingUsers,false))">
+			  		<a href="#">
+			  			<span data-bind="text: settings.title"></span>
+				  		<!-- ko if: settings.canLeave -->
+				  		<i class="fa fa-times close-chanel"></i>
+				  		<!-- /ko -->
+			  		</a>
+		  		</li>
+			</ul>
+			<!-- ko if: chanels()[activeChanel()] -->
+
+			<div class="messages" data-bind="foreach: chanels()[activeChanel()].messages">
+				<pre style="font-size: 13px;" data-bind="html: $parent.formatToFrom($data) + message"></pre>
 			</div>
-			
-			<div class="off-canvas-wrap" data-offcanvas style="height: 100%;">
-				<div class="inner-wrap" style="height: 100%;">
-					<nav class="tab-bar">
-						<section class="left-small">
-							<a class="left-off-canvas-toggle menu-icon" href="#"><span></span></a>
-						</section>
-						<section class="middle tab-bar-section">
-							<h1 class="title">Chat: <span data-bind="text: chat.activeChanel.title"></span></h1>
-						</section>
-						<section class="right-small">
-							<a class="right-off-canvas-toggle menu-icon" href="#"><span></span></a>
-						</section>
-					</nav>
-					
-					<!-- Off Canvas Menu -->
-					<nav class="left-off-canvas-menu">
-						<ul class="off-canvas-list">
-							<li>
-								<label>Chanels</label>
-							</li>
-							<div id="chat-chanels" data-bind="foreach: chat.chanels">
-								<li><a href="#" data-bind="text: title, click: $root.chat.chanelSelect"></a></li>
-							</div>
-							<li>
-								<div class="large-12 columns" style="padding: 0px;">
-									<div class="row collapse">
-										<div class="small-8 columns">
-											<input id="chat-new-title" type="text" placeholder="Title">
-										</div>
-										<div class="small-4 columns">
-											<a id="chat-new" href="#" class="button postfix" data-bind="click: chat.create">Create</a>
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
-					</nav>
-					
-					<nav class="right-off-canvas-menu">
-						<ul class="off-canvas-list">
-							<li class="has-submenu">
-								<a href="#">Actions</a>
-								<ul class="right-submenu">
-									<li class="back"><a href="#">Back</a></li>
-									<li data-bind="visible: chat.activeChanel.canLeave == true && chat.activeChanel.own == false"><a href="#" data-bind="click: chat.leave">Leave</a></li>
-									<li data-bind="visible: chat.activeChanel.own">
-										<div class="large-12 columns" style="padding: 0px;">
-											<div class="row collapse">
-												<div class="small-8 columns">
-													<input id="chat-invite-name" type="text" placeholder="Player Name">
-												</div>
-												<div class="small-4 columns">
-													<a href="#" class="button postfix" data-bind="click: chat.invite">Invite</a>
-												</div>
-											</div>
-										</div>
-									</li>
-									<li data-bind="visible: chat.activeChanel.own"><a href="#" data-bind="click: chat.close">Close</a></li>
-								</ul>
-							</li>
-						</ul>
-						<ul class="off-canvas-list">
-							<li><label>Players</label></li>
-							<div id="chat-players" data-bind="foreach: chat.activeChanel.players">
-								<li><a href="#" data-bind="text: name"></a></li>
-							</div>
-						</ul>
-					</nav>
-					<div>
-						<div id="chat-messages" class="content" data-bind="foreach: chat.activeChanel.messages">
-							<div class="chat-message"><h5 data-bind="text: player" style="display: inline;"></h5>: <p data-bind="text: message" style="display: inline;"></p></div>
-						</div>
-						<form class="no-action" style="margin: 0px;" data-bind="event:{'submit':chat.sendMessage}">
-							<input type="text" style="margin: 0px; width: 100%;" maxlength="100" data-bind="value: chat.sendMessageVal">
-						</form>
-					</div>
-					<!-- close the off-canvas menu -->
-					<a class="exit-off-canvas"></a>
-				</div>
+
+			<form style="margin: 0px;" data-bind="submit: sendMessage, visible: chanels()[activeChanel()].settings.canSendMessage">
+				<a class="button tiny secondary users" data-bind="click: $root.set(showingUsers,true)"><i class="fa fa-users"></i></a>
+				<input type="text" class="form-control message" data-bind="value: chanels()[activeChanel()].message">
+				<input type="submit" class="button tiny sendMessage" value="Send">
+			</form>
+
+			<div id="users" class="panel" data-bind="visible: showingUsers">
+				<i class="fa fa-times close" data-bind="click: $root.set(showingUsers,false)"></i>
+				<!-- ko foreach: chanels()[activeChanel()].players -->
+				<a href="#" class="button tiny secondary small-4" data-bind="text: name"></a>
+				<!-- /ko -->
 			</div>
+			<!-- /ko -->
 		</div>
 		
 		<!-- loading modal -->
 		<div id="loading-modal" class="reveal-modal menu large open" data-reveal style="opacity: 1; visibility: visible; top: 100px;" data-bind="with: loading">
-			<i class="fi-widget modal-button" data-reveal-id="loading-settings"></i>
+		  	<i class="fa fa-cogs modal-button" data-reveal-id="loading-settings"></i>
 
 			<div class="top">
-				<h2>PhaserGame</h2>
+				<h2>PhaserGame <small data-bind="text: $root.versions.currentVersion"></small></h2>
 			</div>
 			<div class="middle">
 				
@@ -146,9 +93,14 @@
 			</div>
 		</div>
 
+		<div id="loading-log" class="scroll-y" data-bind="css:{'showing': loading.logShowing}">
+			<button id="loading-show-log" class="button secondary tiny radius" data-bind="click: toggle(loading.logShowing)"><i class="fa fa-angle-double-up" data-bind="css: {'fa-angle-double-up': !loading.logShowing(), 'fa-angle-double-down': loading.logShowing}"></i></button>
+		</div>
+		<div id="loading-log-close" data-bind="visible: loading.logShowing, click: set(loading.logShowing,false)" style="display:none;"></div>
+
 		<!-- launcher settings -->
 		<div id="loading-settings" class="reveal-modal menu large" data-reveal>
-		  	<i class="fi-x modal-button" data-reveal-id="loading-modal"></i>
+		  	<i class="fa fa-times modal-button" data-reveal-id="loading-modal"></i>
 		  	
 			<div class="small-6 columns">
 				<fieldset data-bind="with: menu.settings.graphics">
@@ -161,6 +113,33 @@
 			    	<div class="panel">
 			    	  <p data-bind="text: renderModes()[renderMode()].desc()"></p>
 			    	</div>
+			  	</fieldset>
+
+			  	<!-- versions -->
+				<fieldset data-bind="with: versions, visible: versions.versions().length">
+			    	<legend>Version</legend>
+
+	    	  		<div class="small-6 columns">
+			    		<label>Current Version: <p><b data-bind="text: currentVersion"></b></p></label>
+	    	  		</div>
+		    	  	<div class="small-6 columns">
+				    	<label>Pre Releases</label>
+				    	<div class="switch">
+						  	<input id="switch-149628165165" type="checkbox" data-bind="checked: enableDevVersions">
+						  	<label for="switch-149628165165"></label>
+						</div> 
+		    	  	</div>
+
+			    	<label>Versions</label>
+			    	<select data-bind="value: selectedVersion, foreach: versions">
+			    		<!-- ko if: !draft -->
+			    		<option data-bind="text: ((id !== 0)? ((prerelease)? 'Pre ' : 'Release ') : '')+name, value: $index, visible: (prerelease)? $parent.enableDevVersions() : true"></option>
+			    		<!-- /ko -->
+			    	</select>
+
+			    	<!-- ko if: versions()[selectedVersion()] -->
+			    	<button class="button tiny radius right" data-bind="click: launch, attr:{'disabled': versions()[selectedVersion()].tag_name === currentVersion()}">Launch</button>
+			  		<!-- /ko -->
 			  	</fieldset>
 			</div>
 
@@ -177,14 +156,40 @@
 					  	<label for="settings-sound-mute2"></label>
 					</div> 
 			  	</fieldset>
+
+			  	<!-- engin versions -->
+				<fieldset data-bind="with: versions">
+			    	<legend>Info</legend>
+
+	    	  		<div class="small-6 columns">
+			    		<!-- <label>Game Version: <p><b data-bind="text: currentVersion"></b></p></label> -->
+			    		<div>
+			    			<a href="http://phaser.io/" target="_blank">Phaser Version:</a> 
+			    			<p><b data-bind="text: phaserVersion"></b></p>
+			    		</div>
+	    	  		</div>
+	    	  		<div class="small-6 columns">
+			    		<div>
+			    			<a href="http://www.pixijs.com/" target="_blank">PIXI Version:</a> 
+		    				<p><b data-bind="text: pixiVersion"></b></p>
+		    			</div>
+	    	  		</div>
+			  	</fieldset>
 		  	</div>
 		</div>
 		
 		<!-- connect -->
-		<div id="connect-modal" class="reveal-modal menu cant-close xlarge" data-reveal data-bind="with: connect">
-			<div class="top">
-				<h4>Servers</h4>
-			</div>
+		<div id="connect-modal" class="reveal-modal menu cant-close xlarge" data-reveal data-bind="with: connect.servers">
+			<dl class="sub-nav">
+				<dt><b>Servers:</b></dt>
+				<!-- filters -->
+				<!-- ko foreach: filters -->
+				<dd data-bind="css: {'active': $parent.activeFilter() == $index()}"><a href="#" data-bind="text: title, click: $root.set($parent.activeFilter,$index)"></a></dd>
+				<!-- /ko -->
+				<a href="#" class="button tiny radius right secondary" data-bind="click: refresh"><i class="fa fa-refresh"></i></a>
+				<a href="#" class="button tiny radius alert right" data-bind="click: remove, css: {'disabled': servers()[selected()] == undefined}">Remove</a>
+				<a href="#" class="button tiny radius success right" data-reveal-id="add-server-modal">Add</a>
+			</dl>
 			<div class="middle">
 				<table>
 					<thead>
@@ -193,42 +198,66 @@
 							<th>Description</th>
 							<th>Server Ip</th>
 							<th>Players</th>
+							<th width="100">Status</th>
+							<th width="100"></th>
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: servers">
-						<tr class="server" data-bind="css:{'selected': $index() === $root.connect.selectedServer(), 'pinging': status() == 0, 'failed': status() == 2}, click: $parent.select">
+						<!-- ko if: $parent.filters()[$parent.activeFilter()].filter.indexOf(status()) !== -1 -->
+						<tr class="server" data-bind="css:{'selected': $index() === $parent.selected(), 'pinging': status() == 0, 'failed': status() == 2}, click: $root.set($parent.selected,$index)">
 							<td data-bind="text: title"></td>
 							<td data-bind="text: description"></td>
 							<td data-bind="text: ip"></td>
 							<td data-bind="text: players"></td>
+							<td><span class="label" data-bind="text: $parent.serverStatuses()[status()].text, attr: {'class': $parent.serverStatuses()[status()].class}"></span></td>
+							<td><a href="#" class="button tiny radius" data-bind="click: $parent.connect, css: {'success': status() == 21, 'secondary': status() !== 1}">connect</a></td>
 						</tr>
+						<!-- /ko -->
 					</tbody>
 				</table>
 			</div>
-			<div class="bottom panel radius">
-				<a href="#" class="button radius tiny" data-reveal-id="add-server-modal" style="flex-shrink: 0;">Add Server</a>
-				<a href="#" class="button radius tiny disabled" data-bind="css:{'disabled': selectedServer() == -1}, click: removeServer" style="flex-shrink: 0;">Remove Server</a>
-				<a href="#" class="button radius tiny" data-bind="click: refresh" style="flex-shrink: 0;margin-right: 20px;">Refresh</a>
-				<input type="email" placeholder="Email" data-bind="css:{'error': login.failed}, value: login.email, valueUpdate: 'keyup'" style="margin-right: 20px;">
-				<input type="password" placeholder="Password" data-bind="css:{'error': login.failed}, value: login.password, valueUpdate: 'keyup'" style="margin-right: 20px;">
-				
-				<div class="switch" style="flex-shrink: 0;margin-right: 20px;">
-					<input id="exampleCheckboxSwitch" type="checkbox" data-bind="checked: login.remember">
-					<label for="exampleCheckboxSwitch"></label>
-				</div>
-				
-				<a type="submit" href="#" class="button tiny radius disabled" data-bind="css:{'disabled': (selectedServer() !== -1)? servers()[selectedServer()].status() !== 1 : true }, click: connect" style="flex-shrink: 0;">Connect</a>
+		</div>
+
+		<div id="connect-loading-modal" class="reveal-modal menu cant-close tiny" data-reveal data-bind="with: connect.login">
+			<h4><i class="fa fa-circle-o-notch fa-spin"></i> <span>Connecting</span></h4>
+		</div>
+
+		<!-- login -->
+		<div id="login-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect.login">
+			<!-- ko if: $root.connect.servers.servers()[$root.connect.servers.selected()] !== undefined -->
+			<fieldset>
+			    <legend>Login</legend>
+			    <label>Email
+			      	<input type="text" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.email">
+			    </label>
+
+			    <label>Password
+			      	<input type="password" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.password">
+			    </label>
+		  	</fieldset>
+          	<label>Remember Login</label>
+          	<div class="switch">
+				<input id="switch-1985738362957" type="checkbox" data-bind="checked: $root.connect.servers.servers()[$root.connect.servers.selected()].login.remember">
+				<label for="switch-1985738362957"></label>
+			</div>
+			<!-- /ko -->
+			<div class="row">
+				<a href="#" class="button tiny left secondary radius" data-reveal-id="connect-modal">Back</a>
+				<a href="#" class="button tiny right radius" data-bind="click: login, attr:{'disabled': loggingIn}">Login</a>
+			</div>
+			<div data-alert class="alert-box radius" style="display:none;">
+				<span>message</span>
 			</div>
 		</div>
 		
 		<!-- add server -->
-		<div id="add-server-modal" class="reveal-modal menu cant-close small" data-reveal data-bind="with: connect">
+		<div id="add-server-modal" class="reveal-modal menu cant-close tiny" data-reveal data-bind="with: connect.servers">
 			<div class="row">
 				<h4>Add Servers</h4>
 			</div>
 			<form data-bind="event: {'submit': add}">
 				<div class="row">
-					<input type="text" placeholder="Server Ip" data-bind="value: newServer.ip"/>
+					<input type="text" placeholder="Server Ip" data-bind="value: addServer.ip"/>
 				</div>
 				<div class="row">
 					<a href="#" class="button tiny left secondary" data-reveal-id="connect-modal">Cancel</a>
@@ -260,9 +289,9 @@
 					  	<dd><a href="#profile-friends">Friends</a></dd>
 					</dl>
 					<div class="tabs-content vertical" data-bind="with: profile">
-					  	<div class="content" id="profile-stats" data-bind="with: playerData">
+					  	<!-- <div class="content" id="profile-stats" data-bind="with: playerData">
 					    	<h5 data-bind="text: id.name"></h5>
-					  	</div>
+					  	</div> -->
 					  	<div class="content" id="profile-players">
 					    	<h5>profile 2.</h5>
 					  	</div>
@@ -300,6 +329,11 @@
 						    		<option data-bind="text: title, value: value"></option>
 						    	</select>
 						    	<!-- /ko -->
+					    		<label>Debugger</label>
+						    	<div class="switch">
+								  	<input id="swich-228462954218362" type="checkbox" data-bind="checked: debug">
+								  	<label for="swich-228462954218362"></label>
+								</div> 
 					    	</div>
 					  	</div>
 					  	<div class="content" id="settings-controls" data-bind="with: keyBindings">
@@ -374,11 +408,11 @@
 			<div class="tabs-content resize">
 				<div class="content" id="invetory-items" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('item') !== -1 && $root.items()[$data.id] !== undefined -->
+						<!-- ko if: $data.id().indexOf('item') !== -1 && $root.items()[$data.id()] !== undefined -->
 						<div class="panel item">
-							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<img data-bind="attr:{src: $root.items()[$data.id()].img}">
 							<span class="right" data-bind="text: $data.count"></span>
-							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</ul>
@@ -386,11 +420,11 @@
 				<div class="content" id="invetory-resources" style="height: 100%;">
 					<!-- list of resources -->
 					<div class="small-8 columns scroll-y" style="height: 100%;" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('resource') !== -1 && $root.items()[$data.id] !== undefined -->
+						<!-- ko if: $data.id().indexOf('resource') !== -1 && $root.items()[$data.id()] !== undefined -->
 						<div class="panel item">
-							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<img data-bind="attr:{src: $root.items()[$data.id()].img}">
 							<span class="right" data-bind="text: $data.count"></span>
-							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</div>
@@ -402,22 +436,22 @@
 				</div>
 				<div class="content" id="invetory-weapons" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('weapon') !== -1 && $root.items()[$data.id] !== undefined -->
+						<!-- ko if: $data.id().indexOf('weapon') !== -1 && $root.items()[$data.id()] !== undefined -->
 						<div class="panel item">
-							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<img data-bind="attr:{src: $root.items()[$data.id()].img}">
 							<span class="right" data-bind="text: $data.count"></span>
-							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</ul>
 				</div>
 				<div class="content" id="invetory-tools" style="height: 100%;">
 					<ul class="small-block-grid-4 medium-block-grid-5 large-block-grid-6" data-bind="foreach: data">
-						<!-- ko if: $data.id.indexOf('tool') !== -1 && $root.items()[$data.id] !== undefined -->
+						<!-- ko if: $data.id().indexOf('tool') !== -1 && $root.items()[$data.id()] !== undefined -->
 						<div class="panel item">
-							<img data-bind="attr:{src: $root.items()[$data.id].img}">
+							<img data-bind="attr:{src: $root.items()[$data.id()].img}">
 							<span class="right" data-bind="text: $data.count"></span>
-							<h4><span data-bind="text: $root.items()[$data.id].title"></span></h4>
+							<h4><span data-bind="text: $root.items()[$data.id()].title"></span></h4>
 						</div>
 						<!-- /ko -->
 					</ul>
@@ -428,6 +462,12 @@
 		<!-- keybinding -->
 		<div id="keybinding">
 			Press Any Key
+		</div>
+
+		<div id="loading">
+			<div class="progress">
+			  <span class="meter" style="width: 100%"></span>
+			</div>
 		</div>
 	</body>
 </html>
