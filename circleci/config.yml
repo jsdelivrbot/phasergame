@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  deploy:
+    docker:
+      - image: rdfriedl/circleci-node-aws
+
+    steps:
+      - checkout
+      
+      - deploy:
+          name: Deploy to s3 bucket
+          command: |
+            aws configure set preview.cloudfront true && \
+            aws s3 rm s3://${S3_BUCKET} --recursive && \
+            aws s3 sync ./ s3://${S3_BUCKET} --acl public-read --exclude "node_modules" --exclude "package.json" --exclude "package-lock.json" && \
+            aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*";
