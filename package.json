@@ -1,0 +1,23 @@
+{
+  "name": "phasergame",
+  "version": "0.1.4",
+  "description": "",
+  "main": "js/main.js",
+  "scripts": {
+    "start": "http-server /",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://rdfriedl@github.com/rdfriedl/phasergame.git"
+  },
+  "author": "Robert Friedl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdfriedl/phasergame/issues"
+  },
+  "homepage": "https://github.com/rdfriedl/phasergame#readme",
+  "devDependencies": {
+    "http-server": "^0.10.0"
+  }
+}
