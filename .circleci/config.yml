@@ -1,12 +1,12 @@
 version: 2
 jobs:
-  deploy:
+  build:
     docker:
       - image: rdfriedl/circleci-node-aws
 
     steps:
       - checkout
-      
+
       - deploy:
           name: Deploy to s3 bucket
           command: |
