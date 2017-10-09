@@ -12,5 +12,5 @@ jobs:
           command: |
             aws configure set preview.cloudfront true && \
             aws s3 rm s3://${S3_BUCKET} --recursive && \
-            aws s3 sync ./ s3://${S3_BUCKET} --acl public-read --exclude "node_modules" --exclude "package.json" --exclude "package-lock.json" && \
+            aws s3 sync ./ s3://${S3_BUCKET} --acl public-read --exclude "node_modules" --exclude "package.json" --exclude "package-lock.json" --exclude ".circleci" --exclude ".git" && \
             aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*";
