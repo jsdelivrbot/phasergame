@@ -1,23 +1,37 @@
 {
-  "name": "phasergame",
-  "version": "0.1.4",
-  "description": "",
-  "main": "js/main.js",
-  "scripts": {
-    "start": "http-server ./",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://rdfriedl@github.com/rdfriedl/phasergame.git"
-  },
-  "author": "Robert Friedl",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/rdfriedl/phasergame/issues"
-  },
-  "homepage": "https://github.com/rdfriedl/phasergame#readme",
-  "devDependencies": {
-    "http-server": "^0.10.0"
-  }
+	"name": "phasergame",
+	"version": "0.1.4",
+	"description": "A simple MMO game built with Phaser.io",
+	"main": "js/main.js",
+	"scripts": {
+		"precommit": "lint-staged",
+		"start": "serve ./ -p 8000",
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"format": "prettier --write ./**/*.{js,css,md,json}"
+	},
+	"lint-staged": {
+		"*.{js,md,css,json}": ["prettier --write", "git add"]
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://rdfriedl@github.com/rdfriedl/phasergame.git"
+	},
+	"author": "Robert Friedl",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/rdfriedl/phasergame/issues"
+	},
+	"homepage": "https://github.com/rdfriedl/phasergame#readme",
+	"devDependencies": {
+		"serve": "^6.4.3",
+		"husky": "^0.14.3",
+		"lint-staged": "^6.0.0",
+		"prettier": "^1.9.2"
+	},
+	"prettier": {
+		"useTabs": true,
+		"semi": true,
+		"trailingComma": "es5",
+		"printWidth": 120
+	}
 }

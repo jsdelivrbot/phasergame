@@ -1,27 +1,29 @@
 @import url(https://fonts.googleapis.com/css?family=Russo+One);
 
-body{
+body {
 	margin: 0px;
 	background-color: black;
 	overflow: hidden;
 	-webkit-user-select: none;
 }
-pre{
+pre {
 	font-family: inherit;
 }
-#game>canvas{
+#game > canvas {
 	margin: auto;
 }
 
 /*foundation over-rides*/
-input.error, textarea.error, select.error{
+input.error,
+textarea.error,
+select.error {
 	margin-bottom: 0;
 	border-color: #f04124;
 }
-.reveal-modal.full{
+.reveal-modal.full {
 	max-width: none;
 }
-.modal-button{
+.modal-button {
 	font-size: 2rem;
 	line-height: 1;
 	position: absolute;
@@ -31,57 +33,77 @@ input.error, textarea.error, select.error{
 	font-weight: bold;
 	cursor: pointer;
 }
-.modal-button:hover{
+.modal-button:hover {
 	color: #777;
 }
-.reveal-modal{
+.reveal-modal {
 	overflow-y: auto;
 }
-.reveal-modal-bg{
+.reveal-modal-bg {
 	display: none;
 }
-.tooltip{
+.tooltip {
 	z-index: 9999;
 }
-.panel.full{
+.panel.full {
 	height: 100%;
 }
-body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title, .pricing-table .price, .tabs dd > a, .tabs .tab-title > a, .side-nav, .side-nav li.active > a:first-child:not(.button), .accordion .accordion-navigation > a, .accordion dd > a , h1, h2, h3, h4, h5, h6, .sub-nav li, .label{
-	font-family: 'Russo One' !important;
+body,
+button,
+.button,
+select,
+.top-bar-section ul li > a,
+.pricing-table .title,
+.pricing-table .price,
+.tabs dd > a,
+.tabs .tab-title > a,
+.side-nav,
+.side-nav li.active > a:first-child:not(.button),
+.accordion .accordion-navigation > a,
+.accordion dd > a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.sub-nav li,
+.label {
+	font-family: "Russo One" !important;
 }
 
 /*tools*/
-.scroll-y{
+.scroll-y {
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
-.pdebug{
+.pdebug {
 	z-index: 2000;
 }
 
 /*loading*/
-#loading-modal{
+#loading-modal {
 	display: flex !important;
 	flex-direction: column;
 	height: 70%;
 }
-#loading-modal>.top{
+#loading-modal > .top {
 	width: 100%;
 }
-#loading-modal>.middle{
+#loading-modal > .middle {
 	width: 100%;
 	height: 100%;
 }
-#loading-modal>.bottom{
+#loading-modal > .bottom {
 	width: 100%;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 }
-#loading-modal>.bottom>.label{
+#loading-modal > .bottom > .label {
 	margin: 0px;
 }
-#loading-modal>.bottom>#loading-bar{
+#loading-modal > .bottom > #loading-bar {
 	width: 100%;
 	margin: 0px;
 	margin-left: 20px;
@@ -90,7 +112,7 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 }
 
 #loading-show-log {
-    position: fixed;
+	position: fixed;
 	bottom: 0px;
 	right: 0px;
 	margin: 0px;
@@ -100,63 +122,63 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 	font-size: 22px;
 	padding-right: 15px;
 	padding-left: 15px;
-    transition: all 0.25s;
+	transition: all 0.25s;
 }
 #loading-log {
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
-    height: 0px;
-    background: rgba(255, 255, 255, 0.54);
-    z-index: 1500;
-    border-top: white 2px solid;
-    border-radius: 5px;
-    border-top-right-radius: 0px;
-    padding-left: 10px;
-    transition: all 0.25s;
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
+	height: 0px;
+	background: rgba(255, 255, 255, 0.54);
+	z-index: 1500;
+	border-top: white 2px solid;
+	border-radius: 5px;
+	border-top-right-radius: 0px;
+	padding-left: 10px;
+	transition: all 0.25s;
 }
 #loading-log.showing {
-    /* border-top: white 2px solid; */
-    height: 50%;
+	/* border-top: white 2px solid; */
+	height: 50%;
 }
 #loading-log.showing #loading-show-log {
-    bottom: 50%;
+	bottom: 50%;
 }
-#loading-log-close{
+#loading-log-close {
 	position: absolute;
 	top: 0px;
 	width: 100%;
 	height: 100%;
 	left: 0px;
 	z-index: 1100;
-	background: rgba(0,0,0,0.3);
+	background: rgba(0, 0, 0, 0.3);
 }
 
 /*loading-settings*/
-#loading-settings{
+#loading-settings {
 	height: 70%;
 }
 
 /*connect*/
-#connect-modal{
+#connect-modal {
 	display: flex !important;
 	flex-direction: column;
 	height: 80%;
 	top: 10% !important;
 }
-#connect-modal>.middle{
+#connect-modal > .middle {
 	width: 100%;
 	height: 100%;
 }
-#connect-modal .button{
+#connect-modal .button {
 	margin-bottom: 0px;
 }
-.server.selected{
+.server.selected {
 	background: lightgrey;
 }
 
 /*loading*/
-#loading{
+#loading {
 	display: none;
 	background: black;
 	z-index: 1100;
@@ -166,11 +188,11 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 	top: 0px;
 	left: 0px;
 }
-#loading .progress{
+#loading .progress {
 	position: absolute;
 	top: 80%;
 	width: 100%;
-	background-color: rgba(0,0,0,0);
+	background-color: rgba(0, 0, 0, 0);
 	border-color: rgba(255, 255, 255, 0.25);
 	padding: 8px;
 	height: 40px;
@@ -179,18 +201,18 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 	border-left: none;
 	padding-left: 0px;
 }
-#loading .meter{
+#loading .meter {
 	background-color: rgb(0, 47, 86);
 	box-shadow: 0px 0px 20px 5px rgb(0, 47, 86);
 }
 
 /*menu*/
-#keybinding{
+#keybinding {
 	display: none;
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background: rgba(0,0,0,.5);
+	background: rgba(0, 0, 0, 0.5);
 	color: lightgrey;
 	z-index: 1100;
 	text-align: center;
@@ -198,21 +220,21 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 }
 
 /*chat*/
-#chat{
+#chat {
 	position: absolute;
 	left: 0px;
 	top: -35px;
 	padding: 0px 10px 10px;
 	min-width: 400px;
-	background-color: rgba(0,0,0,0);
-	border-color: rgba(0,0,0,0);
+	background-color: rgba(0, 0, 0, 0);
+	border-color: rgba(0, 0, 0, 0);
 
-	-webkit-transition: all .3s;
-	-moz-transition: all .3s;
-	-o-transition: all .3s;
-	transition: all .3s;
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
 }
-#chat.open{
+#chat.open {
 	top: 10px;
 	left: 10px;
 
@@ -221,120 +243,120 @@ body, button, .button, select, .top-bar-section ul li > a, .pricing-table .title
 }
 
 /*chanels*/
-#chat .tab-title a{
+#chat .tab-title a {
 	padding: 5px 10px;
 }
-#chat .close-chanel{
+#chat .close-chanel {
 	color: lightgray;
 	cursor: pointer;
 	margin-left: 5px;
 }
-#chat .close-chanel:hover{
+#chat .close-chanel:hover {
 	color: black;
 }
 
 /*message*/
-#chat .messages{
+#chat .messages {
 	height: 250px;
 	overflow: hidden;
 }
-#chat.open .messages{
+#chat.open .messages {
 	overflow-y: auto;
 }
-#chat form{
+#chat form {
 	display: none;
 
-	-webkit-transition: all .2s;
-	-moz-transition: all .2s;
-	-o-transition: all .2s;
-	transition: all .2s;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
 }
-#chat.open form{
+#chat.open form {
 	display: block;
 
-	-webkit-transition: all .2s;
-	-moz-transition: all .2s;
-	-o-transition: all .2s;
-	transition: all .2s;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
 }
-#chat .tabs{
+#chat .tabs {
 	opacity: 0;
 
-	-webkit-transition: all .2s;
-	-moz-transition: all .2s;
-	-o-transition: all .2s;
-	transition: all .2s;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
 }
-#chat.open .tabs{
+#chat.open .tabs {
 	opacity: 1;
 
-	-webkit-transition: all .2s;
-	-moz-transition: all .2s;
-	-o-transition: all .2s;
-	transition: all .2s;
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
 }
-#chat form>*{
+#chat form > * {
 	height: 32px;
 }
-#chat .users{
+#chat .users {
 	margin: 0px;
 	display: inline-block;
 	padding: 10px;
 }
-#chat .message{
+#chat .message {
 	width: 68%;
 	margin: 0px;
 	display: inline-block;
 }
-#chat .sendMessage{
+#chat .sendMessage {
 	width: 20%;
 	margin: 0px;
 	display: inline-block;
 }
 
 /*users*/
-#chat #users{
+#chat #users {
 	position: absolute;
 	top: 36px;
 	left: 0px;
 	width: 100%;
 	bottom: 0px;
 }
-#chat #users .close{
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    font-size: 22px;
-    cursor: pointer;
-    color: lightgray;
+#chat #users .close {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	font-size: 22px;
+	cursor: pointer;
+	color: lightgray;
 }
-#chat #users .close:hover{
+#chat #users .close:hover {
 	color: black;
 }
 
 /*colors*/
-.green{
+.green {
 	color: darkgreen;
 }
-.cyan{
+.cyan {
 	color: darkcyan;
 }
-.yellow{
+.yellow {
 	color: yellow;
 }
-.red{
+.red {
 	color: red;
 }
 
 /*inventory*/
-#inventory{
+#inventory {
 	height: 80%;
 }
-#inventory .item{
+#inventory .item {
 	padding: 10px;
 	height: 86px;
 }
-#inventory .item>img{
+#inventory .item > img {
 	height: 64px;
 	width: auto;
 	float: left;
