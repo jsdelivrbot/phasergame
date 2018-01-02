@@ -12,7 +12,7 @@ db = {
 	save: function(id, saveData, cb) {
 		this.db.find(
 			{
-				id: id,
+				id: id
 			},
 			function(err, data) {
 				if (err) throw err;
@@ -20,10 +20,10 @@ db = {
 				if (data.length) {
 					this.db.update(
 						{
-							id: id,
+							id: id
 						},
 						{
-							data: JSON.stringify(saveData),
+							data: JSON.stringify(saveData)
 						},
 						function() {
 							if (cb) cb();
@@ -33,7 +33,7 @@ db = {
 					this.db.insert(
 						{
 							id: id,
-							data: JSON.stringify(saveData),
+							data: JSON.stringify(saveData)
 						},
 						function() {
 							if (cb) cb();
@@ -46,7 +46,7 @@ db = {
 	load: function(id, cb) {
 		this.db.find(
 			{
-				id: id,
+				id: id
 			},
 			function(err, data) {
 				if (err) throw err;
@@ -59,5 +59,5 @@ db = {
 				}
 			}.bind(this)
 		);
-	},
+	}
 };

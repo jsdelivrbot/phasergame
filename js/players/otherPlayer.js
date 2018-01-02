@@ -10,8 +10,6 @@ OtherPlayer.prototype = {
 	userData: {
 		id: -1,
 		name: "",
-		email: "",
-		password: "",
 		admin: "",
 		banned: "",
 		date_created: "",
@@ -20,10 +18,10 @@ OtherPlayer.prototype = {
 		image: "player/1",
 		map: 0,
 		x: -1,
-		y: -1,
+		y: -1
 	},
 	textStyle: fn.combindOver(fn.duplicate(fontSettings), {
-		align: "center",
+		align: "center"
 	}),
 	nameTag: undefined,
 	createSprite: function() {
@@ -143,7 +141,7 @@ OtherPlayer.prototype = {
 		if (!dontRemove) {
 			players.removePlayer(this.id);
 		}
-	},
+	}
 };
 
 for (var i in OtherPlayer.prototype.userData) {

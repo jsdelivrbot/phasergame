@@ -2,16 +2,16 @@ server = {
 	options: {
 		reconnection: false,
 		forceNew: true,
-		timeout: 5000,
+		timeout: 5000
 	},
 	socket: {},
 	events: {
 		connect: new Phaser.Signal(),
 		disconnect: new Phaser.Signal(),
-		login: new Phaser.Signal(),
+		login: new Phaser.Signal()
 	},
 	loggedIn: false,
-	url: fn.parseURL(""),
+	url: "",
 	data: {}, //data object for the shared data
 	init: function(cb) {
 		this.events.login.add(login);
@@ -20,12 +20,7 @@ server = {
 	},
 	connect: function(ip, cb) {
 		if (!this.connecting) {
-			ip = ip.replace("http://", "");
-			ip = ip.replace("https://", "");
-			ip = ip.replace("www.", "");
-			ip = "http://" + ip;
-
-			this.socket = new io(ip + ":8181", server.options);
+			this.socket = new io(ip, server.options);
 
 			//set up events
 			this.socket.on("connect", this._connect.bind(this, cb));
@@ -33,7 +28,7 @@ server = {
 			this.socket.on("connect_error", this._connectionError.bind(this, cb));
 			this.socket.on("error", this.error);
 
-			this.url = fn.parseURL(ip);
+			this.url = ip;
 		}
 	},
 	disconnect: function() {
@@ -46,12 +41,11 @@ server = {
 			this.socket.emit.apply(this.socket, arguments);
 		}
 	},
-	login: function(email, password, cb) {
+	login: function(name, cb) {
 		this.emit(
 			"login",
 			{
-				email: email,
-				password: password,
+				name: name
 			},
 			function(loginMessage) {
 				this.loggedIn = loginMessage.success;
@@ -108,7 +102,7 @@ server = {
 
 	error: function(error) {
 		throw error.description.stack;
-	},
+	}
 };
 server.__defineGetter__("connected", function() {
 	return server.socket.connected;

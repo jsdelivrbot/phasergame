@@ -4,7 +4,7 @@ objects = {
 	gridSize: 32,
 	group: undefined,
 	events: {
-		objectLoaded: new Phaser.Signal(),
+		objectLoaded: new Phaser.Signal()
 	},
 
 	init: function() {
@@ -21,7 +21,7 @@ objects = {
 					x: chunk.x * chunk.width,
 					y: chunk.y * chunk.height,
 					width: chunk.width,
-					height: chunk.height,
+					height: chunk.height
 				},
 				function() {}
 			);
@@ -65,13 +65,13 @@ objects = {
 					from: {
 						map: position.map,
 						x: position.x,
-						y: position.y,
+						y: position.y
 					},
 					to: {
 						map: position.map,
 						x: position.x + position.width,
-						y: position.y + position.height,
-					},
+						y: position.y + position.height
+					}
 				},
 				function(data) {
 					for (var i = 0; i < data.length; i++) {
@@ -109,7 +109,7 @@ objects = {
 			"getObject",
 			{
 				id: id,
-				type: type,
+				type: type
 			},
 			function(data) {
 				//see if its real
@@ -129,14 +129,14 @@ objects = {
 
 		server.emit("objectCreate", {
 			type: type,
-			data: data,
+			data: data
 		});
 	},
 	deleteObject: function(id, type) {
 		//removes obj from db
 		server.emit("objectDelete", {
 			id: id,
-			type: type,
+			type: type
 		});
 	},
 	typeExists: function(type) {
@@ -191,5 +191,5 @@ objects = {
 		if (this.objectLoaded(data.id, data.type)) {
 			this.removeObject(data.id, data.type);
 		}
-	},
+	}
 };

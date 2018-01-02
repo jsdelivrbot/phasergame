@@ -93,11 +93,11 @@ players = {
 				server.emit("updatePosition", {
 					x: this.player.x,
 					y: this.player.y,
-					map: this.player.map,
+					map: this.player.map
 				});
 			}
 		}
 
 		setTimeout(this.sendPlayerPositionLoop.bind(this), 100);
-	},
+	}
 };

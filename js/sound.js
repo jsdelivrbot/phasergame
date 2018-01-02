@@ -6,7 +6,7 @@ sound = {
 		playing: {
 			mood: "",
 			track: null,
-			trackKey: "",
+			trackKey: ""
 		},
 		start: function() {
 			window.setInterval(sound.background.update, 225);
@@ -74,6 +74,6 @@ sound = {
 					s.mood = s.playing.mood;
 				}
 			}
-		},
-	},
+		}
+	}
 };

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html manifest="appcache.mf">
+<html>
 	<head>
-		<title>phaser game</title>
+		<title>phasergame</title>
 		<link rel="stylesheet" type="text/css" href="css/foundation.min.css">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
 		<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -22,6 +22,7 @@
 		<!-- main -->
 		<script src="js/main.js" type="text/javascript" defer></script>
 
+		<script src="js/keymap.js" type="text/javascript" defer></script>
 		<script src="js/preload.js" type="text/javascript" defer></script>
 		<script src="js/db.js" type="text/javascript" defer></script>
 		<script src="js/interface.js" type="text/javascript" defer></script>
@@ -227,12 +228,8 @@
 			<!-- ko if: $root.connect.servers.servers()[$root.connect.servers.selected()] !== undefined -->
 			<fieldset>
 			    <legend>Login</legend>
-			    <label>Email
-			      	<input type="text" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.email">
-			    </label>
-
-			    <label>Password
-			      	<input type="password" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.password">
+			    <label>Name
+			      	<input type="text" data-bind="value: $root.connect.servers.servers()[$root.connect.servers.selected()].login.name">
 			    </label>
 		  	</fieldset>
           	<label>Remember Login</label>

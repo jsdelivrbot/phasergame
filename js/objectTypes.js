@@ -6,7 +6,7 @@ baseObject = function(id, data, objectController) {
 	this.properties = fn.duplicate(this.properties);
 
 	this.events = {
-		load: new Phaser.Signal(),
+		load: new Phaser.Signal()
 	};
 
 	this.sprite = engin.make.sprite(this.x, this.y, "object-" + this.type);
@@ -50,12 +50,12 @@ baseObject.prototype = {
 			map: this.map,
 			width: this.width,
 			height: this.height,
-			properties: this.properties,
+			properties: this.properties
 		};
 	},
 	remove: function() {
 		this.sprite.destroy();
-	},
+	}
 };
 baseObject.prototype.constructor = baseObject;
 
@@ -71,7 +71,7 @@ doorObject.prototype = fn.combindOver(fn.duplicate(baseObject.prototype), {
 	properties: {
 		x: 0,
 		y: 0,
-		map: -1,
+		map: -1
 	},
 	step: function() {
 		if (
@@ -86,7 +86,7 @@ doorObject.prototype = fn.combindOver(fn.duplicate(baseObject.prototype), {
 				players.player.map = this.properties.map;
 			}
 		}
-	},
+	}
 });
 doorObject.prototype.constructor = doorObject;
 //add it

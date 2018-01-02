@@ -19,7 +19,7 @@ map = {
 
 		this.events = {
 			loaded: new Phaser.Signal(),
-			inportedData: new Phaser.Signal(),
+			inportedData: new Phaser.Signal()
 		};
 
 		//acts as the layers array
@@ -198,7 +198,7 @@ map = {
 	events: {
 		loadMap: new Phaser.Signal(), //dispached before a new map is loaded
 		chunkLoaded: new Phaser.Signal(),
-		layersLoaded: new Phaser.Signal(),
+		layersLoaded: new Phaser.Signal()
 	},
 	loadChunkTimer: undefined,
 
@@ -314,7 +314,7 @@ map = {
 			{
 				map: this.loadedMapID,
 				x: x,
-				y: y,
+				y: y
 			},
 			function(data) {
 				chunk.loaded = true;
@@ -342,7 +342,7 @@ map = {
 			{
 				x: 0,
 				y: 0,
-				l: 0,
+				l: 0
 			},
 			from || {}
 		);
@@ -358,7 +358,7 @@ map = {
 			width: to.x - from.x + 1,
 			height: to.y - from.y + 1,
 			data: [],
-			primaryLayer: 0,
+			primaryLayer: 0
 		};
 
 		for (var l = from.l; l <= to.l; l++) {
@@ -537,12 +537,12 @@ map = {
 					{
 						x: Math.floor(sprite.body.position.x / this.tilemap.tileWidth) - size,
 						y: Math.floor(sprite.body.position.y / this.tilemap.tileHeight) - size,
-						l: l,
+						l: l
 					},
 					{
 						x: Math.floor(sprite.body.position.x / this.tilemap.tileWidth) + size,
 						y: Math.floor(sprite.body.position.y / this.tilemap.tileHeight) + size,
-						l: l,
+						l: l
 					},
 					function(data) {
 						for (var t = 0; t < data.data[0].length; t++) {
@@ -655,7 +655,7 @@ map = {
 		}
 
 		return oy;
-	},
+	}
 };
 
 map.__defineGetter__("loadedMap", function() {
@@ -665,7 +665,7 @@ map.__defineGetter__("loadedMap", function() {
 			width: 0,
 			hegiht: 0,
 			name: "",
-			desc: "",
+			desc: ""
 		}
 	);
 });
@@ -758,7 +758,7 @@ Tile.prototype = {
 
 		this.collisionCallback = tile.collisionCallback;
 		this.collisionCallbackContext = tile.collisionCallbackContext;
-	},
+	}
 };
 Object.defineProperty(Tile.prototype, "properties", {
 	get: function() {
@@ -770,49 +770,49 @@ Object.defineProperty(Tile.prototype, "properties", {
 					top: 0,
 					left: 0,
 					right: 0,
-					bottom: 0,
-				},
+					bottom: 0
+				}
 			}
 		);
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "worldX", {
 	get: function() {
 		return (this.x + this.layer.chunk.x * this.layer.chunk.width) * map.tilemap.tileWidth;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "worldY", {
 	get: function() {
 		return (this.y + this.layer.chunk.y * this.layer.chunk.height) * map.tilemap.tileHeight;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "collides", {
 	get: function() {
 		return this.properties.collision;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "canCollide", {
 	get: function() {
 		return this.collideLeft || this.collideRight || this.collideUp || this.collideDown || this.collisionCallback;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "left", {
 	get: function() {
 		return this.worldX + this.width * this.properties.collisionInfo.left;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "right", {
 	get: function() {
 		return this.worldX + this.width - this.width * this.properties.collisionInfo.right;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "top", {
 	get: function() {
 		return this.worldY + this.height * this.properties.collisionInfo.top;
-	},
+	}
 });
 Object.defineProperty(Tile.prototype, "bottom", {
 	get: function() {
 		return this.worldY + this.height - this.height * this.properties.collisionInfo.bottom;
-	},
+	}
 });

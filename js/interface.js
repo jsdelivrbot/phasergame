@@ -14,7 +14,7 @@ function keyBinding(title, key, events) {
 		},
 		isUp: function() {
 			return this.group.enabled() ? engin.input.keyboard._keys[this.keyCode()].isUp : true;
-		},
+		}
 	};
 
 	if (events) {
@@ -57,7 +57,7 @@ page = {
 			$.ajax({
 				url: "https://api.github.com/repos/rdfriedl/phasergame/releases",
 				type: "GET",
-				dataType: "json",
+				dataType: "json"
 			})
 				.done(function(data) {
 					page.versions.versions(data);
@@ -97,7 +97,7 @@ page = {
 								events_url: "",
 								received_events_url: "",
 								type: "User",
-								site_admin: false,
+								site_admin: false
 							},
 							prerelease: false,
 							created_at: Date(),
@@ -105,7 +105,7 @@ page = {
 							assets: [],
 							tarball_url: "",
 							zipball_url: "",
-							body: "",
+							body: ""
 						});
 						page.versions.selectedVersion(0);
 					}
@@ -120,7 +120,7 @@ page = {
 			if (version) {
 				window.open(page.versions.baseURL().replace("RELEASETAG", version.tag_name), "_self");
 			}
-		},
+		}
 	},
 	items: [],
 	init: function(cb) {
@@ -137,9 +137,9 @@ page = {
 					canLeave: false,
 					default: true,
 					owner: -1,
-					canSendMessage: false,
+					canSendMessage: false
 				},
-				messages: [],
+				messages: []
 			})
 		);
 
@@ -147,7 +147,7 @@ page = {
 		keyBindings = {
 			enabled: _(page.menu.settings.keyBindings.enabled).bind(page.menu.settings.keyBindings),
 			enable: _(page.menu.settings.keyBindings.enable).bind(page.menu.settings.keyBindings),
-			bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings),
+			bindKeys: _(page.menu.settings.keyBindings.bindKeys).bind(page.menu.settings.keyBindings)
 		};
 		_(page.menu.settings.keyBindings.bindings()).each(function(k) {
 			keyBindings[k.id()] = {};
@@ -167,8 +167,7 @@ page = {
 					save: function(servers) {
 						for (var i = 0; i < servers.length; i++) {
 							if (!servers[i].login.remember) {
-								servers[i].login.email = "";
-								servers[i].login.password = "";
+								servers[i].login.name = "";
 							}
 						}
 						return servers;
@@ -176,13 +175,12 @@ page = {
 					load: function(servers) {
 						for (var i = 0; i < servers.length; i++) {
 							servers[i] = ko.mapping.fromJS(servers[i]);
-							servers[i].login.email.subscribe(page.settings.change.bind(this, this));
-							servers[i].login.password.subscribe(page.settings.change.bind(this, this));
+							servers[i].login.name.subscribe(page.settings.change.bind(this, this));
 							servers[i].login.remember.subscribe(page.settings.change.bind(this, this));
 						}
 						return servers;
-					},
-				},
+					}
+				}
 			],
 			1
 		);
@@ -215,8 +213,8 @@ page = {
 							}
 						}
 						return page.menu.settings.keyBindings.bindings();
-					},
-				},
+					}
+				}
 			],
 			1.1
 		);
@@ -289,7 +287,7 @@ page = {
 						// a hash sign that we can break on.
 						content = content.replace(new RegExp("[\\r\\n]+", "g"), "#");
 						appCacheFiles = content.split("#");
-					},
+					}
 				});
 			});
 
@@ -349,50 +347,54 @@ page = {
 
 				loadData(cb);
 			}
-		},
+		}
 	},
 	connect: {
 		servers: {
 			filters: [
 				{
 					title: "all",
-					filter: [0, 1, 2],
+					filter: [0, 1, 2]
 				},
 				{
 					title: "Online",
-					filter: [1],
+					filter: [1]
 				},
 				{
 					title: "Offline",
-					filter: [2],
-				},
+					filter: [2]
+				}
 			],
 			activeFilter: 0,
-			servers: [],
+			servers: [
+				{
+					status: 0,
+					title: "Main server",
+					description: "The main server",
+					ip: "https://phasergameserver.herokuapp.com",
+					players: 0,
+					login: { name: "", remember: true }
+				}
+			],
 			serverStatuses: [
 				{
 					text: "connecting",
-					class: "label",
+					class: "label"
 				},
 				{
 					text: "Online",
-					class: "label success",
+					class: "label success"
 				},
 				{
 					text: "Offline",
-					class: "label alert",
-				},
+					class: "label alert"
+				}
 			],
 			addServer: {
-				ip: "",
+				ip: ""
 			},
 			selected: -1,
 			add: function() {
-				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace("http://", ""));
-				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace("https://", ""));
-				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace("www.", ""));
-				page.connect.servers.addServer.ip(page.connect.servers.addServer.ip().replace("/", ""));
-
 				page.connect.servers.servers.push(
 					ko.mapping.fromJS({
 						status: 0, // 0: connecting, 1: connected, 2: failed
@@ -401,10 +403,9 @@ page = {
 						ip: page.connect.servers.addServer.ip(),
 						players: 0,
 						login: {
-							email: "",
-							password: "",
-							remember: false,
-						},
+							name: "",
+							remember: false
+						}
 					})
 				);
 				page.connect.servers.addServer.ip("");
@@ -443,11 +444,9 @@ page = {
 				for (var i = 0; i < page.connect.servers.servers().length; i++) {
 					page.connect.servers.servers()[i].status(0);
 					$.ajax({
-						url: "http://" + page.connect.servers.servers()[i].ip() + ":8282",
+						url: fixURL(page.connect.servers.servers()[i].ip() + "/api/info"),
 						type: "GET",
-						timeout: 8000,
-						dataType: "json",
-						data: { type: "info" },
+						dataType: "json"
 					})
 						.done(
 							_(function(data) {
@@ -466,38 +465,36 @@ page = {
 							}).bind(page.connect.servers.servers()[i])
 						);
 				}
-			},
+			}
 		},
 		login: {
 			loggedIn: false,
 			loggingIn: false,
 			login: function() {
 				page.connect.login.loggingIn(true);
-				server.login(
-					page.connect.servers.servers()[page.connect.servers.selected()].login.email(),
-					page.connect.servers.servers()[page.connect.servers.selected()].login.password(),
-					function(loginMessage) {
-						$("#login-modal .alert-box>span").text(loginMessage.message);
-						$("#login-modal .alert-box")
-							.removeClass("info alert warning success secondary")
-							.addClass(loginMessage.class);
-						$("#login-modal .alert-box")
-							.finish()
-							.hide()
-							.show(250)
-							.delay(3000)
-							.hide(250);
+				server.login(page.connect.servers.servers()[page.connect.servers.selected()].login.name(), function(
+					loginMessage
+				) {
+					$("#login-modal .alert-box>span").text(loginMessage.message);
+					$("#login-modal .alert-box")
+						.removeClass("info alert warning success secondary")
+						.addClass(loginMessage.class);
+					$("#login-modal .alert-box")
+						.finish()
+						.hide()
+						.show(250)
+						.delay(3000)
+						.hide(250);
 
-						if (loginMessage.success) {
-							setTimeout(function() {
-								$("#login-modal").foundation("reveal", "close");
-								page.connect.login.loggingIn(false);
-							}, 1250);
-						}
+					if (loginMessage.success) {
+						setTimeout(function() {
+							$("#login-modal").foundation("reveal", "close");
+							page.connect.login.loggingIn(false);
+						}, 1250);
 					}
-				);
-			},
-		},
+				});
+			}
+		}
 	},
 	menu: {
 		profile: {
@@ -510,18 +507,18 @@ page = {
 					{
 						title: "Auto",
 						value: Phaser.AUTO,
-						desc: 'If your browser dose not suport "Web GL" it will fall back on "Canvas"',
+						desc: 'If your browser dose not suport "Web GL" it will fall back on "Canvas"'
 					},
 					{
 						title: "Canvas",
 						value: Phaser.CANVAS,
-						desc: 'Uses standard "HTML5 Canvas" to render game',
+						desc: 'Uses standard "HTML5 Canvas" to render game'
 					},
 					{
 						title: "Web GL",
 						value: Phaser.WEBGL,
-						desc: 'Uses "Web GL" to render game',
-					},
+						desc: 'Uses "Web GL" to render game'
+					}
 				],
 				cameraModes: ["none", "dynamic", "smooth"],
 				cameraMode: "smooth",
@@ -529,16 +526,16 @@ page = {
 				cameraSmoothSpeeds: [
 					{
 						title: "slow",
-						value: 50,
+						value: 50
 					},
 					{
 						title: "normal",
-						value: 40,
+						value: 40
 					},
 					{
 						title: "fast",
-						value: 30,
-					},
+						value: 30
+					}
 				],
 				debug: observable(false, function(val) {
 					if (objects.group) {
@@ -558,7 +555,7 @@ page = {
 						//reset the debug
 						engin.debug.reset();
 					}
-				}),
+				})
 			},
 			keyBindings: {
 				currentBinding: null,
@@ -688,7 +685,7 @@ page = {
 						display: false,
 						id: "none",
 						enabled: false,
-						keys: [],
+						keys: []
 					},
 					{
 						title: "Menu",
@@ -706,9 +703,9 @@ page = {
 								},
 								rebind: function(key) {
 									return key > 2;
-								},
-							}),
-						],
+								}
+							})
+						]
 					},
 					{
 						title: "Chat",
@@ -723,9 +720,9 @@ page = {
 								},
 								rebind: function(key) {
 									return key > 2;
-								},
-							}),
-						],
+								}
+							})
+						]
 					},
 					{
 						title: "Inventory",
@@ -741,9 +738,9 @@ page = {
 								},
 								rebind: function(key) {
 									return key > 2;
-								},
-							}),
-						],
+								}
+							})
+						]
 					},
 					{
 						title: "Game",
@@ -767,7 +764,7 @@ page = {
 								},
 								rebind: function(key) {
 									return key > 2;
-								},
+								}
 							}),
 							keyBinding("Open Inventory", Phaser.Keyboard.I, {
 								down: function() {
@@ -781,7 +778,7 @@ page = {
 								},
 								rebind: function(key) {
 									return key > 2;
-								},
+								}
 							}),
 							keyBinding("Open Menu", Phaser.Keyboard.ESC, {
 								down: function() {
@@ -796,11 +793,11 @@ page = {
 								},
 								rebind: function(key) {
 									return key > 2;
-								},
-							}),
-						],
-					},
-				],
+								}
+							})
+						]
+					}
+				]
 			},
 			sound: {
 				volume: observable(0.75, function(val) {
@@ -812,8 +809,8 @@ page = {
 					if (engin.isBooted) {
 						engin.sound.mute = val;
 					}
-				}),
-			},
+				})
+			}
 		},
 		menu: {
 			disconnect: function() {
@@ -821,11 +818,11 @@ page = {
 			},
 			exit: function() {
 				window.close();
-			},
+			}
 		},
 		inventory: {
-			data: [],
-		},
+			data: []
+		}
 	},
 	chat: {
 		open: observable(false, function(val) {
@@ -858,8 +855,8 @@ page = {
 					message: {
 						from: players.player.name,
 						to: "",
-						message: chanel.message(),
-					},
+						message: chanel.message()
+					}
 				});
 				chanel.message("");
 			}
@@ -896,7 +893,7 @@ page = {
 					settings: data.chanel.settings,
 					players: data.players,
 					messages: [],
-					message: "",
+					message: ""
 				})
 			);
 		},
@@ -954,18 +951,18 @@ page = {
 					}
 				}
 			}
-		},
+		}
 	},
 	log: function(message) {
 		page.chat.message({
 			chanel: {
-				id: -1,
+				id: -1
 			},
 			message: {
 				from: "",
 				to: "",
-				message: message,
-			},
+				message: message
+			}
 		});
 	},
 	//handles saving and loading settings
@@ -990,7 +987,7 @@ page = {
 					properties[i] = {
 						prop: properties[i],
 						save: undefined,
-						load: undefined,
+						load: undefined
 					};
 				}
 			}
@@ -999,7 +996,7 @@ page = {
 				obj: obj,
 				version: version,
 				properties: properties,
-				saved: true,
+				saved: true
 			};
 			this.settings.push(setting);
 
@@ -1135,7 +1132,7 @@ page = {
 			if (!saved) {
 				return "there are settings that are not saved yet";
 			}
-		},
+		}
 	},
 	//functions for the knockout in the html
 	toggle: function(observable) {
@@ -1176,7 +1173,7 @@ page = {
 			ob,
 			amount
 		);
-	},
+	}
 };
 
 //load

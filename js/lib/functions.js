@@ -93,6 +93,7 @@ fn = {
 	        searchObject[split[0]] = split[1];
 	    }
 	    return {
+	    		url: url,
 	        protocol: parser.protocol,
 	        host: parser.host,
 	        hostname: parser.hostname,

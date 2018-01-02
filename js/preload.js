@@ -6,7 +6,7 @@ function loadData(cb) {
 	$.ajax({
 		url: "data/tilesets.json",
 		type: "GET",
-		dataType: "json",
+		dataType: "json"
 	})
 		.done(function(data) {
 			loadedData.tilesets = data;
@@ -22,7 +22,7 @@ function loadData(cb) {
 	$.ajax({
 		url: "data/sound.json",
 		type: "GET",
-		dataType: "json",
+		dataType: "json"
 	})
 		.done(function(data) {
 			sound.json = data;
@@ -37,7 +37,7 @@ function loadData(cb) {
 	$.ajax({
 		url: "data/playerImages.json",
 		type: "GET",
-		dataType: "json",
+		dataType: "json"
 	})
 		.done(function(data) {
 			loadedData.playerImages = data;
@@ -50,17 +50,16 @@ function loadData(cb) {
 }
 function loadShardData(cb) {
 	cb = _.after(4, _.partial(loadServerImages, cb));
-	url = server.url.protocol + "//" + server.url.hostname + ":8282";
+	url = fixURL(server.url + "/api/data/");
 
 	$.ajax({
-		url: url,
+		url: url + "itemProfiles",
 		type: "GET",
-		dataType: "json",
-		data: { type: "dataFile", file: "items" },
+		dataType: "json"
 	})
 		.done(function(data) {
 			//update the pages items
-			json = fn.idArray(data, "title");
+			json = fn.idArray(data, "name");
 			page.items(json);
 			server.data.items = json;
 
@@ -71,10 +70,9 @@ function loadShardData(cb) {
 		});
 
 	$.ajax({
-		url: url,
+		url: url + "damageProfiles",
 		type: "GET",
-		dataType: "json",
-		data: { type: "dataFile", file: "damageProfiles" },
+		dataType: "json"
 	})
 		.done(function(data) {
 			//nothing to do with it yet
@@ -85,10 +83,9 @@ function loadShardData(cb) {
 		});
 
 	$.ajax({
-		url: url,
+		url: url + "resourceProfiles",
 		type: "GET",
-		dataType: "json",
-		data: { type: "dataFile", file: "resourceProfiles" },
+		dataType: "json"
 	})
 		.done(function(data) {
 			server.data.resources = fn.idArray(data, "time");
@@ -99,10 +96,9 @@ function loadShardData(cb) {
 		});
 
 	$.ajax({
-		url: url,
+		url: url + "miningProfiles",
 		type: "GET",
-		dataType: "json",
-		data: { type: "dataFile", file: "miningProfiles" },
+		dataType: "json"
 	})
 		.done(function(data) {
 			//nothing to do with it yet
@@ -156,12 +152,12 @@ function preload() {
 }
 
 function loadServerImages(cb) {
-	a = server.data.items;
-	for (var i in a) {
-		if (a[i].img.length) {
-			engin.load.image("imgs/item/" + i, a[i].img);
-		}
-	}
+	// a = server.data.items;
+	// for (var i in a) {
+	// 	if (String(i).indexOf('_extend') === -1 && a[i].img.length) {
+	// 		engin.load.image("imgs/item/" + i, a[i].img);
+	// 	}
+	// }
 
 	engin.load.onLoadStart.addOnce(function() {
 		// $('#loading').fadeIn();
