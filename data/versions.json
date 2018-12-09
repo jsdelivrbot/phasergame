@@ -1,5 +1,5 @@
 {
-	"versionJSON": "https://cdn.rawgit.com/rdfriedl/phasergame/master/data/versions.json",
+	"versionJSON": "https://cdn.jsdelivr.net/gh/rdfriedl/phasergame@master/data/versions.json",
 	"versions": [
 		{
 			"title": "v0.2",
